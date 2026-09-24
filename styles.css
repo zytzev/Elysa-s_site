@@ -5,13 +5,17 @@
    on :root. Component rules reference tokens, never literals, so the whole
    site re-skins from the block below.
 
-   Contrast (WCAG AA, measured not eyeballed):
-     --ink        on --canvas   17.9:1
-     --ink-muted  on --canvas    7.5:1
-     --ink-muted  on --surface   7.1:1
-     --accent     on --canvas   11.9:1
-     --warn       on --canvas   10.6:1
-     --canvas     on --accent   11.9:1   (pressed language button)
+   Contrast (WCAG AA, computed from these exact token values — AA needs 4.5:1):
+     --ink        on --canvas   16.24:1
+     --ink        on --surface-2 14.48:1
+     --ink-muted  on --canvas    7.52:1
+     --ink-muted  on --surface   7.09:1
+     --ink-muted  on --surface-2  6.71:1
+     --accent     on --canvas   11.86:1
+     --accent     on --surface  11.19:1
+     --warn       on --canvas   10.66:1
+     --canvas     on --accent   11.86:1   (pressed language button)
+     --mascot     on --canvas    6.62:1   (decorative, needs 3:1)
    ============================================================================ */
 
 :root {
