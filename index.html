@@ -1,0 +1,382 @@
+<!doctype html>
+<!-- Elysa's Secret — Nordic AI Cup 2026.
+     Content lives in SITE_CONFIG (data: scores, names, dates) and
+     i18n.js (all prose, EN + DA). Never hard-code copy in this file. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Elysa's Secret</title>
+    <meta name="description" content="Nordic AI Cup 2026 — 1st place, Denmark. Four first-year students from the University of Southern Denmark." />
+    <meta name="color-scheme" content="dark" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body id="top">
+    <script>
+      window.SITE_CONFIG = {
+        sections: ["hero", "team", "board", "run", "about", "learned", "contact"],
+
+        brand: { name: "Elysa's Secret", logo: "" },
+
+        /* The team's own claims. Every value here is checked against the
+           spec's allowlist by check.js. */
+        statusRail: {
+          items: [
+            { key: "rail.dkLabel", value: "45.00", tone: "good" },
+            { key: "rail.dkPlace", value: "1st", tone: "good" },
+            { key: "rail.nordicLabel", value: "35.97", tone: "plain" },
+            { key: "rail.nordicPlace", value: "2nd", tone: "plain" },
+            { key: "rail.gapLabel", value: "-0.54", tone: "warn" }
+          ],
+          countdownTo: "2026-10-14T09:00:00Z",
+          countdownKey: "rail.countdown"
+        },
+
+        nav: {
+          links: [
+            { key: "nav.team", href: "#team" },
+            { key: "nav.board", href: "#board" },
+            { key: "nav.run", href: "#run" },
+            { key: "nav.learned", href: "#learned" },
+            { key: "nav.about", href: "#about" }
+          ],
+          cta: { key: "nav.contact", href: "#contact" }
+        },
+
+        hero: {
+          command: "elysa --status",
+          stats: [
+            { key: "hero.place", value: "1st", subKey: "hero.placeSub" },
+            { key: "hero.points", value: "45.00", subKey: "hero.pointsSub" },
+            { key: "hero.final", value: "35.97", subKey: "hero.finalSub" }
+          ],
+          ctas: [
+            { key: "hero.ctaPrimary", href: "#run", variant: "primary" },
+            { key: "hero.ctaSecondary", href: "#contact", variant: "secondary" }
+          ]
+        },
+
+        /* Each member's two headline numbers carry their own label, because
+           they mean different things: a raw score, awarded points, or a
+           before/after. Do not collapse these into "raw / points". */
+        team: {
+          members: [
+            {
+              name: "Alexandru Zaitzev", monogram: "AZ",
+              taskKey: "team.alex.task", logKey: "team.alex.log",
+              metrics: [
+                { labelKey: "team.metric.raw", value: "1405.256" },
+                { labelKey: "team.metric.nordicPoints", value: "10.00" }
+              ]
+            },
+            {
+              name: "Jakub Furmaniuk", monogram: "JF",
+              taskKey: "team.jakub.task", logKey: "team.jakub.log",
+              badgeKey: "team.jakub.badge",
+              metrics: [
+                { labelKey: "team.metric.raw", value: "0.822" },
+                { labelKey: "team.metric.points", value: "25.00" }
+              ]
+            },
+            {
+              name: "Javier Arévalo Hernández", monogram: "JA",
+              taskKey: "team.javier.task", logKey: "team.javier.log",
+              metrics: [
+                { labelKey: "team.metric.raw", value: "0.263" },
+                { labelKey: "team.metric.nordicPoints", value: "0.97" }
+              ]
+            },
+            {
+              name: "Franciszek Kossut", monogram: "FK",
+              taskKey: "team.franek.task", logKey: "team.franek.log",
+              metrics: [
+                { labelKey: "team.metric.first", value: "778" },
+                { labelKey: "team.metric.then", value: "1280" }
+              ]
+            }
+          ]
+        },
+
+        /* Two boards, never conflated. cells are [survival, drone, medical]. */
+        board: {
+          tabs: [
+            { id: "dk", key: "board.tabDk" },
+            { id: "nordic", key: "board.tabNordic" }
+          ],
+          columns: [
+            { key: "board.colSurvival" },
+            { key: "board.colDrone" },
+            { key: "board.colMedical" }
+          ],
+          boards: {
+            dk: {
+              captionKey: "board.captionDk",
+              rows: [
+                { place: "1", name: "Elysa's Secret", orgKey: "board.orgSdu", highlight: true,
+                  cells: [{ raw: "1405.256", points: "12.00" }, { raw: "0.263", points: "8.00" }, { raw: "0.822", points: "25.00" }], total: "45.00" },
+                { place: "2", name: "Ålle", orgKey: "board.orgDtu",
+                  cells: [{ raw: "968.559", points: "2.00" }, { raw: "0.379", points: "25.00" }, { raw: "0.790", points: "12.00" }], total: "39.00" },
+                { place: "3", name: "Powered by Smørrebrød", orgKey: "board.orgDtu",
+                  cells: [{ raw: "43061.384", points: "18.00" }, { raw: "0.314", points: "15.00" }, { raw: "0.781", points: "6.00" }], total: "39.00" },
+                { place: "4", name: "Backprop Boys", orgKey: "board.orgDtu",
+                  cells: [{ raw: "48236.876", points: "25.00" }, { raw: "0.307", points: "12.00" }, { raw: "0.749", points: "0.92" }], total: "37.92" },
+                { place: "5", name: "CarlN", orgKey: "board.orgDtu",
+                  cells: [{ raw: "1958.138", points: "15.00" }, { raw: "0.156", points: "1.00" }, { raw: "0.803", points: "18.00" }], total: "34.00" },
+                { place: "6", name: "Elemental hero", orgKey: "board.orgAalborg",
+                  cells: [{ raw: "1024.117", points: "6.00" }, { raw: "0.302", points: "10.00" }, { raw: "0.798", points: "15.00" }], total: "31.00" },
+                { place: "7", name: "Lisan al-Gaibs", orgKey: "board.orgDtu",
+                  cells: [{ raw: "821.498", points: "0.88" }, { raw: "0.360", points: "18.00" }, { raw: "0.771", points: "2.00" }], total: "20.88" }
+              ]
+            },
+            nordic: {
+              captionKey: "board.captionNordic",
+              rows: [
+                { place: "1", name: "Ifftikhar Amiri", orgKey: "board.orgNmbu",
+                  cells: [{ raw: "800.203", points: "0.51" }, { raw: "0.396", points: "18.00" }, { raw: "0.808", points: "18.00" }], total: "36.51" },
+                { place: "2", name: "Elysa's Secret", orgKey: "board.orgSdu", highlight: true,
+                  cells: [{ raw: "1405.256", points: "10.00" }, { raw: "0.263", points: "0.97" }, { raw: "0.822", points: "25.00" }], total: "35.97" },
+                { place: "3", name: "cosearch", orgKey: "board.orgNtnu",
+                  cells: [{ raw: "766.052", points: "0.44" }, { raw: "0.666", points: "25.00" }, { raw: "0.797", points: "6.00" }], total: "31.44" },
+                { place: "4", name: "CarlN", orgKey: "board.orgDtu",
+                  cells: [{ raw: "1958.138", points: "15.00" }, { raw: "0.156", points: "0.83" }, { raw: "0.803", points: "15.00" }], total: "30.83" },
+                { place: "5", name: "Backprop Boys", orgKey: "board.orgDtu",
+                  cells: [{ raw: "48236.876", points: "25.00" }, { raw: "0.307", points: "4.00" }, { raw: "0.749", points: "0.69" }], total: "29.69" },
+                { place: "6", name: "Powered by Smørrebrød", orgKey: "board.orgDtu",
+                  cells: [{ raw: "43061.384", points: "18.00" }, { raw: "0.314", points: "6.00" }, { raw: "0.781", points: "0.92" }], total: "24.92" },
+                { place: "7", name: "Ålle", orgKey: "board.orgDtu",
+                  cells: [{ raw: "968.559", points: "0.79" }, { raw: "0.379", points: "15.00" }, { raw: "0.790", points: "4.00" }], total: "19.79" }
+              ]
+            }
+          },
+          gapNote: { leader: "Ifftikhar Amiri", value: "0.54", key: "board.gap" }
+        },
+
+        /* The curve. `kind` is load-bearing: it keeps the chart from implying
+           these were all the same measurement. */
+        run: {
+          points: [
+            { value: 344.26, kind: "local",      labelKey: "run.p1", noteKey: "run.p1note" },
+            { value: 600,    kind: "local",      labelKey: "run.p2", noteKey: null, approx: true },
+            { value: 1128,   kind: "local",      labelKey: "run.p3", noteKey: "run.p3note", approx: true },
+            { value: 778,    kind: "validation", labelKey: "run.p4", noteKey: "run.p4note" },
+            { value: 1280,   kind: "validation", labelKey: "run.p5", noteKey: "run.p5note" },
+            { value: 1576,   kind: "validation", labelKey: "run.p6", noteKey: null },
+            { value: 1812,   kind: "validation", labelKey: "run.p7", noteKey: "run.p7note" }
+          ],
+          evaluated: { value: "1405.256", key: "run.evaluated", noteKey: "run.evaluatedNote" },
+          median: { value: "1447", key: "run.median" }
+        },
+
+        about: {
+          loop: [
+            { key: "about.loop.idea" }, { key: "about.loop.implement" },
+            { key: "about.loop.run" }, { key: "about.loop.wait" },
+            { key: "about.loop.score" }, { key: "about.loop.analyze" },
+            { key: "about.loop.change" }
+          ]
+        },
+
+        learned: {
+          cards: [
+            { icon: "gear", titleKey: "learned.1.title", textKey: "learned.1.text" },
+            { icon: "chart", titleKey: "learned.2.title", textKey: "learned.2.text" },
+            { icon: "check", titleKey: "learned.3.title", textKey: "learned.3.text" },
+            { icon: "shield", titleKey: "learned.4.title", textKey: "learned.4.text" },
+            { icon: "zap", titleKey: "learned.5.title", textKey: "learned.5.text" }
+          ]
+        },
+
+        contact: {
+          email: "hello@elysasecret.com",
+          fields: ["name", "email", "message", "consent"],
+          endpoint: "",
+          doors: [
+            { titleKey: "doors.sponsor.title", textKey: "doors.sponsor.text", mailSubject: "Sponsorship" },
+            { titleKey: "doors.roster.title", textKey: "doors.roster.text", mailSubject: "Joining" }
+          ]
+        },
+
+        footer: { socials: [] }
+      };
+    </script>
+
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- ============================================================
+         SLOT: status rail — pinned, always visible, real state
+         ============================================================ -->
+    <!-- rail + header share one sticky container: the rail wraps on narrow
+         screens, so sticking them independently would let them overlap -->
+    <div class="topbar">
+    <div class="rail" data-slot="rail">
+      <div class="rail__inner container">
+        <span class="rail__items" data-fill="rail.items"></span>
+        <span class="rail__right">
+          <span class="rail__countdown" data-slot="countdown"></span>
+          <span class="lang" role="group" aria-label="Language">
+            <button type="button" class="lang__btn" data-lang="en" aria-pressed="true">EN</button>
+            <button type="button" class="lang__btn" data-lang="da" aria-pressed="false">DA</button>
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <header class="site-header" data-slot="header">
+      <div class="container site-header__inner">
+        <a class="site-header__brand" href="#top" data-close-menu>
+          <span class="site-header__logo" data-fill="brand.logo"></span>
+          <span class="site-header__name" data-fill="brand.name"></span>
+        </a>
+        <nav class="site-header__nav" aria-label="Main navigation" data-fill="nav.links"></nav>
+        <span class="site-header__cta" data-fill="nav.cta"></span>
+        <button class="site-header__toggle" type="button" data-slot="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span class="site-header__toggle-bar"></span>
+          <span class="site-header__toggle-bar"></span>
+          <span class="site-header__toggle-bar"></span>
+        </button>
+      </div>
+    </header>
+    </div>
+
+    <main id="main">
+      <!-- SLOT: hero — the boot sequence -->
+      <section id="hero" class="section section--hero" data-section="hero">
+        <div class="container hero__inner">
+          <p class="hero__prompt"><span class="hero__sigil" aria-hidden="true">$</span> <span data-slot="typed" data-fill="hero.command"></span><span class="caret" aria-hidden="true"></span></p>
+          <h1 class="hero__headline" data-fill="hero.headline"></h1>
+          <p class="hero__sub" data-fill="hero.sub"></p>
+          <dl class="hero__stats" data-fill="hero.stats"></dl>
+          <div class="hero__ctas" data-fill="hero.ctas"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: team — four panes, no photographs -->
+      <section id="team" class="section section--team" data-section="team">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="team.heading"></h2>
+            <p class="section__sub" data-fill="team.sub"></p>
+          </div>
+          <div class="team__grid" data-fill="team.members"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: board — two leaderboards, tabbed -->
+      <section id="board" class="section section--board" data-section="board">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="board.heading"></h2>
+            <p class="section__sub" data-fill="board.sub"></p>
+          </div>
+          <div class="board__tabs" role="tablist" aria-label="Leaderboard" data-slot="board-tabs"></div>
+          <div class="board__mount" data-slot="board-table"></div>
+          <p class="board__gap" data-slot="board-gap" hidden></p>
+        </div>
+      </section>
+
+      <!-- SLOT: run — the animated score curve -->
+      <section id="run" class="section section--run" data-section="run">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="run.heading"></h2>
+            <p class="section__sub" data-fill="run.sub"></p>
+          </div>
+          <figure class="run__figure">
+            <svg class="run__svg" data-slot="run-svg" viewBox="0 0 800 360" role="img" aria-labelledby="run-svg-title run-svg-desc" preserveAspectRatio="xMidYMid meet">
+              <title id="run-svg-title"></title>
+              <desc id="run-svg-desc"></desc>
+            </svg>
+            <ol class="run__legend" data-slot="run-legend"></ol>
+            <figcaption class="run__caption" data-slot="run-caption"></figcaption>
+          </figure>
+          <div class="run__closing" data-slot="run-closing"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: about — how we work -->
+      <section id="about" class="section section--about" data-section="about">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="about.heading"></h2>
+          </div>
+          <ol class="loop" data-fill="about.loop"></ol>
+          <div class="about__text" data-fill="about.text"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: learned — five principles -->
+      <section id="learned" class="section section--learned" data-section="learned">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="learned.heading"></h2>
+            <p class="section__sub" data-fill="learned.sub"></p>
+          </div>
+          <div class="features__grid" data-fill="learned.cards"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: contact — two doors + form -->
+      <section id="contact" class="section section--contact" data-section="contact">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="contact.heading"></h2>
+          </div>
+          <div class="doors" data-fill="contact.doors"></div>
+          <div class="contact__inner">
+            <div class="contact__info" data-fill="contact.info"></div>
+            <form class="contact__form" data-slot="contact-form" data-fill="contact.fields" novalidate>
+              <!-- fields injected by script.js from config.contact.fields -->
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================================================
+         SLOT: footer
+         ============================================================ -->
+    <footer class="site-footer" data-slot="footer">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand">
+            <a class="footer__logo" href="#top">
+              <span class="site-header__logo" data-fill="brand.logo"></span>
+              <span class="site-header__name" data-fill="brand.name"></span>
+            </a>
+            <p class="footer__tagline" data-fill="footer.tagline"></p>
+          </div>
+          <div class="footer__socials" data-fill="footer.socials"></div>
+        </div>
+        <div class="footer__bottom">
+          <p data-fill="footer.legal"></p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============================================================
+         MASCOT — fixed bottom-right, decorative, pointer-events: none.
+         Silhouette + chevron eyes. The eyes are `>` and `<`, which is
+         why this shape belongs on a terminal-themed site.
+         Swap for a raster by replacing the <svg> with <img>.
+         ============================================================ -->
+    <div class="mascot" aria-hidden="true">
+      <svg class="mascot__svg" viewBox="0 0 120 100" focusable="false">
+        <path class="mascot__body" d="M30 12 H90 Q96 12 96 18 V34 H106 Q112 34 112 40 V52 Q112 58 106 58 H96 V72 H93 V87 Q93 90 90 90 H85 Q82 90 82 87 V72 H75 V87 Q75 90 72 90 H67 Q64 90 64 87 V72 H57 V87 Q57 90 54 90 H49 Q46 90 46 87 V72 H39 V87 Q39 90 36 90 H31 Q28 90 28 87 V72 H24 V58 H14 Q8 58 8 52 V40 Q8 34 14 34 H24 V18 Q24 12 30 12 Z" />
+        <g class="mascot__eyes">
+          <path class="mascot__eye" d="M42 36 L55 42 L42 48 Z" />
+          <path class="mascot__eye" d="M78 36 L65 42 L78 48 Z" />
+        </g>
+      </svg>
+    </div>
+
+    <script src="i18n.js"></script>
+    <!-- motion.js defines window.SiteMotion, which script.js's boot() consumes.
+         It must load first, or the boot has to guard for a missing API. -->
+    <script src="motion.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
