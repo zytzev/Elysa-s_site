@@ -45,7 +45,7 @@ languages, any figure the team claims that isn't in the spec allowlist, nav
 links pointing at sections that don't exist, the string "Secrete", leftover
 template placeholder text, a `[data-fill]` with no renderer, a `[data-slot]`
 selector matching nothing, and any published email address other than
-`hello@elysasecret.com`.
+`elysassecret@gmail.com`.
 
 **`smoke.js`** builds the minimum DOM needed to run the real `boot()` path —
 real config, real dictionaries, real renderers — then asserts 57 things about
@@ -172,7 +172,7 @@ the `contact.fields` renderer — the hidden inputs *are* the payload.
 - [x] Danish reviewed and approved by the team
 - [x] Contact form wired to Web3Forms
 - [ ] **Restrict the Web3Forms key to `elysasecret.com`** in their dashboard
-- [ ] `hello@elysasecret.com` live via Cloudflare Email Routing → all four inboxes
+- [ ] Confirm the published address `elysassecret@gmail.com` is the right inbox
 - [ ] Submit the form once from the live site; confirm the email arrives
 - [ ] All four members confirmed their names may be published
 - [ ] Instagram and TikTok URLs added to `SITE_CONFIG.footer.socials`

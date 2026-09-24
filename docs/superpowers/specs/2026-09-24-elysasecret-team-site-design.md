@@ -7,6 +7,20 @@
 
 ---
 
+## Revision 3 — the published address
+
+`hello@elysasecret.com` (Revision 1's plan, which assumed Cloudflare Email
+Routing) was never created. The team publishes **`elysassecret@gmail.com`**
+instead — note the spelling: two `s` in the middle, which does **not** match the
+domain `elysasecret.com`. It is the address in `SITE_CONFIG.contact.email`, so
+`check.js` allows it and flags any other.
+
+The contact form still delivers to whichever inbox the Web3Forms access key was
+issued to. That is independent of the address displayed on the site; if they
+should match, the key needs reissuing to the same inbox.
+
+---
+
 ## Revision 2 — 2026-09-24, after the team's review and the repository
 
 The team reviewed the first build and corrected it. Where this revision

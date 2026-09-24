@@ -279,7 +279,7 @@ if (!failures.length) {
   expect("learned combine-models card", learned, "Combine models that fail differently");
 
   expect("contact intro", fills["contact.sub"].textContent, "Nordic final");
-  expect("contact info", fills["contact.info"].innerHTML, "hello@elysasecret.com");
+  expect("contact info", fills["contact.info"].innerHTML, "elysassecret@gmail.com");
   expect("form fields rendered", slots["contact-form"].innerHTML, "name=\"message\"");
   expect("form submit label", slots["contact-form"].innerHTML, ">Send<");
   /* the spam honeypot must ship, and must not be a rendered checkbox */
