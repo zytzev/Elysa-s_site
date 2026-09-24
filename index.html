@@ -86,10 +86,14 @@
            person did, and the numbers live on the board and the run. */
         team: {
           members: [
-            { name: "Alexandru Zaitzev", monogram: "AZ", taskKey: "team.alex.task", logKey: "team.alex.log" },
-            { name: "Jakub Furmaniuk", monogram: "JF", taskKey: "team.jakub.task", logKey: "team.jakub.log" },
-            { name: "Javier Arévalo Hernández", monogram: "JA", taskKey: "team.javier.task", logKey: "team.javier.log" },
-            { name: "Franciszek Kossut", monogram: "FK", taskKey: "team.franek.task", logKey: "team.franek.log" }
+            { name: "Alexandru Zaitzev", monogram: "AZ", taskKey: "team.alex.task", logKey: "team.alex.log",
+              linkedin: "https://www.linkedin.com/in/zaitzev/" },
+            { name: "Jakub Furmaniuk", monogram: "JF", taskKey: "team.jakub.task", logKey: "team.jakub.log",
+              linkedin: "https://www.linkedin.com/in/jakub-furmaniuk/" },
+            { name: "Javier Arévalo Hernández", monogram: "JA", taskKey: "team.javier.task", logKey: "team.javier.log",
+              linkedin: "https://www.linkedin.com/in/javier-arevalo-hernandez" },
+            { name: "Franciszek Kossut", monogram: "FK", taskKey: "team.franek.task", logKey: "team.franek.log",
+              linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" }
           ]
         },
 
@@ -177,9 +181,18 @@
               id: "drone",
               tabKey: "run.tabDrone",
               subKey: "run.droneSub",
+              /* Eight of the recorded steps, not all of them — the shape of the
+                 climb is the point, and 0.035 -> 0.5841 says it in eight.
+                 `kind` matters: everything but the last is a validation mean. */
               points: [
-                { value: 0.5841, kind: "validation", labelKey: "run.d1", noteKey: "run.d1n" },
-                { value: 0.2630, kind: "evaluated",  labelKey: "run.d2", noteKey: "run.d2n" }
+                { value: 0.035,  kind: "validation", labelKey: "run.d1", noteKey: "run.d1n" },
+                { value: 0.132,  kind: "validation", labelKey: "run.d2", noteKey: "run.d2n" },
+                { value: 0.2365, kind: "validation", labelKey: "run.d3", noteKey: "run.d3n" },
+                { value: 0.3048, kind: "validation", labelKey: "run.d4", noteKey: "run.d4n" },
+                { value: 0.4618, kind: "validation", labelKey: "run.d5", noteKey: "run.d5n" },
+                { value: 0.5055, kind: "validation", labelKey: "run.d6", noteKey: "run.d6n" },
+                { value: 0.5841, kind: "validation", labelKey: "run.d7", noteKey: "run.d7n" },
+                { value: 0.2630, kind: "evaluated",  labelKey: "run.d8", noteKey: "run.d8n" }
               ],
               evaluated: null
             },
@@ -187,11 +200,19 @@
               id: "medical",
               tabKey: "run.tabMedical",
               subKey: "run.medicalSub",
+              /* Eight of the recorded steps. Evidence matching was 60% of this
+                 task's score, so most of these are about choosing the right
+                 passage rather than about answering better. */
               points: [
-                { value: 0.802,  kind: "validation", labelKey: "run.m1", noteKey: "run.m1n" },
-                { value: 0.8308, kind: "validation", labelKey: "run.m2", noteKey: "run.m2n" }
+                { value: 0.732,   kind: "validation", labelKey: "run.m1", noteKey: "run.m1n" },
+                { value: 0.75457, kind: "validation", labelKey: "run.m2", noteKey: "run.m2n" },
+                { value: 0.79296, kind: "validation", labelKey: "run.m3", noteKey: "run.m3n" },
+                { value: 0.80197, kind: "validation", labelKey: "run.m4", noteKey: "run.m4n" },
+                { value: 0.80939, kind: "validation", labelKey: "run.m5", noteKey: "run.m5n" },
+                { value: 0.81677, kind: "validation", labelKey: "run.m6", noteKey: "run.m6n" },
+                { value: 0.83079, kind: "validation", labelKey: "run.m7", noteKey: "run.m7n" }
               ],
-              evaluated: { value: "0.8222", key: "run.evaluated", noteKey: "run.medicalEvalNote" }
+              evaluated: { value: "0.82225", key: "run.evaluated", noteKey: "run.medicalEvalNote" }
             }
           ]
         },
@@ -241,7 +262,7 @@
             { icon: "chart", titleKey: "learned.2.title", textKey: "learned.2.text" },
             { icon: "check", titleKey: "learned.3.title", textKey: "learned.3.text" },
             { icon: "shield", titleKey: "learned.4.title", textKey: "learned.4.text" },
-            { icon: "zap", titleKey: "learned.5.title", textKey: "learned.5.text" },
+            { icon: "layers", titleKey: "learned.5.title", textKey: "learned.5.text" },
             { icon: "eye", titleKey: "learned.6.title", textKey: "learned.6.text" }
           ]
         },
@@ -252,12 +273,12 @@
           endpoint: ""
         },
 
-        /* Empty hrefs are skipped by the renderer rather than shipped as dead
-           links — add the URLs and the icons appear on the next load. */
+        /* LinkedIn is per-person, on the member panes — a single team-level
+           LinkedIn would be ambiguous. These two are still placeholders:
+           empty hrefs are skipped by the renderer rather than shipped dead. */
         footer: {
           socials: [
             { name: "Instagram", href: "", icon: "instagram" },
-            { name: "LinkedIn", href: "", icon: "linkedin" },
             { name: "TikTok", href: "", icon: "tiktok" }
           ]
         }

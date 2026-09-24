@@ -211,13 +211,34 @@
   var H = 360;
   var PAD = { t: 30, r: 26, b: 44, l: 64 };
 
+  /* A "nice" gridline step for whatever range the task actually spans. The
+     original hard-coded step of 200 was fine for Survival (308–1815) and
+     useless for the other two, which are scored 0–1: every point collapsed
+     into the bottom pixel of the chart. */
+  function niceStep(range) {
+    var raw = range / 5;
+    if (!(raw > 0)) return 1;
+    var mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10));
+    var norm = raw / mag;
+    var mult = norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 5 ? 5 : 10;
+    return mult * mag;
+  }
+
+  /* trims trailing zeros so an axis reads 0.2, 0.4, 0.6 rather than 0.2000 */
+  function fmtAxis(v) {
+    var s = v.toFixed(4);
+    if (s.indexOf(".") !== -1) s = s.replace(/0+$/, "").replace(/\.$/, "");
+    return s;
+  }
+
   function buildCurve(pts) {
     var values = pts.map(function (p) { return p.value; });
     var max = Math.max.apply(null, values);
     var min = Math.min.apply(null, values);
-    var lo = Math.floor(min / 200) * 200;
-    var hi = Math.ceil(max / 200) * 200;
-    if (hi === lo) hi = lo + 200;
+    var step = niceStep(max - min || Math.abs(max) || 1);
+    var lo = Math.floor(min / step) * step;
+    var hi = Math.ceil(max / step) * step;
+    if (hi === lo) hi = lo + step;
 
     function x(i) { return PAD.l + (i * (W - PAD.l - PAD.r)) / (pts.length - 1); }
     function y(v) { return H - PAD.b - ((v - lo) / (hi - lo)) * (H - PAD.t - PAD.b); }
@@ -227,15 +248,19 @@
       .join(" ");
 
     var grid = "";
-    for (var v = lo; v <= hi; v += 200) {
+    /* float accumulation would drift the last line off the axis, so the loop
+       counts steps instead of adding a float each time */
+    var steps = Math.round((hi - lo) / step);
+    for (var k = 0; k <= steps; k++) {
+      var v = lo + k * step;
       var gy = y(v).toFixed(1);
       grid +=
         '<line class="run__gridline" x1="' + PAD.l + '" x2="' + (W - PAD.r) +
         '" y1="' + gy + '" y2="' + gy + '"/>' +
         '<text class="run__axis" x="' + (PAD.l - 10) + '" y="' + gy +
-        '" text-anchor="end" dominant-baseline="middle">' + v + "</text>";
+        '" text-anchor="end" dominant-baseline="middle">' + fmtAxis(v) + "</text>";
     }
-    return { x: x, y: y, d: d, grid: grid };
+    return { x: x, y: y, d: d, grid: grid, lo: lo, hi: hi };
   }
 
   function startCurve(svg, pts, opts) {

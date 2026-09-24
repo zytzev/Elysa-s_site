@@ -209,6 +209,16 @@ if (!failures.length) {
    "Franciszek Kossut", "All three tasks"].forEach(function (s) {
     expect("team members include " + s, team, s);
   });
+  /* each member links to their OWN LinkedIn — one team-level link would be
+     ambiguous, and a missing one would leave a person unlinked */
+  var linkCount = (team.match(/member__link/g) || []).length;
+  if (linkCount === 4) pass();
+  else fail("expected a LinkedIn link on each of the 4 member panes, got " + linkCount);
+  ["linkedin.com/in/zaitzev", "linkedin.com/in/jakub-furmaniuk",
+   "linkedin.com/in/javier-arevalo-hernandez"].forEach(function (u) {
+    expect("member linkedin " + u, team, u);
+  });
+
   /* the fairness rule: a member pane must never carry a score, and must never
      describe a teammate's task as a weakness */
   ["0.822", "1405.256", "0.263", "778", "1280", "weakest", "weak"].forEach(function (bad) {
@@ -257,7 +267,7 @@ if (!failures.length) {
 
   var learned = fills["learned.cards"].innerHTML;
   expect("learned determinism card", learned, "Determinism is the experiment");
-  expect("learned simplest mechanism", learned, "simplest mechanism that works");
+  expect("learned combine-models card", learned, "Combine models that fail differently");
 
   expect("contact intro", fills["contact.sub"].textContent, "Nordic final");
   expect("contact info", fills["contact.info"].innerHTML, "hello@elysasecret.com");

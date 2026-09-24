@@ -384,6 +384,16 @@ a:hover { text-decoration: underline; }
    bottom-aligned: with four panes of different lengths, pushing each log to the
    bottom opened a void above the short ones and read as a broken row. */
 .member__log { font-size: 0.85rem; color: var(--ink-muted); }
+.member__link {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  align-self: flex-start;
+  margin-top: 0.6rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1px;
+}
+.member__link:hover { color: var(--accent); border-bottom-color: var(--accent); text-decoration: none; }
 
 /* --------------------------------------------------------- the board --- */
 .board__tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }

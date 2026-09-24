@@ -92,7 +92,7 @@ window.I18N = {
       tabDrone: "Drone Flyby",
       tabMedical: "Medical Appointment",
       survivalSub: "Alexandru's task — 4th in Denmark, 12 points. A colony policy with an evolutionary search over candidate controllers, and a bit-exact local simulator so the search could be trusted.",
-      droneSub: "Javier's task — 6th in Denmark, 8 points. Five detection passes per frame, a fixed six-quadrant camera sweep, ground motion refitted online, and all 249 frames answered.",
+      droneSub: "Javier's task — 6th in Denmark, 8 points. Four attempts at a better single detector all failed. What worked was combining models that fail on different classes, and matching the grader's own box convention.",
       medicalSub: "Jakub's task — 1st in Denmark, 25 points. Word timestamps matched to the annotators' own coordinates, a 27B answer pass over the numbered transcript, and evidence spans chosen as the medoid of three independent producers.",
       s1: "First smoke test",
       s1n: "The first recorded score. Pose tracking was broken — the controller was acting on stale observations.",
@@ -110,17 +110,39 @@ window.I18N = {
       s7n: "The reliable local number — and the one the search was trusted on.",
       s8: "Graded validation",
       s8n: "Higher than anything measured locally, which is its own warning, not a win.",
-      d1: "Validation mean",
-      d1n: "Mean over 7 validation runs. Per-class box geometry, a sixth pass, Level-2 zoom and per-class thresholds were all tried here and rejected — they fit the validation flight, not the task.",
-      d2: "Graded evaluation",
-      d2n: "An unseen flight. Every frame answered, and half the score gone. This gap is the whole lesson.",
-      m1: "Earlier solution",
-      m1n: "The previous build, validated at 0.802. Kept on its own branch rather than overwritten.",
-      m2: "Graded build, validated",
-      m2n: "The same build validated four times and returned 0.8307887829198248 every time, byte-identically. Reproducibility measured, not assumed.",
+      d1: "Synthetic frames",
+      d1n: "Objects pasted onto 25 backgrounds. Barely detectable at all.",
+      d2: "Real object cut-outs",
+      d2n: "Real object images on real aerial backgrounds.",
+      d3: "Two models, not one",
+      d3n: "Four attempts at a better single detector had failed. Pairing two that fail on different classes was the first real gain.",
+      d4: "Separate resolutions",
+      d4n: "Each model run at its own inference resolution, rather than one setting for both.",
+      d5: "The grader's box convention",
+      d5n: "Aligning our boxes with the official convention was worth +0.157 in a single change — the largest jump of the three days.",
+      d6: "Box growth and track threshold",
+      d6n: "One flat box-growth factor of 1.3, and a lower threshold for starting a new track.",
+      d7: "Camera sweep, five passes",
+      d7n: "Alternating quadrant views with whole-frame views, and five inference passes. Mean over 7 runs; the best single run reached 0.6071.",
+      d8: "The unseen flight",
+      d8n: "Only about 45% of the validation score carried over. Roughly 60% of our training backgrounds had been cut from that flight — the likely cause, and one we never got to retest.",
+      m1: "First working checkpoint",
+      m1n: "Transcribe the recording, have a local model answer and quote its evidence, then map those quotes back to timestamps.",
+      m2: "Evidence gets its own pass",
+      m2n: "Stop trusting the answer model's first quote; select the evidence separately from answering the question.",
+      m3: "Moved to a rented GPU",
+      m3n: "The 24 GB Mac's memory and latency had become the limit, not the model.",
+      m4: "Matched the annotators' timing",
+      m4n: "The reference timestamps matched a particular small Whisper setup, not the more accurate recogniser we had preferred. Matching the annotators' own system was the single biggest insight of this task.",
+      m5: "Sound-alike medical names",
+      m5n: "Drug names that sound alike were being confused with each other. Handling them explicitly was worth +0.0074.",
+      m6: "A second look at rejected answers",
+      m6n: "Missing a true statement loses both the answer and the evidence credit, so questions we had rejected were re-examined. This became the first locked build.",
+      m7: "Three-model evidence vote",
+      m7n: "Three independently produced spans — the language model's own quote, a trained extractor, and a span ranker — with the one agreeing most with the other two chosen. Validated four times, byte-identically.",
       evaluated: "Final evaluated score",
       survivalEvalNote: "Three games run back to back and averaged: 1319.9, 1298.2, 1599.0. Lower than the validation — a peak is not a result.",
-      medicalEvalNote: "Graded at 0.8222490889515863 with zero errors reported by the grader.",
+      medicalEvalNote: "Graded on a different hidden set: 0.0085 below the best validation. That is the uncertainty you expect from a handful of unseen conversations, not a broken deployment.",
       local: "Local mean",
       validation: "Validation",
       evaluatedKind: "Evaluated",
@@ -146,11 +168,11 @@ window.I18N = {
       sub: "Six things the four days actually taught us.",
       "1": {
         title: "Optimise the actual bottleneck",
-        text: "Our instinct was to improve the model. The first real bottleneck was the network path and a cumulative 600-second budget that counted the round trip. The system around the model mattered more than the model."
+        text: "Our instinct was to improve the model. On Survival the real bottleneck was the network path and a 600-second budget that counted the round trip. On Drone Flyby the same code scored 0.53, 0.45 and 0.19 on three different rented servers. The system around the model mattered more than the model."
       },
       "2": {
         title: "A high validation score is not a good controller",
-        text: "On a simulator that is not deterministic, a controller can post an unusually strong run without being robust. The question that matters is whether the result can be reproduced."
+        text: "One Drone Flyby setting looked 0.08 better offline and scored 0.032 worse on the real grader. Our validation mean was 0.5841; the unseen flight returned 0.2630. The question is not how good a number looks, but whether it transfers."
       },
       "3": {
         title: "Determinism is the experiment",
@@ -158,11 +180,11 @@ window.I18N = {
       },
       "4": {
         title: "Evaluation parity",
-        text: "Local, validation and evaluation must behave alike. Differences in seeds, timing, ordering or network latency distort everything you optimise against."
+        text: "What we measured was not always what we ran — a container was serving stale code while looking perfectly healthy. After that we checked what was actually loaded, and only counted runs that answered all 249 frames. Differences in seeds, timing, ordering or latency distort everything you optimise against."
       },
       "5": {
-        title: "The simplest mechanism that works",
-        text: "We added a recurrent network to correct the heuristic. Thousands of simulations bought roughly five percent. The plain heuristic stayed competitive."
+        title: "Combine models that fail differently",
+        text: "Four attempts at a better single detector failed on Drone Flyby; pairing two that fail on different classes was the first real gain. On Medical, the winning third model was not the strongest on its own — its different mistakes were what made the vote work."
       },
       "6": {
         title: "Perception was not the problem",
@@ -295,7 +317,7 @@ window.I18N = {
       tabDrone: "Drone Flyby",
       tabMedical: "Medical Appointment",
       survivalSub: "Alexandrus opgave — nr. 4 i Danmark, 12 point. En kolonipolitik med en evolutionær søgning gennem kandidatcontrollere og en bittede-identisk lokal simulator, så søgningen kunne betros.",
-      droneSub: "Javiers opgave — nr. 6 i Danmark, 8 point. Fem detektionspas pr. frame, en fast sekskvadrant-kamerasweep, grundbevægelse efterjusteret undervejs, og alle 249 frames besvaret.",
+      droneSub: "Javiers opgave — nr. 6 i Danmark, 8 point. Fire forsøg på en bedre enkeltdetektor mislykkedes alle. Det, der virkede, var at kombinere modeller, der fejler på forskellige klasser, og at matche bedømmerens egen box-konvention.",
       medicalSub: "Jakubs opgave — nr. 1 i Danmark, 25 point. Ordtidsstempler matchet mod annotatørernes egne koordinater, et 27B-svarpas over den nummererede transskription og evidensspans valgt som medoiden af tre uafhængige producenter.",
       s1: "Første smoke-test",
       s1n: "Den første målte score. Pose-tracking var i stykker — controlleren handlede på forældede observationer.",
@@ -313,17 +335,39 @@ window.I18N = {
       s7n: "Det pålidelige lokale tal — og det, søgningen blev betroet ud fra.",
       s8: "Bedømt validering",
       s8n: "Højere end noget, der blev målt lokalt, hvilket er en advarsel i sig selv, ikke en sejr.",
-      d1: "Valideringsgennemsnit",
-      d1n: "Gennemsnit over 7 valideringskørsler. Per-klasse box-geometri, et sjette pas, Level-2 zoom og per-klasse tærskler blev alle prøvet her og afvist — de passede på valideringsflyvningen, ikke på opgaven.",
-      d2: "Bedømt evaluering",
-      d2n: "En uset flyvning. Hver frame besvaret, og halvdelen af scoren væk. Det gab er hele lektionen.",
-      m1: "Tidligere løsning",
-      m1n: "Den forrige build, valideret til 0.802. Bevaret på sin egen branch i stedet for overskrevet.",
-      m2: "Bedømt build, valideret",
-      m2n: "Samme build valideret fire gange og returnerede 0.8307887829198248 hver gang, bittede-identisk. Reproducerbarhed målt, ikke antaget.",
+      d1: "Syntetiske frames",
+      d1n: "Objekter klistret ind på 25 baggrunde. Næsten ikke til at se.",
+      d2: "Virkelige objekt-udklip",
+      d2n: "Virkelige objektbilleder på virkelige luftbaggrunde.",
+      d3: "To modeller, ikke én",
+      d3n: "Fire forsøg på en bedre enkeltdetektor var mislykkedes. At parre to, der fejler på forskellige klasser, gav den første rigtige fremgang.",
+      d4: "Hver sin opløsning",
+      d4n: "Hver model kørt i sin egen inferensopløsning i stedet for én indstilling for begge.",
+      d5: "Bedømmerens box-konvention",
+      d5n: "At tilpasse vores boxes til den officielle konvention var værd +0.157 i én enkelt ændring — det største spring på de tre dage.",
+      d6: "Box-vækst og track-tærskel",
+      d6n: "Én flad box-vækstfaktor på 1.3 og en lavere tærskel for at starte et nyt track.",
+      d7: "Kamerasweep, fem pas",
+      d7n: "Skiftende kvadrantvisninger og helbilledvisninger, og fem inferenspas. Gennemsnit over 7 kørsler; den bedste enkeltkørsel nåede 0.6071.",
+      d8: "Den usete flyvning",
+      d8n: "Kun omkring 45% af valideringsscoren fulgte med over. Cirka 60% af vores træningsbaggrunde var klippet fra netop den flyvning — den sandsynlige årsag, og en vi aldrig fik testet igen.",
+      m1: "Første fungerende checkpoint",
+      m1n: "Transskribér optagelsen, lad en lokal model svare og citere sin evidens, og map citaterne tilbage til tidsstempler.",
+      m2: "Evidensen får sit eget pas",
+      m2n: "Hold op med at stole på svar-modellens første citat; vælg evidensen separat fra at besvare spørgsmålet.",
+      m3: "Flyttet til en lejet GPU",
+      m3n: "Mac'ens 24 GB hukommelse og latens var blevet grænsen, ikke modellen.",
+      m4: "Matchede annotatørernes timing",
+      m4n: "Referencetidsstemplerne matchede en bestemt lille Whisper-opsætning, ikke den mere præcise genkender vi selv foretrak. At matche annotatørernes eget system var den største enkeltindsigt i denne opgave.",
+      m5: "Medicinske navne der lyder ens",
+      m5n: "Lægemiddelnavne, der lyder ens, blev forvekslet med hinanden. At håndtere dem eksplicit var værd +0.0074.",
+      m6: "Et andet blik på afviste svar",
+      m6n: "At overse et sandt udsagn koster både svaret og evidenspoint, så spørgsmål vi havde afvist, blev gennemgået igen. Det blev den første låste build.",
+      m7: "Evidensafstemning med tre modeller",
+      m7n: "Tre uafhængigt producerede spans — sprogmodellens eget citat, en trænet ekstraktor og en span-ranker — hvor den, der var mest enig med de to andre, blev valgt. Valideret fire gange, bittede-identisk.",
       evaluated: "Endelig bedømt score",
       survivalEvalNote: "Tre spil kørt lige efter hinanden og gennemsnittet: 1319.9, 1298.2, 1599.0. Lavere end valideringen — en top er ikke et resultat.",
-      medicalEvalNote: "Bedømt til 0.8222490889515863 uden fejl rapporteret af bedømmeren.",
+      medicalEvalNote: "Bedømt på et andet skjult sæt: 0.0085 under den bedste validering. Det er den usikkerhed, man må forvente fra en håndfuld usete samtaler — ikke en ødelagt udrulning.",
       local: "Lokalt gennemsnit",
       validation: "Validering",
       evaluatedKind: "Bedømt",
@@ -349,11 +393,11 @@ window.I18N = {
       sub: "Seks ting de fire dage faktisk lærte os.",
       "1": {
         title: "Optimér den faktiske flaskehals",
-        text: "Vores instinkt var at forbedre modellen. Den første reelle flaskehals var netværksvejen og et kumulativt 600-sekunders budget, der talte rundturen med. Systemet omkring modellen betød mere end modellen."
+        text: "Vores instinkt var at forbedre modellen. På Survival var den reelle flaskehals netværksvejen og et 600-sekunders budget, der talte rundturen med. På Drone Flyby gav samme kode 0.53, 0.45 og 0.19 på tre forskellige lejede servere. Systemet omkring modellen betød mere end modellen."
       },
       "2": {
         title: "En høj valideringsscore er ikke en god controller",
-        text: "På en simulator, der ikke er deterministisk, kan en controller levere en usædvanligt stærk kørsel uden at være robust. Spørgsmålet, der betyder noget, er, om resultatet kan genskabes."
+        text: "Én Drone Flyby-indstilling så 0.08 bedre ud offline og scorede 0.032 dårligere hos den rigtige bedømmer. Vores valideringsgennemsnit var 0.5841; den usete flyvning gav 0.2630. Spørgsmålet er ikke, hvor godt et tal ser ud, men om det overfører."
       },
       "3": {
         title: "Determinisme er eksperimentet",
@@ -361,11 +405,11 @@ window.I18N = {
       },
       "4": {
         title: "Paritet mellem miljøer",
-        text: "Lokal, validering og bedømmelse skal opføre sig ens. Forskelle i seeds, timing, rækkefølge eller netværkslatens forvrænger alt, hvad man optimerer imod."
+        text: "Det, vi målte, var ikke altid det, vi kørte — en container serverede gammel kode, mens den så helt sund ud. Derefter tjekkede vi, hvad der faktisk var indlæst, og talte kun kørsler med alle 249 frames besvaret. Forskelle i seeds, timing, rækkefølge eller latens forvrænger alt, hvad man optimerer imod."
       },
       "5": {
-        title: "Den enkleste mekanisme, der virker",
-        text: "Vi tilføjede et rekurrent netværk for at korrigere heuristikken. Tusindvis af simuleringer gav cirka fem procent. Den rene heuristik forblev konkurrencedygtig."
+        title: "Kombinér modeller, der fejler forskelligt",
+        text: "Fire forsøg på en bedre enkeltdetektor mislykkedes på Drone Flyby; at parre to, der fejler på forskellige klasser, gav den første rigtige fremgang. På Medical var den vindende tredje model ikke den stærkeste alene — dens anderledes fejl var det, der fik afstemningen til at virke."
       },
       "6": {
         title: "Perceptionen var ikke problemet",

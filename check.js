@@ -161,6 +161,11 @@ var ALLOWED_NUMBERS = [
      SUBMISSIONS.md) rather than from the earlier verbal account */
   "308", "437", "570", "709", "1014", "1239", "1484", "1815",
   "0.5841", "0.263", "0.2630", "0.802", "0.8308", "0.8222",
+  /* Drone Flyby's recorded validation progression, from the team's notes and
+     the repo record */
+  "0.035", "0.132", "0.2365", "0.3048", "0.4618", "0.5055",
+  /* Medical Appointment's recorded validation progression, same sources */
+  "0.732", "0.75457", "0.79296", "0.80197", "0.80939", "0.81677", "0.83079", "0.82225",
   /* the team's rank on the highlighted row of each board: 1 in Denmark,
      2 in the Nordic combined. Listed as the real placements rather than a
      blanket 1-7, so a wrong rank on the team's own row still fails. */

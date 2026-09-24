@@ -226,6 +226,22 @@ async function captureSections(browser) {
   }
 
   await page.screenshot({ path: path.join(OUT, "run-inview.png") });
+
+  /* one capture per run tab. The tabs are re-rendered on every switch, so an
+     element handle taken up front is detached after the first click — query by
+     id each time instead. */
+  var runIds = await page.evaluate(function () {
+    return ((window.SITE_CONFIG.run || {}).tasks || []).map(function (t) { return t.id; });
+  });
+  for (var ti = 0; ti < runIds.length; ti++) {
+    await page.evaluate(function (id) {
+      var b = document.querySelector('[data-run-task="' + id + '"]');
+      if (b) b.click();
+    }, runIds[ti]);
+    await new Promise(function (r) { setTimeout(r, 2400); });
+    var sec = await page.$("#run");
+    if (sec) await sec.screenshot({ path: path.join(OUT, "run-" + runIds[ti] + ".png") });
+  }
   var mascot = await page.$(".mascot");
   if (mascot) {
     await mascot.screenshot({ path: path.join(OUT, "mascot.png") });
