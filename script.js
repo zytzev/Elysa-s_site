@@ -58,7 +58,7 @@
   /* data-fill keys that name a translation rather than a raw config value.
      NOTE: `command` is deliberately absent — config.hero.command is a literal
      shell command, identical in both languages. */
-  var TEXT_KEYS = /(?:^|\.)(headline|heading|sub|text|tagline|legal|title|badge|note|caption|label)$/;
+  var TEXT_KEYS = /(?:^|\.)(headline|heading|sub|text|tagline|legal|title|badge|note|caption|label|days|hours|minutes|seconds|venue)$/;
 
   /* ---------------------------------------------------------------- icons --- */
   var ICONS = {
@@ -516,6 +516,79 @@
     );
   }
 
+  /* ---------------------------------------------------------------- final ---
+     The clock is revealed only after the command above it has typed out, and
+     only when the section is actually reached — otherwise the whole sequence
+     plays off-screen and the visitor arrives at a countdown that has already
+     finished arriving.
+
+     The hidden state is applied inline here rather than in CSS, so with JS
+     disabled the clock is simply visible instead of never appearing. */
+  var finalDone = false;
+
+  function mountFinal() {
+    var cfg = config.final || {};
+    var typed = document.querySelector('[data-slot="final-typed"]');
+    var caret = document.querySelector('[data-slot="final-caret"]');
+    var clock = document.querySelector('[data-slot="final-clock"]');
+    var els = {
+      d: document.querySelector('[data-slot="final-d"]'),
+      h: document.querySelector('[data-slot="final-h"]'),
+      m: document.querySelector('[data-slot="final-m"]'),
+      s: document.querySelector('[data-slot="final-s"]')
+    };
+    if (!els.d || !window.SiteMotion) return;
+
+    function show() {
+      if (clock) { clock.style.opacity = ""; clock.style.transform = ""; }
+      if (caret) caret.hidden = true;
+      window.SiteMotion.startClock(cfg.countdownTo, els);
+    }
+
+    function run() {
+      if (typed) typed.textContent = "";
+      if (caret) caret.hidden = false;
+      if (clock) { clock.style.opacity = "0"; clock.style.transform = "translateY(8px)"; }
+      window.SiteMotion.typeCommand(typed, cfg.command || "", function () {
+        if (caret) caret.hidden = true;
+        if (clock) {
+          window.requestAnimationFrame(function () {
+            clock.style.opacity = "";
+            clock.style.transform = "";
+          });
+        }
+        window.SiteMotion.startClock(cfg.countdownTo, els);
+      });
+    }
+
+    if (finalDone) { show(); return; }
+    finalDone = true;
+
+    if (window.SiteMotion.reduced) { if (typed) typed.textContent = cfg.command || ""; show(); return; }
+
+    var section = document.getElementById("final");
+    if (section && "IntersectionObserver" in window) {
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            io.disconnect();
+            run();
+          });
+        },
+        { threshold: 0.2 }
+      );
+      io.observe(section);
+      /* if it never intersects (odd viewport, observer quirk) the clock must
+         still start rather than sit at "--" forever */
+      window.setTimeout(function () {
+        if (els.d && els.d.textContent === "--") { io.disconnect(); run(); }
+      }, 9000);
+    } else {
+      run();
+    }
+  }
+
   /* ----------------------------------------------------------------- boot ---
      The terminal owns the viewport until it finishes. On completion the page
      is revealed FIRST and the terminal then slides up and out of the way —
@@ -544,6 +617,8 @@
         window.SiteMotion.countUp(statValues);
         window.SiteMotion.mascotPlace();
         window.SiteMotion.revealSections(document);
+        /* the mascot only starts talking once the page is actually on screen */
+        window.SiteMotion.startMascotEvents();
       }
       root.classList.remove("is-booting");
 
@@ -671,6 +746,7 @@
     renderAll(document);
     mountBoard();
     mountRun();
+    mountFinal();
     mountRail();
     mountRailCountdown();
   }
@@ -697,8 +773,8 @@
     mountRailCountdown();
     mountBoard();
     mountRun();
-    /* mascot must be placed and drag-wired BEFORE mountBoot's reveal calls
-       mascotEnter — otherwise the entrance has nothing to animate */
+    mountFinal();
+    /* mascot must be placed and drag-wired before mountBoot's reveal places it */
     if (window.SiteMotion) window.SiteMotion.initMascot();
     mountBoot();
   }

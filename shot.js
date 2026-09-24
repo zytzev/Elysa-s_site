@@ -177,7 +177,14 @@ async function captureSections(browser) {
   await page.goto(URL, { waitUntil: "networkidle0", timeout: 30000 });
   await new Promise(function (r) { setTimeout(r, 2200); });
 
-  var names = ["hero", "team", "board", "run", "about", "learned", "contact"];
+  /* derived from the page, not hard-coded — a new section should not need this
+     file edited to get a screenshot */
+  var names = await page.evaluate(function () {
+    return Array.prototype.map.call(
+      document.querySelectorAll("[data-section]"),
+      function (s) { return s.getAttribute("data-section"); }
+    );
+  });
   for (var i = 0; i < names.length; i++) {
     var el = await page.$("#" + names[i]);
     if (!el) { problems.push("missing section #" + names[i]); continue; }
@@ -234,6 +241,23 @@ async function captureSections(browser) {
       if (m) m.style.width = "";
     });
   }
+
+  /* Force each event state and capture it. Waiting for the random 30s timer
+     four times would make this a two-minute screenshot run, and it would not be
+     reproducible. */
+  var STATES = ["wave", "uwu", "salute", "locked"];
+  for (var si = 0; si < STATES.length; si++) {
+    await page.evaluate(function (st) {
+      var m = document.querySelector(".mascot");
+      if (!m) return;
+      m.style.width = "300px";
+      m.className = "mascot mascot--settled mascot--busy mascot--" + st;
+    }, STATES[si]);
+    await new Promise(function (r) { setTimeout(r, 700); });
+    var one = await page.$(".mascot");
+    if (one) await one.screenshot({ path: path.join(OUT, "mascot-" + STATES[si] + ".png") });
+  }
+
   await page.close();
 }
 

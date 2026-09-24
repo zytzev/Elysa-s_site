@@ -273,6 +273,35 @@ if (!failures.length) {
   expect("run tabs list all three tasks", slots["run-tabs"].innerHTML, "Medical Appointment");
   expect("first tab selected by default", slots["run-tabs"].innerHTML, "\"true\"");
 
+  /* the countdown section */
+  ["final-d", "final-h", "final-m", "final-s"].forEach(function (slot) {
+    var v = (slots[slot] || {}).textContent || "";
+    if (/^\d+$/.test(v)) pass();
+    else fail("countdown " + slot + " did not render a number: " + JSON.stringify(v));
+  });
+  expect("countdown labels translated", fills["final.days"].textContent, "Days");
+  expect("countdown venue", fills["final.venue"].textContent, "Reykjavík");
+
+  /* the mascot's state-dependent parts must all ship in the markup */
+  ["mascot__arm", "mascot__beret", "mascot__eyes-uwu", "mascot__eyes-angry",
+   "mascot-speech", "mascot-displace"].forEach(function (needle) {
+    expect("mascot markup has " + needle, html, needle);
+  });
+  expect("mascot speech is positioned inline", slots["mascot-speech"].style.transform || "", "translate");
+  /* The mascot lines are EXACTLY the four the team specified. Asserted as an
+     exact list rather than a count, because a ">= 4" check is what let four
+     invented lines through the first time. */
+  var EXPECTED_LINES = [
+    "Claude LOCK IN",
+    "Claude use no tokens",
+    "Claude make no mistakes",
+    "Claude don't give up!"
+  ];
+  var lines = (ctx.window.SITE_CONFIG.mascot || {}).lines || [];
+  if (JSON.stringify(lines) === JSON.stringify(EXPECTED_LINES)) pass();
+  else fail("mascot lines must be exactly the four agreed ones.\n      expected: " +
+    JSON.stringify(EXPECTED_LINES) + "\n      got:      " + JSON.stringify(lines));
+
   expect("nav links", fills["nav.links"].innerHTML, "#team");
   expect("nav cta", fills["nav.cta"].innerHTML, "Contact");
   expect("footer tagline", fills["footer.tagline"].textContent, "University of Southern Denmark");

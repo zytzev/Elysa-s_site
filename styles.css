@@ -60,6 +60,12 @@ body, h1, h2, h3, p, dl, dd, figure, blockquote, ol, ul {
 ol, ul { padding: 0; list-style: none; }
 img, svg, video { max-width: 100%; }
 
+/* A component's own `display` rule beats the user agent's [hidden] rule, so
+   setting .hidden = true silently does nothing. This makes the attribute win
+   everywhere — it was leaving a caret blinking after typing had finished, and
+   would have left tab strips visible when they should have been hidden. */
+[hidden] { display: none !important; }
+
 html {
   scroll-behavior: smooth;
   /* rail (2.5rem) + header (3.5rem) + a little air, so #anchors don't land
@@ -693,7 +699,7 @@ a:hover { text-decoration: underline; }
   top: 0;
   z-index: 45;
   width: var(--mascot-size);
-  height: calc(var(--mascot-size) * 0.883);
+  height: calc(var(--mascot-size) * 0.897);
   pointer-events: auto;
   touch-action: none;      /* let pointermove track a drag instead of scrolling */
   cursor: grab;
@@ -712,6 +718,101 @@ a:hover { text-decoration: underline; }
 }
 .mascot__eye { fill: var(--mascot-eye); }
 .mascot__eyes { transform-origin: 50% 50%; transform-box: fill-box; }
+
+/* --- parts that only exist in one state --------------------------------- */
+.mascot__arm,
+.mascot__beret,
+.mascot__eyes-uwu,
+.mascot__eyes-angry { display: none; }
+
+.mascot__arm {
+  fill: var(--mascot);
+  stroke: var(--mascot-line);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: 0% 50%;   /* the shoulder is the box's left edge */
+}
+.mascot__uwu { fill: none; stroke: var(--mascot-eye); stroke-width: 5; stroke-linecap: round; }
+.mascot__iris { fill: #E01B22; }
+.mascot__brow { stroke: var(--mascot-eye); stroke-width: 6; stroke-linecap: round; }
+.mascot__beret-crown { fill: #4C5527; stroke: var(--mascot-line); stroke-width: 3; stroke-linejoin: round; }
+.mascot__beret-band { fill: #2B2F1A; }
+.mascot__beret-badge { fill: #D9A441; }
+
+/* --- state switches ------------------------------------------------------ */
+.mascot--uwu .mascot__eyes-default { display: none; }
+.mascot--uwu .mascot__eyes-uwu { display: block; }
+/* locked in: bloodshot eyes UNDER the chevrons, so the pupils sit on red */
+.mascot--locked .mascot__eyes-angry { display: block; }
+.mascot--salute .mascot__beret { display: block; }
+.mascot--wave .mascot__arm,
+.mascot--salute .mascot__arm { display: block; }
+
+/* --- speech -------------------------------------------------------------- */
+.mascot__speech {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 46;
+  max-width: 15rem;
+  margin: 0;
+  padding: 0.4rem 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  color: var(--accent);
+  white-space: pre-wrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  will-change: transform, opacity;
+}
+.mascot__speech.is-on { opacity: 1; }
+.is-booting .mascot__speech { display: none; }
+
+/* --------------------------------------------------------------- final ---
+   The countdown. It is revealed by JS after the command above it types out;
+   the hidden state is applied inline by JS rather than in CSS, so with JS
+   disabled the clock is simply visible instead of missing. */
+.final__cmd {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  margin-bottom: 1.5rem;
+}
+.final__clock {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-bottom: 1.25rem;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.final__unit { background: var(--surface); padding: 1.4rem 0.75rem; text-align: center; }
+.final__num {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: clamp(1.9rem, 7vw, 3.75rem);
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.final__label {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+}
+.final__venue { font-size: 0.85rem; color: var(--ink-muted); max-width: 68ch; }
 
 @media (max-width: 30em) { :root { --mascot-size: 106px; } }
 @media (max-height: 24em) { .mascot { display: none; } }
@@ -786,12 +887,11 @@ html.is-booting { overflow: hidden; }
 @media (prefers-reduced-motion: no-preference) {
   .caret { animation: caret-blink 1.05s steps(1) infinite; }
 
-  /* the mascot breathes once it has landed, and blinks — but only when no
-     expression animation owns the eyes, or the two transforms fight */
-  .mascot--settled:not(.mascot--held):not(.mascot--annoyed):not(.mascot--giggle) .mascot__svg {
+  /* idle: breathe and blink — only when no event or drag owns the mascot */
+  .mascot--settled:not(.mascot--busy) .mascot__svg {
     animation: mascot-bob 3.6s ease-in-out infinite;
   }
-  .mascot--settled:not(.mascot--annoyed):not(.mascot--giggle) .mascot__eyes {
+  .mascot--settled:not(.mascot--busy) .mascot__eyes {
     animation: mascot-blink 5.4s ease-in-out infinite;
   }
   /* dragged: squints and grumbles */
@@ -800,6 +900,15 @@ html.is-booting { overflow: hidden; }
   /* released: giggling squash, three quick beats */
   .mascot--giggle .mascot__eyes { animation: mascot-giggle-eyes 0.3s ease-in-out 3; }
   .mascot--giggle .mascot__inner { animation: mascot-giggle-body 0.3s ease-in-out 3; }
+
+  /* the four idle events */
+  .mascot--wave .mascot__arm { animation: mascot-wave 0.85s ease-in-out infinite; }
+  .mascot--wave .mascot__svg { animation: mascot-lean 1.9s ease-in-out infinite; }
+  .mascot--salute .mascot__arm { transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .mascot--salute .mascot__svg { animation: mascot-stand 0.6s ease-out 1; }
+  .mascot--uwu .mascot__svg { animation: mascot-sway 1.9s ease-in-out infinite; }
+  .mascot--locked .mascot__svg { animation: mascot-tense 0.14s steps(2, end) infinite; }
+  .mascot--locked .mascot__eyes { animation: mascot-strain 0.7s ease-in-out infinite; }
 
   /* The run's hidden start state is OPT-IN via .is-animated. If motion.js
      never runs, or the observer never fires, the chart is simply complete —
@@ -852,6 +961,38 @@ html.is-booting { overflow: hidden; }
   0%, 100% { transform: scale(1, 1); }
   40% { transform: scale(1.09, 0.9); }
   70% { transform: scale(0.97, 1.04); }
+}
+
+/* The arm poses are static and live OUTSIDE the motion query, so with reduced
+   motion a salute still reads as a salute — only the oscillation is dropped. */
+.mascot--wave .mascot__arm { transform: rotate(-112deg); }
+.mascot--salute .mascot__arm { transform: rotate(-118deg); }
+
+@keyframes mascot-wave {
+  0%, 100% { transform: rotate(-98deg); }
+  50% { transform: rotate(-134deg); }
+}
+@keyframes mascot-lean {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-2.5deg); }
+}
+@keyframes mascot-stand {
+  0% { transform: translateY(3px) scale(1.04, 0.96); }
+  60% { transform: translateY(-3px) scale(0.98, 1.03); }
+  100% { transform: translateY(0) scale(1, 1); }
+}
+@keyframes mascot-sway {
+  0%, 100% { transform: rotate(-1.6deg) translateY(0); }
+  50% { transform: rotate(1.6deg) translateY(-2px); }
+}
+@keyframes mascot-tense {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(0.8px, -0.5px); }
+}
+/* locked in: the bloodshot eyes strain wide and breathe hard */
+@keyframes mascot-strain {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(1.18) scaleX(0.94); }
 }
 
 @media (prefers-reduced-motion: reduce) {

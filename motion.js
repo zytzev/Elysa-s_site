@@ -62,6 +62,34 @@
     el.__countdownTimer = window.setInterval(paint, 60000);
   }
 
+  /* ========================================================= detailed clock ===
+     Days / hours / minutes / seconds, ticking once a second. Reduced motion
+     paints a single frame and stops: a ticking clock is exactly the kind of
+     motion that setting exists to suppress. */
+  var clockTimer = null;
+
+  function startClock(iso, els) {
+    if (!els || !els.d) return;
+    var target = new Date(iso).getTime();
+    if (isNaN(target)) return;
+
+    function pad(n) {
+      n = String(n);
+      return n.length < 2 ? "0" + n : n;
+    }
+    function paint() {
+      var s = Math.max(0, Math.floor((target - Date.now()) / 1000));
+      els.d.textContent = pad(Math.floor(s / 86400));
+      if (els.h) els.h.textContent = pad(Math.floor((s % 86400) / 3600));
+      if (els.m) els.m.textContent = pad(Math.floor((s % 3600) / 60));
+      if (els.s) els.s.textContent = pad(s % 60);
+    }
+    paint();
+    if (clockTimer) { window.clearInterval(clockTimer); clockTimer = null; }
+    if (REDUCED) return;
+    clockTimer = window.setInterval(paint, 1000);
+  }
+
   /* ============================================================ typewriter === */
   function typeCommand(el, text, done) {
     if (!el) { if (done) done(); return; }
@@ -294,6 +322,7 @@
   var settled = false;
   var mascotEl = null;
   var dispEl = null;
+  var speechEl = null;
   var wobbleRAF = null;
 
   /* Measured with offsetWidth/Height, which — unlike getBoundingClientRect —
@@ -335,6 +364,15 @@
       "translate(" + pos.x.toFixed(1) + "px," + pos.y.toFixed(1) + "px)" +
       " scale(" + scaleState.x + "," + scaleState.y + ")" +
       " rotate(" + rotState + "deg)";
+    /* the speech is a separate fixed element, kept pinned just above the
+       mascot's top-right corner. It is NOT a child of the mascot: the drag
+       scales and rotates that element, and a bubble inside it would shear. */
+    if (speechEl) {
+      var s = size();
+      speechEl.style.transform =
+        "translate(" + (pos.x + s.w).toFixed(1) + "px," + (pos.y - 8).toFixed(1) + "px)" +
+        " translate(-100%, -100%)";
+    }
   }
 
   function apply(p, sx, sy, rot) {
@@ -409,10 +447,12 @@
     el.addEventListener("pointerdown", function (e) {
       if (drag) return;
       stopBreath();
+      setMascotState(null);              /* cancel whatever event was running */
+      clearSpeech();
       el.setPointerCapture(e.pointerId);
       drag = { dx: e.clientX - pos.x, dy: e.clientY - pos.y };
       el.classList.remove("mascot--giggle");
-      el.classList.add("mascot--held", "mascot--annoyed");
+      el.classList.add("mascot--held", "mascot--annoyed", "mascot--busy");
       e.preventDefault();
     });
 
@@ -423,24 +463,99 @@
       apply(clamped, 1.03, 0.97, 0);
     });
 
-    function release(e) {
+    function release() {
       if (!drag) return;
       drag = null;
       el.classList.remove("mascot--held", "mascot--annoyed");
-      /* the longer it was held, the more it complains on landing */
       el.classList.add("mascot--giggle");
-      window.setTimeout(function () { el.classList.remove("mascot--giggle"); }, 950);
+      window.setTimeout(function () {
+        el.classList.remove("mascot--giggle", "mascot--busy");
+      }, 950);
       goHome();
     }
     el.addEventListener("pointerup", release);
     el.addEventListener("pointercancel", release);
   }
 
+  /* ------------------------------------------------------- mascot events ---
+     Every ~30s the mascot picks one of four states at random and types a line
+     at Claude above its head. The state and the line are both re-drawn each
+     time, and neither repeats back to back.
+
+     The lines are jokes in English and are deliberately not translated: they
+     only work in their own wording. */
+  var EVENT_STATES = ["wave", "uwu", "salute", "locked"];
+  var eventTimer = null;
+  var lastState = null;
+  var lastLine = null;
+
+  function setMascotState(name) {
+    if (!mascotEl) return;
+    EVENT_STATES.forEach(function (s) { mascotEl.classList.remove("mascot--" + s); });
+    /* one flag gates the idle breathe/blink, so every state has to do the same
+       thing in the same place rather than each excluding the others by name */
+    mascotEl.classList.toggle("mascot--busy", !!name);
+    if (name) mascotEl.classList.add("mascot--" + name);
+  }
+
+  function speak(line) {
+    if (!speechEl) return;
+    if (REDUCED) { speechEl.textContent = line; speechEl.classList.add("is-on"); return; }
+    speechEl.textContent = "";
+    speechEl.classList.add("is-on");
+    var i = 0;
+    (function type() {
+      speechEl.textContent = line.slice(0, ++i);
+      if (i < line.length) window.setTimeout(type, 55);
+    })();
+  }
+
+  function clearSpeech() {
+    if (!speechEl) return;
+    speechEl.classList.remove("is-on");
+    window.setTimeout(function () { speechEl.textContent = ""; }, 320);
+  }
+
+  function pick(list, last) {
+    if (!list.length) return null;
+    if (list.length === 1) return list[0];
+    var v = list[Math.floor(Math.random() * list.length)];
+    if (v === last) v = list[(list.indexOf(v) + 1) % list.length];
+    return v;
+  }
+
+  function runEvent() {
+    if (!mascotEl || drag) return;             /* never interrupt a drag */
+    var lines = (window.SITE_CONFIG && window.SITE_CONFIG.mascot &&
+      window.SITE_CONFIG.mascot.lines) || [];
+    if (!lines.length) return;
+
+    lastState = pick(EVENT_STATES, lastState);
+    lastLine = pick(lines, lastLine);
+
+    setMascotState(lastState);
+    speak(lastLine);
+    window.setTimeout(clearSpeech, 5200);
+    window.setTimeout(function () { setMascotState(null); }, 6100);
+  }
+
+  function startMascotEvents() {
+    if (REDUCED || eventTimer || !mascotEl) return;
+    /* the first one comes sooner than the steady beat, so the mechanic is
+       discovered rather than missed */
+    window.setTimeout(function () {
+      runEvent();
+      eventTimer = window.setInterval(runEvent, 30000);
+    }, 13000);
+  }
+
   function initMascot() {
     mascotEl = window.document.querySelector("[data-slot=\"mascot\"]");
     if (!mascotEl) return;
     dispEl = window.document.querySelector("[data-slot=\"mascot-displace\"]");
+    speechEl = window.document.querySelector("[data-slot=\"mascot-speech\"]");
     apply(corner());
+    render();                  /* also parks the speech above the corner */
     wireDrag(mascotEl);
 
     window.addEventListener("resize", function () {
@@ -500,6 +615,7 @@
   window.SiteMotion = {
     reduced: REDUCED,
     startCountdown: startCountdown,
+    startClock: startClock,
     typeCommand: typeCommand,
     scramble: scramble,
     countUp: countUp,
@@ -508,6 +624,7 @@
     drawOnScroll: drawOnScroll,
     initMascot: initMascot,
     mascotPlace: mascotPlace,
+    startMascotEvents: startMascotEvents,
     revealSections: revealSections
   };
 })();

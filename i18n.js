@@ -18,9 +18,19 @@ window.I18N = {
       team: "The four",
       board: "The board",
       run: "The run",
+      final: "Reykjavík",
       learned: "What we learned",
       about: "How we work",
       contact: "Contact"
+    },
+    final: {
+      heading: "The final",
+      sub: "Four days of qualifying are behind us. This is what is left.",
+      days: "Days",
+      hours: "Hours",
+      minutes: "Minutes",
+      seconds: "Seconds",
+      venue: "Nordic AI Meet · Reykjavík, Iceland · 14–15 October 2026 · against the national champions of Sweden, Norway, Finland and Iceland."
     },
     hero: {
       headline: "First place. Denmark.",
@@ -211,9 +221,19 @@ window.I18N = {
       team: "De fire",
       board: "Ranglisten",
       run: "Forløbet",
+      final: "Reykjavík",
       learned: "Hvad vi lærte",
       about: "Sådan arbejder vi",
       contact: "Kontakt"
+    },
+    final: {
+      heading: "Finalen",
+      sub: "Fire dages kvalifikation ligger bag os. Det her er, hvad der er tilbage.",
+      days: "Dage",
+      hours: "Timer",
+      minutes: "Minutter",
+      seconds: "Sekunder",
+      venue: "Nordic AI Meet · Reykjavík, Island · 14.–15. oktober 2026 · mod nationalmestrene fra Sverige, Norge, Finland og Island."
     },
     hero: {
       headline: "Førstepladsen. Danmark.",

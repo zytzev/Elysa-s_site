@@ -37,7 +37,7 @@
 
     <script>
       window.SITE_CONFIG = {
-        sections: ["hero", "team", "board", "run", "about", "learned", "contact"],
+        sections: ["hero", "team", "board", "final", "run", "about", "learned", "contact"],
 
         brand: { name: "Elysa's Secret", logo: "" },
 
@@ -55,13 +55,16 @@
           dayManyKey: "rail.dayMany"
         },
 
+        /* nav order mirrors sections[] exactly — a nav that lists "what we
+           learned" before "how we work" would jump backwards down the page */
         nav: {
           links: [
             { key: "nav.team", href: "#team" },
             { key: "nav.board", href: "#board" },
+            { key: "nav.final", href: "#final" },
             { key: "nav.run", href: "#run" },
-            { key: "nav.learned", href: "#learned" },
-            { key: "nav.about", href: "#about" }
+            { key: "nav.about", href: "#about" },
+            { key: "nav.learned", href: "#learned" }
           ],
           cta: { key: "nav.contact", href: "#contact" }
         },
@@ -190,6 +193,26 @@
               ],
               evaluated: { value: "0.8222", key: "run.evaluated", noteKey: "run.medicalEvalNote" }
             }
+          ]
+        },
+
+        /* The final, at the top of the page's second act. Iceland has no
+           daylight saving, so UTC is the right zone. Change this one instant if
+           the start time is confirmed as something other than 09:00. */
+        final: {
+          countdownTo: "2026-10-14T09:00:00Z",
+          command: "elysa --reykjavik"
+        },
+
+        /* Things we type at Claude. EXACTLY these four — nothing else gets
+           added here. Deliberately not translated: they are jokes in English
+           and survive only in their own wording. */
+        mascot: {
+          lines: [
+            "Claude LOCK IN",
+            "Claude use no tokens",
+            "Claude make no mistakes",
+            "Claude don't give up!"
           ]
         },
 
@@ -335,6 +358,38 @@
         </div>
       </section>
 
+      <!-- SLOT: final — the countdown to Reykjavík. It runs a command first and
+           only then reveals the clock, so the number arrives rather than just
+           sitting there. -->
+      <section id="final" class="section section--final" data-section="final">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="final.heading"></h2>
+            <p class="section__sub" data-fill="final.sub"></p>
+          </div>
+          <p class="final__cmd"><span class="hero__sigil" aria-hidden="true">$</span> <span data-slot="final-typed"></span><span class="caret" data-slot="final-caret" aria-hidden="true"></span></p>
+          <div class="final__clock" data-slot="final-clock">
+            <div class="final__unit">
+              <span class="final__num" data-slot="final-d">--</span>
+              <span class="final__label" data-fill="final.days"></span>
+            </div>
+            <div class="final__unit">
+              <span class="final__num" data-slot="final-h">--</span>
+              <span class="final__label" data-fill="final.hours"></span>
+            </div>
+            <div class="final__unit">
+              <span class="final__num" data-slot="final-m">--</span>
+              <span class="final__label" data-fill="final.minutes"></span>
+            </div>
+            <div class="final__unit">
+              <span class="final__num" data-slot="final-s">--</span>
+              <span class="final__label" data-fill="final.seconds"></span>
+            </div>
+          </div>
+          <p class="final__venue" data-fill="final.venue"></p>
+        </div>
+      </section>
+
       <!-- SLOT: about — how we work -->
       <section id="about" class="section section--about" data-section="about">
         <div class="container">
@@ -402,7 +457,7 @@
          mouse/touch only, so keyboard users are never blocked by it.
          ============================================================ -->
     <div class="mascot" data-slot="mascot" aria-hidden="true">
-      <svg class="mascot__svg" viewBox="0 0 120 106" focusable="false">
+      <svg class="mascot__svg" viewBox="-8 -8 136 122" focusable="false">
         <defs>
           <!-- fractal noise displacement: this is what gives the body its
                organic, breathing surface instead of a flat vector shape.
@@ -416,13 +471,45 @@
         </defs>
         <g class="mascot__inner" filter="url(#mascot-goo)">
           <path class="mascot__body" d="M32 10 H88 Q94 10 94 16 V32 H104 Q110 32 110 38 V52 Q110 58 104 58 H94 V72 H93 V93 Q93 96 90 96 H85 Q82 96 82 93 V72 H75 V93 Q75 96 72 96 H67 Q64 96 64 93 V72 H57 V93 Q57 96 54 96 H49 Q46 96 46 93 V72 H39 V93 Q39 96 36 96 H31 Q28 96 28 93 V72 H26 V58 H16 Q10 58 10 52 V38 Q10 32 16 32 H26 V16 Q26 10 32 10 Z" />
+
+          <!-- one arm, shown only for the wave and salute states. A single
+               element (not a group): transform-box: fill-box did not apply to
+               a <g> in Chrome, which left the arm stuck at rest. The bounding
+               box starts exactly at the shoulder, so the pivot can be 0% 50%. -->
+          <rect class="mascot__arm" x="106" y="38" width="30" height="16" rx="8" />
+
+          <!-- beret, shown only for the salute -->
+          <g class="mascot__beret">
+            <path class="mascot__beret-crown" d="M28 16 q4 -16 32 -16 q28 0 34 14 q3 8 -6 10 q-28 5 -56 1 q-9 -2 -4 -9 z" />
+            <path class="mascot__beret-band" d="M24 15 q34 9 66 0 q5 6 -3 9 q-30 7 -60 0 q-7 -3 -3 -9 z" />
+            <path class="mascot__beret-badge" d="M78 1 l2.2 4.6 5 .6 -3.7 3.4 1 5 -4.5 -2.5 -4.5 2.5 1 -5 -3.7 -3.4 5 -.6 z" />
+          </g>
+
+          <!-- paint order matters: the bloodshot eyes are drawn FIRST so the
+               chevron pupils land on top of them in the locked-in state. Put
+               them last and the red simply covers the pupils. -->
           <g class="mascot__eyes">
-            <path class="mascot__eye" d="M43 34 L56 41 L43 48 Z" />
-            <path class="mascot__eye" d="M77 34 L64 41 L77 48 Z" />
+            <g class="mascot__eyes-angry">
+              <circle class="mascot__iris" cx="49" cy="42" r="10" />
+              <circle class="mascot__iris" cx="71" cy="42" r="10" />
+              <path class="mascot__brow" d="M35 26 L57 35" />
+              <path class="mascot__brow" d="M85 26 L63 35" />
+            </g>
+            <g class="mascot__eyes-default">
+              <path class="mascot__eye" d="M43 34 L56 41 L43 48 Z" />
+              <path class="mascot__eye" d="M77 34 L64 41 L77 48 Z" />
+            </g>
+            <g class="mascot__eyes-uwu">
+              <path class="mascot__uwu" d="M38 46 q8 -11 16 0" />
+              <path class="mascot__uwu" d="M66 46 q8 -11 16 0" />
+            </g>
           </g>
         </g>
       </svg>
     </div>
+    <!-- separate from the mascot so the drag's scale/rotation never distorts
+         the text; JS keeps its bottom-right corner pinned above the mascot -->
+    <p class="mascot__speech" data-slot="mascot-speech" aria-hidden="true"></p>
 
     <script src="i18n.js"></script>
     <!-- motion.js defines window.SiteMotion, which script.js's boot() consumes.

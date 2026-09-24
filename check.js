@@ -274,7 +274,7 @@ var rendererKeys = (scriptSrc.match(/\n\s*"([A-Za-z0-9._-]+)":\s*function/g) || 
 
 /* mirrors TEXT_KEYS in script.js — keep the two in step, or a real
    data-fill silently stops resolving */
-var TEXT_KEYS_RE = /(?:^|\.)(headline|heading|sub|text|tagline|legal|title|badge|note|caption|label)$/;
+var TEXT_KEYS_RE = /(?:^|\.)(headline|heading|sub|text|tagline|legal|title|badge|note|caption|label|days|hours|minutes|seconds|venue)$/;
 function at(obj, key) {
   return String(key).split(".").reduce(function (node, part) {
     return node == null ? undefined : node[part];
