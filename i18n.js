@@ -133,7 +133,7 @@ window.I18N = {
     },
     learned: {
       heading: "What we learned",
-      sub: "Five things the four days actually taught us.",
+      sub: "Six things the four days actually taught us.",
       "1": {
         title: "Optimise the actual bottleneck",
         text: "Our instinct was to improve the model. The first real bottleneck was the network path and a cumulative 600-second budget that counted the round trip. The system around the model mattered more than the model."
@@ -153,6 +153,10 @@ window.I18N = {
       "5": {
         title: "The simplest mechanism that works",
         text: "We added a recurrent network to correct the heuristic. Thousands of simulations bought roughly five percent. The plain heuristic stayed competitive."
+      },
+      "6": {
+        title: "Perception was not the problem",
+        text: "We gave the colony perfect knowledge of every tree, fruit and predator. It still went extinct. Perception was never the limit — the decision logic was, and that is much harder to fix."
       }
     },
     /* the boot sequence: commands are literal (config), these status lines are not */
@@ -322,7 +326,7 @@ window.I18N = {
     },
     learned: {
       heading: "Hvad vi lærte",
-      sub: "Fem ting de fire dage faktisk lærte os.",
+      sub: "Seks ting de fire dage faktisk lærte os.",
       "1": {
         title: "Optimér den faktiske flaskehals",
         text: "Vores instinkt var at forbedre modellen. Den første reelle flaskehals var netværksvejen og et kumulativt 600-sekunders budget, der talte rundturen med. Systemet omkring modellen betød mere end modellen."
@@ -342,6 +346,10 @@ window.I18N = {
       "5": {
         title: "Den enkleste mekanisme, der virker",
         text: "Vi tilføjede et rekurrent netværk for at korrigere heuristikken. Tusindvis af simuleringer gav cirka fem procent. Den rene heuristik forblev konkurrencedygtig."
+      },
+      "6": {
+        title: "Perceptionen var ikke problemet",
+        text: "Vi gav kolonien perfekt viden om hvert træ, hver frugt og hvert rovdyr. Den uddøde alligevel. Perceptionen var aldrig grænsen — beslutningslogikken var, og den er meget sværere at rette."
       }
     },
     boot: {
