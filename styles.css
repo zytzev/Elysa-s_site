@@ -384,14 +384,17 @@ a:hover { text-decoration: underline; }
    bottom-aligned: with four panes of different lengths, pushing each log to the
    bottom opened a void above the short ones and read as a broken row. */
 .member__log { font-size: 0.85rem; color: var(--ink-muted); }
+/* pinned to the bottom of the pane, so the four links form one row rather than
+   sitting wherever each person's description happens to end */
 .member__link {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--ink-muted);
   align-self: flex-start;
-  margin-top: 0.6rem;
+  margin-top: auto;
+  padding-top: 1rem;
   border-bottom: 1px solid var(--line);
-  padding-bottom: 1px;
+  line-height: 1.2;
 }
 .member__link:hover { color: var(--accent); border-bottom-color: var(--accent); text-decoration: none; }
 
