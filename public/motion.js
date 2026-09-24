@@ -328,7 +328,13 @@
     /* The legend carries every value as plain text, so the whole story is
        available without seeing the chart at all. */
     if (opts.legend && opts.t) {
-      opts.legend.innerHTML = pts
+      /* The grid fills column-major, so the CSS needs the row count. An odd
+         number of steps also needs one filler cell, or the box is left open at
+         the bottom right. */
+      var rows = Math.ceil(pts.length / 2);
+      opts.legend.style.setProperty("--rows", String(rows));
+
+      var legendHtml = pts
         .map(function (p) {
           var who = p.author ? ((opts.authorName && opts.authorName(p.author)) || p.author) : "";
           return (
@@ -342,6 +348,11 @@
           );
         })
         .join("");
+
+      for (var f = rows * 2 - pts.length; f > 0; f--) {
+        legendHtml += '<li class="run__legend-item run__legend-item--filler" aria-hidden="true"></li>';
+      }
+      opts.legend.innerHTML = legendHtml;
     }
 
     if (REDUCED) { svg.classList.add("is-complete"); return; }

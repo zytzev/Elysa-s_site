@@ -34,7 +34,7 @@ function makeEl(attrs) {
     _attrs: attrs || {},
     hidden: false,
     elements: {},
-    style: {},
+    style: { setProperty: function () {}, removeProperty: function () {} },
     classList: {
       add: function (c) { if (classes.indexOf(c) === -1) classes.push(c); },
       remove: function (c) { classes = classes.filter(function (x) { return x !== c; }); },
@@ -259,6 +259,11 @@ if (!failures.length) {
   expect("curve svg drawn", slots["run-svg"].innerHTML, "run__seg");
   /* the authorship marking: only the agreed stretch carries it */
   expect("survival marks 3 points as franek's", slots["run-svg"].innerHTML, "run__by-franek");
+  /* a filler cell exists only to close the box on an odd step count */
+  var stepCount = (ctx.window.SITE_CONFIG.run.tasks[0].points || []).length;
+  var fillerCount = (slots["run-legend"].innerHTML.match(/run__legend-item--filler/g) || []).length;
+  if (fillerCount === (stepCount % 2 === 0 ? 0 : 1)) pass();
+  else fail("legend filler count wrong: " + fillerCount + " filler(s) for " + stepCount + " steps");
   expect("curve svg axes", slots["run-svg"].innerHTML, "run__axis");
   expect("curve is complete under reduced motion",
     slots["run-svg"].classList.contains("is-complete") ? "is-complete" : "", "is-complete");

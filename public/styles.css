@@ -511,29 +511,36 @@ a:hover { text-decoration: underline; }
   font-variant-numeric: tabular-nums;
 }
 
-/* Step list, read DOWN each column and then across: step 1, 2, 3 down the first
-   column, then the rest down the second. The grid that was here flowed
-   left-to-right, so consecutive steps read across a row instead of down a list.
-   Multi-column does this natively and has no empty-cell problem on odd counts. */
+/* Steps read DOWN each column and then across, and the rows stay aligned across
+   both columns. Multi-column was the wrong tool: its columns are independent,
+   so entries of different heights left ragged edges and a hole under the short
+   one. A grid keeps the rows level; grid-auto-flow: column gives the reading
+   order; a filler cell keeps the box rectangular when the count is odd. */
 .run__legend {
-  list-style: none;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
   border: 1px solid var(--line);
-  border-bottom: 0;      /* the items' own bottom borders close the box */
-  background: var(--surface);
 }
 @media (min-width: 48em) {
-  .run__legend { columns: 2; column-gap: 0; column-rule: 1px solid var(--line); }
+  .run__legend {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: column;
+    grid-template-rows: repeat(var(--rows, 4), auto);
+  }
 }
 .run__legend-item {
-  break-inside: avoid;
-  padding: 0.65rem 0.85rem;
+  background: var(--surface);
+  padding: 0.7rem 0.85rem;
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 0.35rem 0.7rem;
   align-items: baseline;
   font-size: 0.8rem;
-  border-bottom: 1px solid var(--line);
 }
+/* an empty cell in the last slot, so an odd count still closes the box */
+.run__legend-item--filler { padding: 0; }
+@media (max-width: 47.99em) { .run__legend-item--filler { display: none; } }
 .run__legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .run__legend-item--local .run__legend-dot { background: var(--canvas); border: 2px solid var(--ink-muted); }
 .run__legend-item--validation .run__legend-dot { background: var(--accent); }
