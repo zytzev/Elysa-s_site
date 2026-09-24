@@ -121,10 +121,12 @@ function collectKeys(node, trail, out) {
      returns early for every string and silences the whole check, which is
      how this function spent its first version collecting nothing at all. */
   if (typeof node === "string") {
-    /* any `somethingKey` property, plus a plain `.key` — a new key-suffixed
-       field must not be able to slip past validation just because it is not
-       in a hand-maintained list */
-    if (/Key$/.test(trail || "") || /(?:^|\.)key$/.test(trail || "")) {
+    /* Any `somethingKey` property, plus a plain `.key`. Requiring a dot in the
+       VALUE distinguishes a translation key ("team.alex.task") from a field
+       that merely ends in "Key" — a credential like contact.accessKey is not a
+       translation, and treating it as one fails the build for no reason. */
+    if ((/Key$/.test(trail || "") || /(?:^|\.)key$/.test(trail || "")) &&
+        node.indexOf(".") !== -1) {
       out.push(node);
     }
     return out;
@@ -235,6 +237,7 @@ if (config && config.nav && config.sections) {
 /* ---- 7. forbidden strings ----------------------------------------------- */
 var sources = {
   "index.html": html,
+  "thanks.html": read("thanks.html") || "",
   "i18n.js": read("i18n.js") || "",
   "styles.css": read("styles.css") || "",
   "script.js": read("script.js") || "",
@@ -268,7 +271,7 @@ if (config && config.contact) {
 
 /* ---- 9. required files exist -------------------------------------------
    Site files in public/, the readme at the root. */
-["index.html", "i18n.js", "styles.css", "script.js", "motion.js"].forEach(function (f) {
+["index.html", "thanks.html", "i18n.js", "styles.css", "script.js", "motion.js"].forEach(function (f) {
   if (fs.existsSync(path.join(SITE, f))) ok();
   else fail("required site file present: public/" + f);
 });
@@ -280,7 +283,8 @@ else fail("required file present: README.md");
    a plan, a screenshot, an editor backup. This is the check that would have
    caught the design doc being served at the domain. */
 var ALLOWED_IN_PUBLIC = [
-  "index.html", "i18n.js", "styles.css", "script.js", "motion.js",
+  "index.html", "thanks.html",
+  "i18n.js", "styles.css", "script.js", "motion.js",
   /* files Cloudflare Pages itself may add, and editor/system noise we ignore */
   "_headers", "_redirects", "_routes.json"
 ];

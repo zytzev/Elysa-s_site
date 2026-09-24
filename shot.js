@@ -278,6 +278,104 @@ async function captureSections(browser) {
   await page.close();
 }
 
+/* Drives the contact form over HTTP and inspects the request it produces,
+   WITHOUT sending anything: the POST to the form service is intercepted and
+   aborted. The CORS preflight is allowed through, because a preflight that the
+   service refuses is exactly the failure worth catching.
+
+   It must be served over HTTP, not file://. From a file:// page the browser
+   sends `Origin: null`, the form service cannot echo it, and every submission
+   fails CORS — verified. That is why the README now says to preview over
+   HTTP before trusting the form. */
+function startSiteServer() {
+  var http = require("http");
+  return new Promise(function (resolve) {
+    var srv = http.createServer(function (req, res) {
+      var rel = req.url.split("?")[0];
+      if (rel === "/") rel = "/index.html";
+      var file = path.join(ROOT, "public", rel);
+      if (file.indexOf(path.join(ROOT, "public")) !== 0 || !fs.existsSync(file)) {
+        res.writeHead(404); res.end("not found"); return;
+      }
+      var type = /\.css$/.test(file) ? "text/css"
+        : /\.js$/.test(file) ? "text/javascript" : "text/html";
+      res.writeHead(200, { "Content-Type": type });
+      res.end(fs.readFileSync(file));
+    });
+    srv.listen(0, "127.0.0.1", function () { resolve(srv); });
+  });
+}
+
+async function verifyForm(browser) {
+  var srv = await startSiteServer();
+  var origin = "http://127.0.0.1:" + srv.address().port;
+  var page = await browser.newPage();
+  var captured = null;
+
+  await page.setRequestInterception(true);
+  page.on("request", function (req) {
+    if (req.url().indexOf("web3forms") !== -1 && req.method() === "POST") {
+      captured = { method: req.method(), body: req.postData() || "" };
+      req.abort();                      /* nothing leaves the machine */
+      return;
+    }
+    req.continue();                     /* let the preflight really happen */
+  });
+
+  await page.goto(origin + "/index.html", { waitUntil: "networkidle0", timeout: 30000 });
+  await new Promise(function (r) { setTimeout(r, 5500); });   /* past the boot */
+
+  var filled = await page.evaluate(function () {
+    var f = document.querySelector(".contact__form");
+    if (!f || !f.elements.name) return false;
+    f.elements.name.value = "Contract check";
+    f.elements.email.value = "check@example.com";
+    if (f.elements.message) f.elements.message.value = "Intercepted, not sent.";
+    if (f.elements.consent) f.elements.consent.checked = true;
+    var btn = f.querySelector('button[type="submit"]');
+    if (btn) btn.click();
+    return true;
+  });
+
+  /* A form submission is a navigation, issued asynchronously after the click —
+     checking for the request in the same tick always misses it. */
+  await new Promise(function (r) { setTimeout(r, 2200); });
+
+  console.log("\n  === contact form (served over HTTP, request intercepted) ===");
+  if (!filled) {
+    problems.push("contact form not found or has no name field");
+  } else if (!captured) {
+    problems.push("submitting the form produced NO POST — the preflight was refused, or the handler did not run");
+  } else {
+    /* a native form POST is urlencoded, not JSON */
+    var params = {};
+    captured.body.split("&").forEach(function (pair) {
+      var i = pair.indexOf("=");
+      if (i === -1) return;
+      params[decodeURIComponent(pair.slice(0, i))] =
+        decodeURIComponent(pair.slice(i + 1).replace(/\+/g, " "));
+    });
+    console.log("  method: " + captured.method);
+    console.log("  payload: " + captured.body.slice(0, 320));
+
+    var must = ["access_key", "subject", "name", "email", "message", "consent"];
+    var missing = must.filter(function (k) { return !(k in params); });
+    if (missing.length) problems.push("contact payload missing: " + missing.join(", "));
+    if (!params.access_key) problems.push("contact payload has an EMPTY access_key — the service would reject it");
+    /* an unchecked checkbox is not submitted at all, which is exactly right for
+       a honeypot: it only appears if something filled it in */
+    if ("botcheck" in params) problems.push("honeypot was submitted — a real bot flag would be set by default");
+    if (params.name !== "Contract check" || params.email !== "check@example.com") {
+      problems.push("contact payload did not carry the typed values");
+    }
+    console.log("  honeypot: " + ("botcheck" in params ? "PRESENT (wrong)" : "absent, as it should be"));
+    console.log("  result: " + (missing.length || !params.access_key ? "PROBLEMS ABOVE" : "well-formed"));
+  }
+
+  await page.close();
+  srv.close();
+}
+
 (async function () {
   var browser = await puppeteer.launch({ headless: "new", args: ["--allow-file-access-from-files"] });
   try {
@@ -287,6 +385,7 @@ async function captureSections(browser) {
     await capture(browser, "mobile", { width: 390, height: 844 });
     await capture(browser, "danish", { width: 1440, height: 900, lang: "da" });
     await captureSections(browser);
+    await verifyForm(browser);
   } finally {
     await browser.close();
   }

@@ -270,7 +270,20 @@
         contact: {
           email: "hello@elysasecret.com",
           fields: ["name", "email", "message", "consent"],
-          endpoint: ""
+          /* Native form POST, not fetch. Web3Forms' free plan rejects the CORS
+             preflight that a JSON fetch forces (403, no allow-origin header),
+             so an AJAX submit can never work there. A plain form POST is a
+             navigation, not a cross-origin request, so CORS does not apply.
+             The access key ships in the page by design; it only names the
+             destination inbox and cannot read anything. Restrict it to
+             elysasecret.com in the Web3Forms dashboard. */
+          endpoint: "https://api.web3forms.com/submit",
+          accessKey: "9d4a0f49-f679-4ca7-89fb-eab27e777866",
+          subject: "elysasecret.com — contact form",
+          /* where the service sends the visitor back to. Must be absolute.
+             Set once the domain resolves; leave empty to let the service show
+             its own confirmation page instead. */
+          thanksUrl: "https://elysasecret.com/thanks.html"
         },
 
         /* LinkedIn is per-person, on the member panes — a single team-level
@@ -442,7 +455,11 @@
           </div>
           <div class="contact__inner">
             <div class="contact__info" data-fill="contact.info"></div>
-            <form class="contact__form" data-slot="contact-form" data-fill="contact.fields" novalidate>
+            <!-- Native POST to the form service: action and hidden fields are
+                 set by script.js from SITE_CONFIG.contact. novalidate is
+                 deliberately NOT set, so the browser enforces the required
+                 fields natively. -->
+            <form class="contact__form" data-slot="contact-form" data-fill="contact.fields">
               <!-- fields injected by script.js from config.contact.fields -->
             </form>
           </div>

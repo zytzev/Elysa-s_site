@@ -243,7 +243,20 @@
 
     "contact.fields": function (el, c) {
       var fields = c.contact.fields || [];
+      var contact = c.contact || {};
       var html = "";
+
+      /* Native POST: the service's own fields travel as form inputs rather
+         than as a JSON body. `redirect` is what sends the visitor back. */
+      if (contact.accessKey) {
+        html += '<input type="hidden" name="access_key" value="' + esc(contact.accessKey) + '" />';
+      }
+      if (contact.subject) {
+        html += '<input type="hidden" name="subject" value="' + esc(contact.subject) + '" />';
+      }
+      if (contact.thanksUrl) {
+        html += '<input type="hidden" name="redirect" value="' + esc(contact.thanksUrl) + '" />';
+      }
 
       if (fields.indexOf("name") !== -1) {
         html += '<label class="field"><span>' + esc(t("contact.name")) + "</span>" +
@@ -269,12 +282,24 @@
           '<input name="consent" type="checkbox" required />' +
           "<span>" + esc(t("contact.consent")) + "</span></label>";
       }
+      /* Honeypot: the form service rejects any submission where this is
+         checked. Hidden by positioning rather than display:none, because some
+         bots skip fields that are not rendered. */
+      html += '<input type="checkbox" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />';
       html += '<button class="btn btn--primary" type="submit">' + esc(t("contact.submit")) + "</button>";
       html += '<p class="form-status" data-slot="form-status" hidden></p>';
 
       el.innerHTML = html;
-      /* wire exactly once — the handler queries its elements per submit, so it
-         survives re-rendering on a language switch. */
+
+      /* point the form at the service — the browser performs a real POST, so
+         no fetch and no CORS preflight is involved */
+      if (contact.endpoint) {
+        el.setAttribute("action", contact.endpoint);
+        el.setAttribute("method", "POST");
+      }
+
+      /* wire exactly once — the handler reads the current config at submit
+         time, so it survives re-rendering on a language switch. */
       if (!el.getAttribute("data-wired")) {
         el.setAttribute("data-wired", "1");
         attachFormHandler(el, c);
@@ -678,52 +703,25 @@
     });
   }
 
-  /* ----------------------------------------------------------------- form --- */
+  /* ----------------------------------------------------------------- form ---
+     The browser performs a real POST to the form service — see the comment on
+     contact.endpoint in index.html for why a fetch cannot work here.
+
+     This handler therefore does almost nothing: it only steps in when the form
+     is NOT configured, because with no access key the native POST would land
+     on the service and show the visitor a raw error page. In that case it stops
+     the submission and says plainly that nothing was sent. */
   function attachFormHandler(form, c) {
     form.addEventListener("submit", function (event) {
+      var contact = c.contact || {};
+      if (contact.accessKey && contact.endpoint) return;   /* let it POST */
+
       event.preventDefault();
       var status = form.querySelector('[data-slot="form-status"]');
-      var submitBtn = form.querySelector('button[type="submit"]');
-      var payload = {
-        name: form.elements.name ? form.elements.name.value : "",
-        email: form.elements.email ? form.elements.email.value : "",
-        message: form.elements.message ? form.elements.message.value : "",
-        consent: form.elements.consent ? form.elements.consent.checked : false
-      };
-      var endpoint = c.contact.endpoint || "";
-
-      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = t("contact.sending"); }
-
-      function done(ok, message) {
-        if (!status) return;
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = t("contact.submit"); }
-        status.hidden = false;
-        status.textContent = message;
-        status.className = "form-status form-status--" + (ok ? "success" : "error");
-        if (ok) form.reset();
-      }
-
-      if (!endpoint) {
-        /* No endpoint configured yet. Say so plainly — never imply an email
-           was sent when nothing left the browser. */
-        window.setTimeout(function () { done(true, t("contact.simulated")); }, 400);
-        return;
-      }
-
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-        .then(function (response) {
-          return response.json().catch(function () { return {}; })
-            .then(function (body) { return { ok: response.ok, body: body }; });
-        })
-        .then(function (result) {
-          var message = result.body && result.body.message;
-          done(result.ok, message || t(result.ok ? "contact.sent" : "contact.error"));
-        })
-        .catch(function () { done(false, t("contact.error")); });
+      if (!status) return;
+      status.hidden = false;
+      status.className = "form-status form-status--error";
+      status.textContent = t("contact.notConnected");
     });
   }
 

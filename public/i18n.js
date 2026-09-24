@@ -214,10 +214,7 @@ window.I18N = {
       messagePlaceholder: "What would you like to ask us?",
       consent: "I agree that Elysa's Secret may use this information to respond.",
       submit: "Send",
-      sending: "Sending…",
-      sent: "Thank you — your message was sent.",
-      simulated: "Thank you — your message was recorded. (No form endpoint is configured yet, so nothing was emailed.)",
-      error: "Something went wrong. Please try again, or email us directly."
+      notConnected: "The contact form is not connected yet, so nothing was sent. Please email us directly in the meantime."
     },
     footer: {
       tagline: "Nordic AI Cup 2026 — 1st place, Denmark. University of Southern Denmark.",
@@ -438,10 +435,7 @@ window.I18N = {
       messagePlaceholder: "Hvad vil du gerne spørge os om?",
       consent: "Jeg accepterer, at Elysa's Secret må bruge disse oplysninger til at svare mig.",
       submit: "Send",
-      sending: "Sender…",
-      sent: "Tak — din besked er sendt.",
-      simulated: "Tak — din besked blev registreret. (Der er endnu ikke konfigureret et endpoint, så der er ikke sendt en e-mail.)",
-      error: "Noget gik galt. Prøv igen, eller send os en e-mail."
+      notConnected: "Kontaktformularen er endnu ikke sat op, så der blev ikke sendt noget. Skriv til os på mail i mellemtiden."
     },
     footer: {
       tagline: "Nordic AI Cup 2026 — 1. plads, Danmark. Syddansk Universitet.",

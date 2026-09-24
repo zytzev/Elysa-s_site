@@ -128,23 +128,49 @@ nothing.
 After the first deploy, load `https://elysasecret.com/check.js` once. It must
 return 404. If it returns source, the output directory is wrong.
 
-## Contact form
+## Contact form — wired, one live test left
 
-A static page cannot send email, so `SITE_CONFIG.contact.endpoint` posts to a
-form service. While it is `""` the form **simulates** success and says so in
-plain language — it never claims an email was sent when nothing left the
-browser.
+The form is connected to **Web3Forms** and the access key is already in
+`public/index.html`. Submitting it should deliver to whichever inbox that key
+was issued to.
 
-To make it live: create a Formspree or Web3Forms endpoint and paste the URL
-into `contact.endpoint`.
+**It uses a native form POST, not `fetch`, and that is not a style choice.**
+Web3Forms' free plan rejects the CORS preflight that a JSON `fetch` forces —
+verified: `OPTIONS` returns 403 with no `Access-Control-Allow-Origin` — and it
+rejects server-side POSTs outright with *"This method is not allowed. Use our
+API in client side... (Pro plan is required)"*. A plain form POST is a
+navigation, so CORS never applies and it works. Do not "improve" this into an
+AJAX call; it will break.
+
+`shot.js` verifies the submission without sending anything: it intercepts the
+POST, inspects the payload, and aborts it.
+
+### Before you rely on it
+
+1. **Restrict the key to `elysasecret.com`** in the Web3Forms dashboard. The key
+   is public by design — it ships in the page source and cannot read anything —
+   but an unrestricted key can be used to send mail through your quota.
+2. Submit the form once from the live site and confirm the email arrives.
+3. `thanks.html` is where the service sends people back. It is **English only**:
+   the redirect carries no language, and the form service does not pass one
+   through.
+
+**If the key is ever emptied**, the form stops rather than posting a request the
+service would reject, and says plainly that nothing was sent.
+
+**Switching provider** means changing `endpoint` and the payload field names in
+the `contact.fields` renderer — the hidden inputs *are* the payload.
 
 ## Launch checklist (target: before 14 October 2026)
 
-- [ ] `node check.js` passes
-- [ ] Danish proofread by a native speaker at SDU
+- [x] `node check.js && node smoke.js && node shot.js` all pass
+- [x] Danish reviewed and approved by the team
+- [x] Contact form wired to Web3Forms
+- [ ] **Restrict the Web3Forms key to `elysasecret.com`** in their dashboard
 - [ ] `hello@elysasecret.com` live via Cloudflare Email Routing → all four inboxes
-- [ ] Contact form endpoint set; test a real submission
+- [ ] Submit the form once from the live site; confirm the email arrives
 - [ ] All four members confirmed their names may be published
-- [ ] Socials added to `SITE_CONFIG.footer.socials` if wanted
-- [ ] Cloudflare Pages connected; `elysasecret.com` resolving over HTTPS
+- [ ] Instagram and TikTok URLs added to `SITE_CONFIG.footer.socials`
+- [ ] Cloudflare Pages connected; **output directory `public`**; domain resolving
+- [ ] `https://elysasecret.com/check.js` returns **404**
 - [ ] Checked on a phone and on a laptop

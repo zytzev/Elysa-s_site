@@ -275,6 +275,13 @@ if (!failures.length) {
   expect("contact info", fills["contact.info"].innerHTML, "hello@elysasecret.com");
   expect("form fields rendered", slots["contact-form"].innerHTML, "name=\"message\"");
   expect("form submit label", slots["contact-form"].innerHTML, ">Send<");
+  /* the spam honeypot must ship, and must not be a rendered checkbox */
+  expect("form has a honeypot", slots["contact-form"].innerHTML, "name=\"botcheck\"");
+  expect("honeypot is off-screen", slots["contact-form"].innerHTML, "class=\"honeypot\"");
+  /* the form's live/not-live contract is data, so check it as data */
+  var ct = ctx.window.SITE_CONFIG.contact || {};
+  if (typeof ct.endpoint === "string" && typeof ct.accessKey === "string" && ct.subject) pass();
+  else fail("contact config must carry endpoint, accessKey and subject");
   /* socials ship with empty hrefs, so nothing should render yet — and there
      must be no dead <a href=""> in the footer */
   expectEq("socials render nothing until URLs exist", fills["footer.socials"].innerHTML, "");
