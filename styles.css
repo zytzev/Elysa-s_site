@@ -38,7 +38,7 @@
   --mascot:      #E07A5B;
   --mascot-line: #F6F2ED;
   --mascot-eye:  #16120F;
-  --mascot-size: 128px;
+  --mascot-size: 147px;
 
   /* type */
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -358,7 +358,9 @@ a:hover { text-decoration: underline; }
 .member__sigil { color: var(--accent); }
 /* fixed-height head + badge slots so the metric rows align across all four
    panes; only the log then varies, and it bottom-aligns via margin-top: auto */
-.member__head { display: flex; gap: 0.8rem; align-items: center; min-height: 3.1rem; }
+/* fixed-height head slot: a two-line name (Javier's) must not push its log out
+   of line with the other three */
+.member__head { display: flex; gap: 0.8rem; align-items: center; min-height: 3.6rem; }
 .member__monogram {
   font-family: var(--font-mono);
   font-size: 0.9rem;
@@ -692,15 +694,31 @@ a:hover { text-decoration: underline; }
 .mascot__eye { fill: var(--mascot-eye); }
 .mascot__eyes { transform-origin: 50% 50%; transform-box: fill-box; }
 
-@media (max-width: 30em) { :root { --mascot-size: 92px; } }
+@media (max-width: 30em) { :root { --mascot-size: 106px; } }
 @media (max-height: 24em) { .mascot { display: none; } }
 
 /* ---------------------------------------------------------------- boot ---
-   The hero's boot log. The hero content itself stays hidden (opacity 0 via
-   .hero__reveal) until this sequence finishes, so the page reads as a machine
-   starting up rather than as text that failed to load. */
-.boot { font-family: var(--font-mono); font-size: 0.82rem; margin-bottom: 2rem; min-height: 9rem; }
-.boot__log { display: flex; flex-direction: column; gap: 0.3rem; }
+   A full-viewport terminal that owns the screen until it finishes. The rest of
+   the page is hidden while it runs, so the first thing anyone sees is a machine
+   starting up rather than a page that has already arrived.
+
+   display:none unless <html> carries .is-booting — a class an inline script
+   sets before first paint. With JS disabled the class is never added and the
+   overlay can never cover the page. */
+.boot { display: none; }
+.boot--shown {
+  display: grid;
+  align-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--canvas);
+  padding: var(--gutter);
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.6vw, 0.9rem);
+}
+.boot__screen { width: 100%; max-width: var(--page); margin-inline: auto; min-height: 8rem; }
+.boot__log { display: flex; flex-direction: column; gap: 0.32rem; }
 .boot__line { color: var(--ink-muted); display: flex; align-items: baseline; gap: 0.5rem; }
 .boot__sigil { color: var(--accent); }
 .boot__cmd { color: var(--ink); }
@@ -708,14 +726,40 @@ a:hover { text-decoration: underline; }
 /* the dotted leader is drawn, not typed — it costs nothing and never wraps */
 .boot__dots { flex: 1 1 auto; border-bottom: 1px dotted var(--line); transform: translateY(-0.22em); min-width: 1.5rem; }
 .boot__status { color: var(--accent); }
-.boot__line--ready .boot__ready-text { color: var(--accent); }
-.boot__ready { color: var(--accent); margin-top: 0.35rem; }
+.boot__ready { color: var(--accent); margin-top: 0.45rem; }
 
-/* The headline is scrambled through random glyphs before it settles. It only
-   needs a hairline reserve: the scramble keeps the character count, and the
-   longest headline fits the container even with the widest glyphs, so it
-   cannot reflow mid-animation. A full line reserve just left a dead gap. */
-.hero__headline { min-height: 1.05em; }
+/* everything behind the terminal, including the chrome and the mascot */
+.is-booting .topbar,
+.is-booting main,
+.is-booting .site-footer,
+.is-booting .mascot { visibility: hidden; }
+html.is-booting { overflow: hidden; }
+
+/* Exit: the terminal scrolls up and out, the way output leaves a screen —
+   deliberately not a fade. */
+@media (prefers-reduced-motion: no-preference) {
+  .boot--lifting {
+    transition: transform 0.75s cubic-bezier(0.55, 0.06, 0.32, 1);
+    transform: translateY(-101%);
+  }
+}
+
+/* ------------------------------------------------------- section unlock ---
+   Sections decode in the first time they are reached rather than being fully
+   present at load. Each title resolves out of random glyphs and its body
+   follows with a short stagger. Everything here is inside the no-preference
+   query, so with reduced motion nothing is ever hidden in the first place. */
+.section__title { min-height: 1.25em; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html.is-ready .section { opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  html.is-ready .section.is-unlocked { opacity: 1; transform: none; }
+  html.is-ready .section > .container > * { opacity: 0; transform: translateY(7px); transition: opacity 0.45s ease, transform 0.45s ease; }
+  html.is-ready .section.is-unlocked > .container > * { opacity: 1; transform: none; }
+  html.is-ready .section.is-unlocked > .container > *:nth-child(2) { transition-delay: 0.07s; }
+  html.is-ready .section.is-unlocked > .container > *:nth-child(3) { transition-delay: 0.14s; }
+  html.is-ready .section.is-unlocked > .container > *:nth-child(4) { transition-delay: 0.21s; }
+}
 
 /* ------------------------------------------------------------------ motion ---
    Every animated behaviour sits behind this query. With reduced motion the

@@ -323,18 +323,33 @@
     };
   }
 
-  function apply(p, sx, sy, rot) {
-    pos = p;
+  /* One render path. Position, scale and rotation are separate pieces of state
+     so a wall impact can drive the squash while a drag drives the position —
+     otherwise the two overwrite each other's transform every frame. */
+  var scaleState = { x: 1, y: 1 };
+  var rotState = 0;
+
+  function render() {
     if (!mascotEl) return;
     mascotEl.style.transform =
-      "translate(" + p.x.toFixed(1) + "px," + p.y.toFixed(1) + "px)" +
-      " scale(" + (sx == null ? 1 : sx) + "," + (sy == null ? 1 : sy) + ")" +
-      " rotate(" + (rot || 0) + "deg)";
+      "translate(" + pos.x.toFixed(1) + "px," + pos.y.toFixed(1) + "px)" +
+      " scale(" + scaleState.x + "," + scaleState.y + ")" +
+      " rotate(" + rotState + "deg)";
+  }
+
+  function apply(p, sx, sy, rot) {
+    pos = p;
+    scaleState = { x: sx == null ? 1 : sx, y: sy == null ? 1 : sy };
+    rotState = rot || 0;
+    render();
   }
 
   /* slow idle breath once it has arrived */
   function startBreath() {
     if (REDUCED || !dispEl) return;
+    /* guard: place() can be called more than once (init, then after the boot),
+       and each call would otherwise leave another rAF loop running forever */
+    if (wobbleRAF) return;
     var t0 = Date.now();
     (function loop() {
       var t = (Date.now() - t0) / 1000;
@@ -348,58 +363,19 @@
     if (wobbleRAF) { window.cancelAnimationFrame(wobbleRAF); wobbleRAF = null; }
   }
 
-  function enter() {
+  /* No entrance flight. The mascot is simply there, in the corner, from the
+     moment the page appears — the drag-and-return ("magnet") is what stays. */
+  function place() {
     if (!mascotEl) return;
-    var to = corner();
-
-    if (REDUCED) {
-      apply(to);
-      mascotEl.classList.add("mascot--settled");
-      settled = true;
-      return;
-    }
-
-    var s = size();
-    var from = {
-      x: window.innerWidth / 2 - s.w / 2,
-      y: window.innerHeight * 0.42 - s.h / 2
-    };
-    var fromScale = Math.min(2.9, Math.max(1.8, window.innerWidth / 460));
-
-    mascotEl.classList.add("mascot--travelling");
-    apply(from, fromScale, fromScale, -9);
-
-    /* the displacement scale peaks mid-flight and decays on landing — this is
-       the "shape dilation" that makes the shape feel liquid rather than rigid */
-    var start = Date.now();
-    var dur = 2300;
-    (function fly() {
-      var p = Math.min(1, (Date.now() - start) / dur);
-      var eased = 1 - Math.pow(1 - p, 3);
-      var x = from.x + (to.x - from.x) * eased;
-      var y = from.y + (to.y - from.y) * eased;
-      /* an arc, so it does not travel in a straight line */
-      y -= Math.sin(p * Math.PI) * (window.innerHeight * 0.16);
-      /* squash going out, stretch at speed, squash on landing */
-      var stretch = 1 + Math.sin(p * Math.PI) * 0.22 - (p > 0.86 ? (p - 0.86) * 1.6 : 0);
-      var sx = 1 / stretch;
-      var sy = stretch;
-      var scale = fromScale + (1 - fromScale) * eased;
-      var rot = -9 + p * 15;
-      apply({ x: x, y: y }, sx * scale, sy * scale, rot);
-
-      if (dispEl) dispEl.setAttribute("scale", (7 * (1 - p) * (1 - p) + 0.9).toFixed(2));
-
-      if (p < 1) raf(fly);
-      else {
-        apply(to, 1, 1, 0);
-        mascotEl.classList.remove("mascot--travelling");
-        mascotEl.classList.add("mascot--settled");
-        settled = true;
-        startBreath();
-      }
-    })();
+    apply(corner());
+    mascotEl.classList.add("mascot--settled");
+    settled = true;
+    startBreath();
   }
+
+  /* There is deliberately no wall-impact reaction. A mascot that squashes when
+     you slam it into an edge was built and then cut: it read as a gag bolted
+     onto the interface rather than part of it. */
 
   function goHome() {
     if (!mascotEl) return;
@@ -407,17 +383,19 @@
     if (REDUCED) { apply(to); return; }
     var from = { x: pos.x, y: pos.y };
     var start = Date.now();
-    var dur = 620;
+    /* Low gravity, not a zip. It hangs and drifts back over ~1.5s with a
+       decaying float and a lazy rotation, rather than snapping to the corner. */
+    var dur = 1500;
     mascotEl.classList.add("mascot--travelling");
     (function back() {
       var p = Math.min(1, (Date.now() - start) / dur);
-      var eased = 1 - Math.pow(1 - p, 2.2);
-      /* overshoot slightly, then settle */
-      var over = Math.sin(p * Math.PI) * 10;
+      var eased = 1 - Math.pow(1 - p, 1.7);                 /* gentle deceleration */
       var x = from.x + (to.x - from.x) * eased;
-      var y = from.y + (to.y - from.y) * eased - over;
-      var squash = 1 + Math.sin(p * Math.PI) * 0.14;
-      apply({ x: x, y: y }, squash, 1 / squash, 0);
+      var y = from.y + (to.y - from.y) * eased;
+      var float = Math.sin(p * Math.PI * 1.7) * 22 * (1 - p); /* it lingers, then settles */
+      var squash = 1 + Math.sin(p * Math.PI) * 0.07;
+      var rot = Math.sin(p * Math.PI * 2.1) * 4 * (1 - p);
+      apply({ x: x, y: y - float }, squash, 1 / squash, rot);
       if (p < 1) raf(back);
       else {
         apply(to, 1, 1, 0);
@@ -440,7 +418,9 @@
 
     el.addEventListener("pointermove", function (e) {
       if (!drag) return;
-      apply(clampPos({ x: e.clientX - drag.dx, y: e.clientY - drag.dy }), 1.04, 0.96, 0);
+      var clamped = clampPos({ x: e.clientX - drag.dx, y: e.clientY - drag.dy });
+      /* leaning slightly while carried, so it reads as being held */
+      apply(clamped, 1.03, 0.97, 0);
     });
 
     function release(e) {
@@ -469,9 +449,52 @@
     });
   }
 
-  function mascotEnter() {
+  function mascotPlace() {
     if (!mascotEl) return;
-    enter();
+    place();
+  }
+
+  /* --------------------------------------------------- section unlocking ---
+     Each section decodes the first time it is reached: its title resolves out
+     of random glyphs and its body rises in behind it. This is what makes the
+     page feel like a terminal reading itself out rather than a document that
+     was already there.
+
+     Two safety nets, because an unlock that never fires means an invisible
+     section: anything without an observer is unlocked outright, and a timer
+     unlocks whatever is left regardless. */
+  function revealSections(doc) {
+    var sections = doc.querySelectorAll("[data-section]");
+    if (!sections.length) return;
+
+    function unlock(section, animate) {
+      if (section.classList.contains("is-unlocked")) return;
+      section.classList.add("is-unlocked");
+      if (!animate || REDUCED) return;
+      var title = section.querySelector(".section__title");
+      if (title && title.textContent) scramble(title, title.textContent);
+    }
+
+    if (REDUCED || !("IntersectionObserver" in window)) {
+      Array.prototype.forEach.call(sections, function (s) { unlock(s, false); });
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          unlock(entry.target, true);
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+    );
+    Array.prototype.forEach.call(sections, function (s) { observer.observe(s); });
+
+    window.setTimeout(function () {
+      Array.prototype.forEach.call(sections, function (s) { unlock(s, false); });
+    }, 4000);
   }
 
   window.SiteMotion = {
@@ -484,6 +507,7 @@
     startCurve: startCurve,
     drawOnScroll: drawOnScroll,
     initMascot: initMascot,
-    mascotEnter: mascotEnter
+    mascotPlace: mascotPlace,
+    revealSections: revealSections
   };
 })();

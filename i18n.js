@@ -39,19 +39,19 @@ window.I18N = {
       sub: "Four first-year bachelor students at the University of Southern Denmark. None of us had competed in an ML competition before.",
       alex: {
         task: "Survival Simulator",
-        log: "Built an evolutionary search over thousands of candidate controllers, and spent three days refusing to accept the plateau it produced."
+        log: "Rebuilt the official simulator to be bit-exact and 8.5× faster, then ran an evolutionary search over thousands of candidate controllers against it, pushing the score from 308 to a graded 1815."
       },
       jakub: {
         task: "Medical Appointment",
-        log: "Took the scheduling task and produced the highest score in the entire Nordic field."
+        log: "Built a pipeline that transcribes the recording with word-level timestamps matched to the annotators' own coordinates, then answers through a 27B model and picks each evidence span as the medoid of three independently trained producers."
       },
       javier: {
         task: "Drone Flyby",
-        log: "Worked the control problem from the ground up, and kept iterating on the model with Franciszek until it moved."
+        log: "Took the perception task: five detection passes per frame, a fixed six-quadrant camera sweep, ground motion refitted online mid-flight, and every one of the 249 frames answered on an unseen flight."
       },
       franek: {
-        task: "Across all three tasks",
-        log: "Built the alternative controller in one long session, then went to the other two tasks and helped improve the drone and medical models as well."
+        task: "All three tasks",
+        log: "Built the alternative controller that turned the run around in one long session, then moved across the other two tasks — working with Javier on the drone model and with Jakub on the medical one."
       }
     },
     board: {
@@ -228,19 +228,19 @@ window.I18N = {
       sub: "Fire førsteårsstuderende på Syddansk Universitet. Ingen af os havde deltaget i en ML-konkurrence før.",
       alex: {
         task: "Survival Simulator",
-        log: "Byggede en evolutionær søgning gennem tusindvis af kandidatcontrollere og nægtede i tre dage at acceptere det plateau, den gav."
+        log: "Genopbyggede den officielle simulator, så den er bittede-identisk og 8.5× hurtigere, og kørte derefter en evolutionær søgning gennem tusindvis af kandidatcontrollere imod den — fra 308 til en bedømt 1815."
       },
       jakub: {
         task: "Medical Appointment",
-        log: "Tog planlægningsopgaven og leverede den højeste score i hele det nordiske felt."
+        log: "Byggede en pipeline, der transskriberer optagelsen med ordtidsstempler matchet mod annotatørernes egne koordinater, svarer gennem en 27B-model og vælger hver evidensspan som medoiden af tre uafhængigt trænede producenter."
       },
       javier: {
         task: "Drone Flyby",
-        log: "Angreb styreproblemet fra bunden og blev ved med at iterere på modellen sammen med Franciszek, indtil den flyttede sig."
+        log: "Tog perceptionsopgaven: fem detektionspas pr. frame, en fast sekskvadrant-kamerasweep, grundbevægelse efterjusteret online undervejs, og alle 249 frames besvaret på en flyvning han aldrig havde set."
       },
       franek: {
-        task: "På tværs af alle tre opgaver",
-        log: "Byggede den alternative controller i én lang session og gik derefter til de to andre opgaver og hjalp med at forbedre både drone- og medical-modellen."
+        task: "Alle tre opgaver",
+        log: "Byggede den alternative controller, der vendte forløbet, i én lang session, og gik derefter på tværs af de to andre opgaver — sammen med Javier om drone-modellen og med Jakub om medical-modellen."
       }
     },
     board: {

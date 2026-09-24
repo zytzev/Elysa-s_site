@@ -513,34 +513,54 @@
   }
 
   /* ----------------------------------------------------------------- boot ---
-     The hero is deliberately withheld until the boot log finishes: commands
-     type in turn, a short status readout prints, then the headline resolves
-     out of random glyphs (not a fade) and the numeric stats count up. */
+     The terminal owns the viewport until it finishes. On completion the page
+     is revealed FIRST and the terminal then slides up and out of the way —
+     so the lift actually uncovers something rather than moving over a page
+     that is still hidden. */
   var bootDone = false;
 
   function mountBoot() {
-    var bits = document.querySelectorAll(".hero__headline, .hero__sub, .hero__stats, .hero__ctas");
+    var root = document.documentElement;
+    var overlay = document.querySelector('[data-slot="boot"]');
     var headline = document.querySelector('[data-slot="headline"]');
     var statValues = document.querySelectorAll(".hero__stat-value");
     var log = document.querySelector('[data-slot="boot-log"]');
     var readyEl = document.querySelector('[data-slot="boot-ready"]');
     var cfg = config.boot || {};
+    var reduced = !!(window.SiteMotion && window.SiteMotion.reduced);
 
-    function reveal() {
-      Array.prototype.forEach.call(bits, function (el) { el.classList.add("is-in"); });
-      if (!window.SiteMotion) return;
-      window.SiteMotion.scramble(headline, t("hero.headline"));
-      window.SiteMotion.countUp(statValues);
-      window.SiteMotion.mascotEnter();
+    function unveil() {
+      /* reveal the page, decode the hero (it is on screen already), then let
+         the terminal slide away over it */
+      root.classList.add("is-ready");
+      var hero = document.querySelector('[data-section="hero"]');
+      if (hero) hero.classList.add("is-unlocked");
+      if (window.SiteMotion) {
+        window.SiteMotion.scramble(headline, t("hero.headline"));
+        window.SiteMotion.countUp(statValues);
+        window.SiteMotion.mascotPlace();
+        window.SiteMotion.revealSections(document);
+      }
+      root.classList.remove("is-booting");
+
+      if (!overlay || reduced) {
+        if (overlay) overlay.classList.remove("boot--shown");
+        return;
+      }
+      overlay.classList.add("boot--lifting");
+      window.setTimeout(function () {
+        overlay.classList.remove("boot--shown", "boot--lifting");
+      }, 780);
     }
 
-    if (bootDone) { reveal(); return; }
+    if (bootDone) { unveil(); return; }
     bootDone = true;
 
-    Array.prototype.forEach.call(bits, function (el) { el.classList.add("hero__reveal"); });
+    /* no terminal available (no JS motion, or reduced motion): the page is
+       simply shown, and nothing is ever hidden in the first place */
+    if (!log || !window.SiteMotion || reduced) { unveil(); return; }
 
-    /* no log markup, or no motion available: show everything immediately */
-    if (!log || !window.SiteMotion) { reveal(); return; }
+    if (overlay) overlay.classList.add("boot--shown");
 
     window.SiteMotion.bootSequence({
       log: log,
@@ -550,7 +570,7 @@
         return { label: t(s.labelKey), status: t(s.statusKey) };
       }),
       readyLabel: t(cfg.readyKey),
-      done: reveal
+      done: unveil
     });
   }
 

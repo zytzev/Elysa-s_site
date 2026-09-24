@@ -16,6 +16,25 @@
   </head>
 
   <body id="top">
+    <!-- Set before anything paints, so the page never flashes its content
+         before the terminal has run. With JS off this line never executes, no
+         class is added, and the whole page is simply visible. -->
+    <script>document.documentElement.classList.add("is-booting");</script>
+
+    <!-- ============================================================
+         BOOT TERMINAL — owns the entire viewport until it finishes, then
+         slides up and out like terminal output scrolling away. Hidden by
+         default in CSS so that with JS disabled it can never cover the page.
+         aria-hidden: it is theatre, not content, and nobody should have to
+         sit through it with a screen reader.
+         ============================================================ -->
+    <div class="boot" data-slot="boot" aria-hidden="true">
+      <div class="boot__screen">
+        <ol class="boot__log" data-slot="boot-log"></ol>
+        <p class="boot__ready" data-slot="boot-ready"></p>
+      </div>
+    </div>
+
     <script>
       window.SITE_CONFIG = {
         sections: ["hero", "team", "board", "run", "about", "learned", "contact"],
@@ -263,12 +282,6 @@
       <!-- SLOT: hero — the boot sequence -->
       <section id="hero" class="section section--hero" data-section="hero">
         <div class="container hero__inner">
-          <!-- The boot log is theatre, not content: aria-hidden so nobody has
-               to sit through it, and skipped entirely under reduced motion. -->
-          <div class="boot" data-slot="boot" aria-hidden="true">
-            <ol class="boot__log" data-slot="boot-log"></ol>
-            <p class="boot__ready" data-slot="boot-ready"></p>
-          </div>
           <h1 class="hero__headline" data-slot="headline" data-fill="hero.headline"></h1>
           <p class="hero__sub" data-fill="hero.sub"></p>
           <dl class="hero__stats" data-fill="hero.stats"></dl>

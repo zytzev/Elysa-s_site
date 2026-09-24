@@ -100,7 +100,15 @@ async function capture(browser, name, opts) {
         return nearRight && nearBottom;
       })(),
       bootLines: document.querySelectorAll(".boot__line").length,
-      heroRevealed: !!document.querySelector(".hero__headline.is-in"),
+      bootOverlayShown: (function () {
+        var b = document.querySelector(".boot");
+        if (!b) return false;
+        return getComputedStyle(b).display !== "none";
+      })(),
+      pageHiddenWhileBooting: document.documentElement.classList.contains("is-booting"),
+      heroUnlocked: !!(document.querySelector("#hero") || {}).classList &&
+        document.querySelector("#hero").classList.contains("is-unlocked"),
+      unlockedSections: document.querySelectorAll(".section.is-unlocked").length,
       headlineText: (document.querySelector(".hero__headline") || {}).textContent || "",
       statValues: Array.prototype.map.call(document.querySelectorAll(".hero__stat-value"), function (e) { return e.textContent; }),
       doors: document.querySelectorAll(".door").length,
@@ -128,9 +136,10 @@ async function capture(browser, name, opts) {
     " complete=" + metrics.curveComplete);
   console.log("  mascot: visible=" + metrics.mascotVisible + " box=" + JSON.stringify(metrics.mascotBox) +
     " reachedCorner=" + metrics.mascotCornerOk);
-  console.log("  boot: lines=" + metrics.bootLines + " heroRevealed=" + metrics.heroRevealed +
-    " headline=" + JSON.stringify(metrics.headlineText) +
-    " stats=" + JSON.stringify(metrics.statValues));
+  console.log("  boot: lines=" + metrics.bootLines + " overlayShown=" + metrics.bootOverlayShown +
+    " pageHidden=" + metrics.pageHiddenWhileBooting + " heroUnlocked=" + metrics.heroUnlocked +
+    " unlockedSections=" + metrics.unlockedSections);
+  console.log("  headline=" + JSON.stringify(metrics.headlineText) + " stats=" + JSON.stringify(metrics.statValues));
   console.log("  footer: " + JSON.stringify(metrics.footerLegal));
   if (logs.length) {
     console.log("  CONSOLE:");
@@ -141,6 +150,15 @@ async function capture(browser, name, opts) {
 
   if (metrics.overflowX > 1) problems.push(name + ": horizontal overflow of " + metrics.overflowX + "px");
   if (!metrics.headline) problems.push(name + ": hero headline is EMPTY");
+  /* the boot must actually finish and reveal the page — a stuck overlay or an
+     unlocked-never hero would leave the site looking broken for everyone */
+  if (opts.expectBooting) {
+    if (!metrics.bootOverlayShown) problems.push(name + ": expected the boot terminal to be covering the page");
+  } else {
+    if (metrics.pageHiddenWhileBooting) problems.push(name + ": page still hidden after boot should have finished");
+    if (metrics.bootOverlayShown) problems.push(name + ": boot terminal still covering the page after boot");
+    if (!metrics.heroUnlocked) problems.push(name + ": hero was never unlocked");
+  }
   if (metrics.teamPanels !== 4) problems.push(name + ": expected 4 member panes, got " + metrics.teamPanels);
   if (metrics.boardRows !== 7) problems.push(name + ": expected 7 board rows, got " + metrics.boardRows);
   if (metrics.legendItems !== metrics.expectedPoints) problems.push(name + ": expected " + metrics.expectedPoints + " legend items, got " + metrics.legendItems);
@@ -223,6 +241,7 @@ async function captureSections(browser) {
   var browser = await puppeteer.launch({ headless: "new", args: ["--allow-file-access-from-files"] });
   try {
     await capture(browser, "desktop", { width: 1440, height: 900 });
+    await capture(browser, "boot", { width: 1440, height: 900, settle: 1150, expectBooting: true });
     await capture(browser, "desktop-reduced", { width: 1440, height: 900, reducedMotion: true });
     await capture(browser, "mobile", { width: 390, height: 844 });
     await capture(browser, "danish", { width: 1440, height: 900, lang: "da" });

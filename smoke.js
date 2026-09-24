@@ -158,7 +158,10 @@ function run(file) {
   vm.runInContext(src, ctx, { filename: file });
 }
 
-var configScript = html.match(/<script>([\s\S]*?)<\/script>/g)[0]
+/* only the config block — the page also carries a tiny bootstrap script that
+   touches document, which this stub deliberately does not fully provide */
+var configScript = (html.match(/<script>([\s\S]*?)<\/script>/g) || [])
+  .filter(function (b) { return b.indexOf("SITE_CONFIG") !== -1; })[0]
   .replace(/^<script>/, "").replace(/<\/script>$/, "");
 
 try {
@@ -203,7 +206,7 @@ if (!failures.length) {
   expect("team heading", fills["team.heading"].textContent, "The four");
   var team = fills["team.members"].innerHTML;
   ["Alexandru Zaitzev", "Jakub Furmaniuk", "Javier Arévalo Hernández",
-   "Franciszek Kossut", "Across all three tasks"].forEach(function (s) {
+   "Franciszek Kossut", "All three tasks"].forEach(function (s) {
     expect("team members include " + s, team, s);
   });
   /* the fairness rule: a member pane must never carry a score, and must never
@@ -211,6 +214,22 @@ if (!failures.length) {
   ["0.822", "1405.256", "0.263", "778", "1280", "weakest", "weak"].forEach(function (bad) {
     if (team.indexOf(bad) === -1) pass();
     else fail("member panes must not contain " + JSON.stringify(bad));
+  });
+
+  /* The four panes sit side by side and their logs are bottom-aligned, so
+     wildly uneven lengths read as a broken layout — one long pane beside a
+     short one leaves a visible void above it. Keep them within sight of each
+     other, in both languages. */
+  ["en", "da"].forEach(function (l) {
+    var words = ["alex", "jakub", "javier", "franek"].map(function (k) {
+      var log = (ctx.window.I18N[l].team[k] || {}).log || "";
+      return log.trim().split(/\s+/).length;
+    });
+    var lo = Math.min.apply(null, words);
+    var hi = Math.max.apply(null, words);
+    if (hi / lo <= 1.35) pass();
+    else fail("member pane logs too uneven in " + l + ": " + words.join(" / ") +
+      " words (max/min = " + (hi / lo).toFixed(2) + ")");
   });
 
   expect("board sub explains the two scales", fills["board.sub"].textContent, "own competition");

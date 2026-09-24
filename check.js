@@ -36,10 +36,11 @@ function loadGlobals() {
   if (html) {
     var blocks = html.match(/<script>([\s\S]*?)<\/script>/g) || [];
     blocks.forEach(function (b) {
-      vm.runInContext(
-        b.replace(/^<script>/, "").replace(/<\/script>$/, ""),
-        ctx
-      );
+      var body = b.replace(/^<script>/, "").replace(/<\/script>$/, "");
+      /* only the config block — the page also carries a tiny bootstrap script
+         that touches document, which does not exist in this sandbox */
+      if (body.indexOf("SITE_CONFIG") === -1) return;
+      vm.runInContext(body, ctx);
     });
   }
   var i18n = read("i18n.js");
