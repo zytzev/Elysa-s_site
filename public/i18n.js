@@ -57,7 +57,7 @@ window.I18N = {
       },
       javier: {
         task: "Drone Flyby",
-        log: "Took the perception task: five detection passes per frame, a camera sweep alternating quadrant and whole-frame views, ground motion refitted mid-flight, and all 249 frames answered on an unseen flight."
+        log: "Took the perception task: five detection passes per frame, a camera sweep alternating quadrant and whole-frame views, ground motion refitted mid-flight, and all 249 frames answered on an unseen flight. The box-convention theory was Franciszek's."
       },
       franek: {
         task: "All three tasks",
@@ -126,8 +126,6 @@ window.I18N = {
       d7n: "Alternating quadrant views with whole-frame views, and five inference passes. Mean over 7 runs; the best single run reached 0.6071.",
       d8: "The unseen flight",
       d8n: "Only about 45% of the validation score carried over. Roughly 60% of our training backgrounds had been cut from that flight — the likely cause, and one we never got to retest.",
-      m0: "Earlier architecture, replaced",
-      m0n: "A working 0.802 under a completely different architecture, kept on its own branch. The rebuild below was a full replacement, not an extension — it starts lower and has to climb past this.",
       m1: "First working checkpoint",
       m1n: "Transcribe the recording, have a local model answer and quote its evidence, then map those quotes back to timestamps.",
       m2: "Evidence gets its own pass",
@@ -281,7 +279,7 @@ window.I18N = {
       },
       javier: {
         task: "Drone Flyby",
-        log: "Tog perceptionsopgaven: fem detektionspas pr. frame, en kamerasweep der skifter mellem kvadrant- og helbilledvisninger, grundbevægelse efterjusteret undervejs, og alle 249 frames besvaret på en uset flyvning."
+        log: "Tog perceptionsopgaven: fem detektionspas pr. frame, en kamerasweep der skifter mellem kvadrant- og helbilledvisninger, grundbevægelse efterjusteret undervejs, og alle 249 frames besvaret på en uset flyvning. Box-konventionsteorien var Franciszeks."
       },
       franek: {
         task: "Alle tre opgaver",
@@ -350,8 +348,6 @@ window.I18N = {
       d7n: "Skiftende kvadrantvisninger og helbilledvisninger, og fem inferenspas. Gennemsnit over 7 kørsler; den bedste enkeltkørsel nåede 0.6071.",
       d8: "Den usete flyvning",
       d8n: "Kun omkring 45% af valideringsscoren fulgte med over. Cirka 60% af vores træningsbaggrunde var klippet fra netop den flyvning — den sandsynlige årsag, og en vi aldrig fik testet igen.",
-      m0: "Tidligere arkitektur, erstattet",
-      m0n: "En fungerende 0.802 under en helt anden arkitektur, bevaret på sin egen branch. Genopbygningen nedenfor var en fuld erstatning, ikke en udvidelse — den starter lavere og skal kravle forbi denne.",
       m1: "Første fungerende checkpoint",
       m1n: "Transskribér optagelsen, lad en lokal model svare og citere sin evidens, og map citaterne tilbage til tidsstempler.",
       m2: "Evidensen får sit eget pas",

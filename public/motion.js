@@ -306,8 +306,16 @@
       var x1 = c.x(s - 1), y1 = c.y(pts[s - 1].value);
       var x2 = c.x(s), y2 = c.y(pts[s].value);
       var len = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) + 2;
+/* A segment is marked only when BOTH of its ends belong to the same marked
+       author. Colouring the segment that merely *leads to* a marked point would
+       start the colour before that author's first contribution — the red must
+       cover 1239 -> 1815, not 1014 -> 1815. */
+      var segAuthor = (pts[s - 1].author && pts[s - 1].author === pts[s].author)
+        ? pts[s].author
+        : null;
       segs +=
-        '<path class="run__seg' + byMark(pts[s]) + '" d="M' + x1.toFixed(1) + " " + y1.toFixed(1) +
+        '<path class="run__seg' + (segAuthor ? " run__by-" + String(segAuthor) : "") +
+        '" d="M' + x1.toFixed(1) + " " + y1.toFixed(1) +
         " L" + x2.toFixed(1) + " " + y2.toFixed(1) + '" style="--len:' + len.toFixed(1) +
         ";--i:" + (s - 1) + '"/>';
     }
