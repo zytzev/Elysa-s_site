@@ -268,26 +268,53 @@
     opts = opts || {};
     var c = buildCurve(pts);
 
+    var byMark = function (p) { return p.author ? " run__by-" + String(p.author) : ""; };
+
     var marks = "";
     pts.forEach(function (p, i) {
       var px = c.x(i).toFixed(1);
       var py = c.y(p.value).toFixed(1);
       var cls = p.kind === "evaluated" ? "run__dot--evaluated"
         : p.kind === "validation" ? "run__dot--validation"
+        : p.kind === "superseded" ? "run__dot--superseded"
         : "run__dot--local";
       /* Edge labels anchor inward, or the first value sits on top of the
          y-axis tick at the same height. */
       var anchor = i === 0 ? "start" : i === pts.length - 1 ? "end" : "middle";
       var lx = c.x(i) + (i === 0 ? 8 : i === pts.length - 1 ? -8 : 0);
+
+      /* A native <title> is the hover tooltip — no JS, and a screen reader gets
+         the attribution too. */
+      var tip = opts.t(p.labelKey) + (p.noteKey ? " — " + opts.t(p.noteKey) : "");
+      if (p.author) {
+        var who = (opts.authorName && opts.authorName(p.author)) || p.author;
+        tip = who + ": " + tip;
+      }
+
       marks +=
-        '<circle class="run__dot ' + cls + '" cx="' + px + '" cy="' + py + '" r="4"/>' +
-        '<text class="run__value" x="' + lx.toFixed(1) + '" y="' + (c.y(p.value) - 13).toFixed(1) +
-        '" text-anchor="' + anchor + '">' + (p.approx ? "~" : "") + p.value + "</text>";
+        '<circle class="run__dot ' + cls + byMark(p) + '" cx="' + px + '" cy="' + py +
+        '" r="4" data-i="' + i + '"><title>' + esc(tip) + "</title></circle>" +
+        '<text class="run__value' + byMark(p) + '" x="' + lx.toFixed(1) + '" y="' +
+        (c.y(p.value) - 13).toFixed(1) + '" text-anchor="' + anchor + '">' +
+        (p.approx ? "~" : "") + p.value + "</text>";
     });
+
+    /* One path per segment rather than a single line, so a segment can carry
+       the colour of whoever pushed the point it leads to. */
+    var segs = "";
+    for (var s = 1; s < pts.length; s++) {
+      var x1 = c.x(s - 1), y1 = c.y(pts[s - 1].value);
+      var x2 = c.x(s), y2 = c.y(pts[s].value);
+      var len = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) + 2;
+      segs +=
+        '<path class="run__seg' + byMark(pts[s]) + '" d="M' + x1.toFixed(1) + " " + y1.toFixed(1) +
+        " L" + x2.toFixed(1) + " " + y2.toFixed(1) + '" style="--len:' + len.toFixed(1) +
+        ";--i:" + (s - 1) + '"/>';
+    }
 
     svg.innerHTML =
       c.grid +
-      '<path class="run__line" d="' + c.d + '"/>' +
+      '<g class="run__segs">' + segs + "</g>" +
       '<g class="run__marks">' + marks + "</g>";
 
     /* The legend carries every value as plain text, so the whole story is
@@ -295,11 +322,13 @@
     if (opts.legend && opts.t) {
       opts.legend.innerHTML = pts
         .map(function (p) {
+          var who = p.author ? ((opts.authorName && opts.authorName(p.author)) || p.author) : "";
           return (
-            '<li class="run__legend-item run__legend-item--' + esc(p.kind) + '">' +
+            '<li class="run__legend-item run__legend-item--' + esc(p.kind) + byMark(p) + '">' +
             '<span class="run__legend-dot" aria-hidden="true"></span>' +
             '<span class="run__legend-label">' + esc(opts.t(p.labelKey)) + "</span>" +
             '<span class="run__legend-value">' + (p.approx ? "~" : "") + p.value + "</span>" +
+            (who ? '<span class="run__by">' + esc(who) + "</span>" : "") +
             (p.noteKey ? '<span class="run__legend-note">' + esc(opts.t(p.noteKey)) + "</span>" : "") +
             "</li>"
           );

@@ -67,9 +67,11 @@ async function capture(browser, name, opts) {
       prompt: txt(".hero__prompt"),
       teamPanels: document.querySelectorAll(".member").length,
       boardRows: document.querySelectorAll(".board__row").length,
-      curvePath: !!document.querySelector(".run__line"),
-      curveLen: (document.querySelector(".run__line") || {}).getTotalLength
-        ? Math.round(document.querySelector(".run__line").getTotalLength()) : null,
+      curvePath: !!document.querySelector(".run__seg"),
+      segmentCount: document.querySelectorAll(".run__seg").length,
+      markedSegments: document.querySelectorAll(".run__seg.run__by-franek").length,
+      markedDots: document.querySelectorAll(".run__dot.run__by-franek").length,
+      noteHidden: (function () { var n = document.querySelector('[data-slot="run-note"]'); return n ? n.hidden : null; })(),
       curveComplete: !!document.querySelector(".run__svg.is-complete"),
       legendItems: document.querySelectorAll(".run__legend-item").length,
       /* read the expectation from the page's own config rather than a magic
@@ -133,8 +135,8 @@ async function capture(browser, name, opts) {
   console.log("  prompt: " + JSON.stringify(metrics.prompt));
   console.log("  members=" + metrics.teamPanels + "  boardRows=" + metrics.boardRows +
     "  legendItems=" + metrics.legendItems + "  doors=" + metrics.doors + "  formFields=" + metrics.formFields);
-  console.log("  curve: path=" + metrics.curvePath + " len=" + metrics.curveLen +
-    " complete=" + metrics.curveComplete);
+  console.log("  curve: segments=" + metrics.segmentCount + " complete=" + metrics.curveComplete +
+    " markedSegments=" + metrics.markedSegments + " markedDots=" + metrics.markedDots);
   console.log("  mascot: visible=" + metrics.mascotVisible + " box=" + JSON.stringify(metrics.mascotBox) +
     " reachedCorner=" + metrics.mascotCornerOk);
   console.log("  boot: lines=" + metrics.bootLines + " overlayShown=" + metrics.bootOverlayShown +
@@ -207,7 +209,7 @@ async function captureSections(browser) {
 
   var after = await page.evaluate(function () {
     var svg = document.querySelector(".run__svg");
-    var line = document.querySelector(".run__line");
+    var line = document.querySelector(".run__seg");
     var cs = line ? getComputedStyle(line) : null;
     return {
       complete: !!(svg && svg.classList.contains("is-complete")),

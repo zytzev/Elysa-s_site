@@ -33,6 +33,7 @@
   --accent:     #5CE1A0;  /* phosphor green — the team's own numbers, successes */
   --warn:       #F2B455;  /* amber — reserved for the unflattering numbers       */
   --dk:         #C8102E;  /* Danish red — used exactly once, the DK chip         */
+  --marked:     #E5484D;  /* red — means "a named person pushed this point"      */
 
   /* mascot */
   --mascot:      #E07A5B;
@@ -465,12 +466,34 @@ a:hover { text-decoration: underline; }
 .run__svg { width: 100%; height: auto; display: block; }
 .run__gridline { stroke: var(--line); stroke-width: 1; }
 .run__axis { fill: var(--ink-muted); font-family: var(--font-mono); font-size: 11px; }
-.run__line {
+/* one path per segment, so a segment can carry the colour of whoever pushed
+   the point it leads to */
+.run__seg {
   fill: none;
   stroke: var(--accent);
   stroke-width: 2;
   stroke-linejoin: round;
   stroke-linecap: round;
+}
+
+/* the one mark on this site that means "a named person pushed this" */
+.run__dot.run__by-franek { fill: var(--marked); stroke: var(--canvas); stroke-width: 2; }
+.run__seg.run__by-franek { stroke: var(--marked); }
+.run__value.run__by-franek { fill: var(--marked); }
+.run__legend-item.run__by-franek .run__legend-dot { background: var(--marked); border: 0; }
+.run__by {
+  grid-column: 2 / -1;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--marked);
+}
+.run__note {
+  margin-top: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--marked);
+  border-left: 2px solid var(--marked);
+  padding-left: 0.7rem;
 }
 .run__dot--local { fill: var(--canvas); stroke: var(--ink-muted); stroke-width: 2; }
 .run__dot--validation { fill: var(--accent); stroke: var(--canvas); stroke-width: 2; }
@@ -959,13 +982,16 @@ html.is-booting { overflow: hidden; }
   /* The run's hidden start state is OPT-IN via .is-animated. If motion.js
      never runs, or the observer never fires, the chart is simply complete —
      it is never left blank. */
-  .run__svg.is-animated .run__line {
-    stroke-dasharray: 2200;
-    stroke-dashoffset: 2200;
-    transition: stroke-dashoffset 1.6s ease-out;
+  /* Segments draw in sequence — each one animates its own length, staggered by
+     its index, rather than a single path with one long dash. */
+  .run__svg.is-animated .run__seg {
+    stroke-dasharray: var(--len);
+    stroke-dashoffset: var(--len);
+    transition: stroke-dashoffset 0.45s ease-out;
+    transition-delay: calc(var(--i) * 0.14s);
   }
-  .run__svg.is-animated .run__marks { opacity: 0; transition: opacity 0.6s ease 1.2s; }
-  .run__svg.is-animated.is-complete .run__line { stroke-dashoffset: 0; }
+  .run__svg.is-animated .run__marks { opacity: 0; transition: opacity 0.6s ease 1.3s; }
+  .run__svg.is-animated.is-complete .run__seg { stroke-dashoffset: 0; }
   .run__svg.is-animated.is-complete .run__marks { opacity: 1; }
 }
 

@@ -256,7 +256,9 @@ if (!failures.length) {
   ["308", "437", "570", "709", "1014", "1239", "1484", "1815"].forEach(function (n) {
     expect("survival legend has " + n, legend, n);
   });
-  expect("curve svg drawn", slots["run-svg"].innerHTML, "run__line");
+  expect("curve svg drawn", slots["run-svg"].innerHTML, "run__seg");
+  /* the authorship marking: only the agreed stretch carries it */
+  expect("survival marks 3 points as franek's", slots["run-svg"].innerHTML, "run__by-franek");
   expect("curve svg axes", slots["run-svg"].innerHTML, "run__axis");
   expect("curve is complete under reduced motion",
     slots["run-svg"].classList.contains("is-complete") ? "is-complete" : "", "is-complete");

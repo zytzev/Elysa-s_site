@@ -511,6 +511,7 @@
 
     window.SiteMotion.startCurve(svg, task.points, {
       t: t,
+      authorName: function (a) { return (config.run.authors || {})[a] || ""; },
       legend: document.querySelector('[data-slot="run-legend"]'),
       onReady: function (el) {
         if (!el.getAttribute("data-observed")) {
@@ -519,6 +520,26 @@
         }
       }
     });
+
+    /* Clicking a point names whoever pushed it. Hover already works through the
+       SVG <title>; this is for touch, where there is no hover. */
+    var note = document.querySelector('[data-slot="run-note"]');
+    if (note) {
+      note.hidden = true;
+      note.textContent = "";
+      svg.querySelectorAll(".run__dot").forEach(function (dot) {
+        dot.style.cursor = "pointer";
+        dot.addEventListener("click", function () {
+          var i = parseInt(dot.getAttribute("data-i"), 10);
+          var p = task.points[i];
+          if (!p) return;
+          var who = p.author ? ((config.run.authors || {})[p.author] || "") : "";
+          note.textContent = (who ? who + " — " : "") + t(p.labelKey) +
+            (p.noteKey ? ": " + t(p.noteKey) : "");
+          note.hidden = false;
+        });
+      });
+    }
 
     var caption = document.querySelector('[data-slot="run-caption"]');
     if (caption) caption.textContent = t("run.legend");

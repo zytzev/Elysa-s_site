@@ -160,6 +160,10 @@
            validation run from the graded evaluation. Never merge them: the
            whole point of this section is that they are different numbers. */
         run: {
+          /* Who pushed a given point. Only points where the team has agreed the
+             attribution carry an `author`; everything else stays unmarked rather
+             than guessed. */
+          authors: { franek: "Franciszek Kossut" },
           tasks: [
             {
               id: "survival",
@@ -171,9 +175,11 @@
                 { value: 570,  kind: "local",      labelKey: "run.s3", noteKey: "run.s3n" },
                 { value: 709,  kind: "local",      labelKey: "run.s4", noteKey: "run.s4n" },
                 { value: 1014, kind: "local",      labelKey: "run.s5", noteKey: "run.s5n" },
-                { value: 1239, kind: "local",      labelKey: "run.s6", noteKey: "run.s6n" },
-                { value: 1484, kind: "local",      labelKey: "run.s7", noteKey: "run.s7n" },
-                { value: 1815, kind: "validation", labelKey: "run.s8", noteKey: "run.s8n" }
+                /* the breakthrough: Franciszek's alternative controller, which
+                   took it from here to the graded result */
+                { value: 1239, kind: "local",      labelKey: "run.s6", noteKey: "run.s6n", author: "franek" },
+                { value: 1484, kind: "local",      labelKey: "run.s7", noteKey: "run.s7n", author: "franek" },
+                { value: 1815, kind: "validation", labelKey: "run.s8", noteKey: "run.s8n", author: "franek" }
               ],
               evaluated: { value: "1405.256", key: "run.evaluated", noteKey: "run.survivalEvalNote" }
             },
@@ -398,6 +404,7 @@
             </svg>
             <ol class="run__legend" data-slot="run-legend"></ol>
             <figcaption class="run__caption" data-slot="run-caption"></figcaption>
+            <p class="run__note" data-slot="run-note" hidden></p>
           </figure>
           <div class="run__closing" data-slot="run-closing"></div>
         </div>

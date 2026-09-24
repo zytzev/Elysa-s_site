@@ -49,7 +49,7 @@ window.I18N = {
       sub: "Four first-year bachelor students at the University of Southern Denmark. None of us had competed in an ML competition before.",
       alex: {
         task: "Survival Simulator",
-        log: "Owned Survival Simulator: read the reward straight out of the simulator source, ran the evolutionary search over candidate controllers, and chased determinism until a seed meant the same run. Added the stray-payload guard that keeps the organisers' probe from wiping a live game."
+        log: "Survival Simulator is his task: he read the reward straight out of the simulator source, ran the evolutionary search over candidate controllers, and chased determinism until a seed meant the same run."
       },
       jakub: {
         task: "Medical Appointment",
@@ -57,11 +57,11 @@ window.I18N = {
       },
       javier: {
         task: "Drone Flyby",
-        log: "Took the perception task: five detection passes per frame, a camera sweep alternating quadrant and whole-frame views, ground motion refitted mid-flight, and all 249 frames answered on an unseen flight. The box-convention theory was Franciszek's."
+        log: "Took the perception task: five detection passes per frame, a camera sweep alternating quadrant and whole-frame views, ground motion refitted mid-flight, and all 249 frames answered on an unseen flight."
       },
       franek: {
         task: "All three tasks",
-        log: "Worked across all three tasks. On Drone Flyby he worked out the grader's box convention and found the camera pattern used in the final submission, then helped Javier and Jakub push their models further."
+        log: "His alternative controller was the breakthrough on Survival Simulator, taking it from 1250 to 1815. He then worked closely with Javier on the drone model and with Jakub on the medical one."
       }
     },
     board: {
@@ -91,7 +91,7 @@ window.I18N = {
       tabSurvival: "Survival Simulator",
       tabDrone: "Drone Flyby",
       tabMedical: "Medical Appointment",
-      survivalSub: "4th in Denmark, 12 points. A colony policy with an evolutionary search over candidate controllers, a bit-exact local simulator so the search could be trusted, and a stray-payload guard in the served build.",
+      survivalSub: "Alexandru's task — 4th in Denmark, 12 points. A colony policy with an evolutionary search over candidate controllers, a bit-exact local simulator so the search could be trusted, and a stray-payload guard in the served build. Franciszek's alternative controller was the breakthrough here.",
       droneSub: "Javier's task — 6th in Denmark, 8 points. Four attempts at a better single detector all failed. What worked was combining models that fail on different classes, and matching the grader's own box convention.",
       medicalSub: "Jakub's task — 1st in Denmark, 25 points. Word timestamps matched to the annotators' own coordinates, a 27B answer pass over the numbered transcript, and evidence spans chosen as the medoid of three independent producers.",
       s1: "First smoke test",
@@ -119,7 +119,7 @@ window.I18N = {
       d4: "Separate resolutions",
       d4n: "Each model run at its own inference resolution, rather than one setting for both.",
       d5: "Box growth toward the convention",
-      d5n: "Reported boxes were tight; growing them toward the official convention was worth +0.157 in a single change. Franciszek's theory behind it was later measured dead — the gain was real, the explanation was wrong.",
+      d5n: "Reported boxes were tight; growing them toward the official convention was worth +0.157 in a single change. The theory behind it was later measured dead — the gain was real, the explanation was wrong.",
       d6: "Box growth and track threshold",
       d6n: "One flat box-growth factor of 1.3, and a lower threshold for starting a new track.",
       d7: "Camera sweep, five passes",
@@ -273,7 +273,7 @@ window.I18N = {
       sub: "Fire førsteårsstuderende på Syddansk Universitet. Ingen af os havde deltaget i en ML-konkurrence før.",
       alex: {
         task: "Survival Simulator",
-        log: "Havde Survival Simulator: læste reward-funktionen direkte ud af simulatorkilden, kørte den evolutionære søgning gennem kandidatcontrollere og jagtede determinisme, indtil et seed betød samme kørsel. Tilføjede stray-payload-guardet, der forhindrer arrangørernes probe i at slette en kørende kamp."
+        log: "Survival Simulator er hans opgave: han læste reward-funktionen direkte ud af simulatorkilden, kørte den evolutionære søgning gennem kandidatcontrollere og jagtede determinisme, indtil et seed betød samme kørsel."
       },
       jakub: {
         task: "Medical Appointment",
@@ -281,11 +281,11 @@ window.I18N = {
       },
       javier: {
         task: "Drone Flyby",
-        log: "Tog perceptionsopgaven: fem detektionspas pr. frame, en kamerasweep der skifter mellem kvadrant- og helbilledvisninger, grundbevægelse efterjusteret undervejs, og alle 249 frames besvaret på en uset flyvning. Box-konventionsteorien var Franciszeks."
+        log: "Tog perceptionsopgaven: fem detektionspas pr. frame, en kamerasweep der skifter mellem kvadrant- og helbilledvisninger, grundbevægelse efterjusteret undervejs, og alle 249 frames besvaret på en uset flyvning."
       },
       franek: {
         task: "Alle tre opgaver",
-        log: "På Drone Flyby regnede han bedømmerens box-konvention ud og fandt det kameramønster, der blev brugt i den endelige indsendelse. Derefter hjalp han Javier og Jakub med at presse deres modeller videre."
+        log: "Hans alternative controller var gennembruddet på Survival Simulator og tog den fra 1250 til 1815. Derefter arbejdede han tæt sammen med Javier om drone-modellen og med Jakub om medical-modellen."
       }
     },
     board: {
@@ -315,7 +315,7 @@ window.I18N = {
       tabSurvival: "Survival Simulator",
       tabDrone: "Drone Flyby",
       tabMedical: "Medical Appointment",
-      survivalSub: "Nr. 4 i Danmark, 12 point. En kolonipolitik med en evolutionær søgning gennem kandidatcontrollere, en bittede-identisk lokal simulator, så søgningen kunne betros, og et stray-payload-guard i den udrullede build.",
+      survivalSub: "Alexandrus opgave — nr. 4 i Danmark, 12 point. En kolonipolitik med en evolutionær søgning gennem kandidatcontrollere, en bittede-identisk lokal simulator, så søgningen kunne betros, og et stray-payload-guard i den udrullede build. Franciszeks alternative controller var gennembruddet her.",
       droneSub: "Javiers opgave — nr. 6 i Danmark, 8 point. Fire forsøg på en bedre enkeltdetektor mislykkedes alle. Det, der virkede, var at kombinere modeller, der fejler på forskellige klasser, og at matche bedømmerens egen box-konvention.",
       medicalSub: "Jakubs opgave — nr. 1 i Danmark, 25 point. Ordtidsstempler matchet mod annotatørernes egne koordinater, et 27B-svarpas over den nummererede transskription og evidensspans valgt som medoiden af tre uafhængige producenter.",
       s1: "Første smoke-test",
