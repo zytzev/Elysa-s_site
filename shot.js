@@ -361,6 +361,14 @@ async function verifyForm(browser) {
     var must = ["access_key", "subject", "name", "email", "message", "consent"];
     var missing = must.filter(function (k) { return !(k in params); });
     if (missing.length) problems.push("contact payload missing: " + missing.join(", "));
+    /* The redirect MUST point at the origin we are actually served from. A
+       hardcoded domain here is exactly what hung the browser on "Connecting to
+       elysasecret.com" while that domain had nothing behind it. */
+    var expectRedirect = origin + "/thanks.html";
+    if (params.redirect !== expectRedirect) {
+      problems.push("contact redirect should follow the served origin (" +
+        expectRedirect + "), got " + JSON.stringify(params.redirect));
+    }
     if (!params.access_key) problems.push("contact payload has an EMPTY access_key — the service would reject it");
     /* an unchecked checkbox is not submitted at all, which is exactly right for
        a honeypot: it only appears if something filled it in */

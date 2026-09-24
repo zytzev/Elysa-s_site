@@ -151,9 +151,14 @@ POST, inspects the payload, and aborts it.
    is public by design — it ships in the page source and cannot read anything —
    but an unrestricted key can be used to send mail through your quota.
 2. Submit the form once from the live site and confirm the email arrives.
-3. `thanks.html` is where the service sends people back. It is **English only**:
-   the redirect carries no language, and the form service does not pass one
-   through.
+3. `thanks.html` is where the service sends people back. The `redirect` field
+   **follows the origin the site is served from**, so it is correct on a
+   `pages.dev` preview, on `elysasecret.com` and on localhost with no edit.
+   Leave `contact.thanksUrl` empty unless you want to override it — setting it
+   to a domain that is not live yet hangs the browser on *"Connecting to …"*
+   after a successful submission. `shot.js` asserts the redirect matches the
+   served origin. The page is **English only**: the redirect carries no
+   language, and the form service does not pass one through.
 
 **If the key is ever emptied**, the form stops rather than posting a request the
 service would reject, and says plainly that nothing was sent.

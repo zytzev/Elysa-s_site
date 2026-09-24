@@ -280,10 +280,15 @@
           endpoint: "https://api.web3forms.com/submit",
           accessKey: "9d4a0f49-f679-4ca7-89fb-eab27e777866",
           subject: "elysasecret.com — contact form",
-          /* where the service sends the visitor back to. Must be absolute.
-             Set once the domain resolves; leave empty to let the service show
-             its own confirmation page instead. */
-          thanksUrl: "https://elysasecret.com/thanks.html"
+          /* Where the service sends the visitor afterwards. Leave this EMPTY
+             and the form uses its own origin — so the redirect is correct on a
+             pages.dev test URL, on elysasecret.com, and on any localhost
+             preview, with no edit in between. Set an absolute URL only to
+             override that.
+
+             This was hardcoded to https://elysasecret.com and hung the browser
+             on "Connecting to elysasecret.com" before the domain existed. */
+          thanksUrl: ""
         },
 
         /* LinkedIn is per-person, on the member panes — a single team-level

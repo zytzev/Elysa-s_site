@@ -254,8 +254,18 @@
       if (contact.subject) {
         html += '<input type="hidden" name="subject" value="' + esc(contact.subject) + '" />';
       }
-      if (contact.thanksUrl) {
-        html += '<input type="hidden" name="redirect" value="' + esc(contact.thanksUrl) + '" />';
+      /* Where the service sends the visitor afterwards. With no explicit
+         override this follows the site's OWN origin, so the redirect is right
+         on a pages.dev preview, on elysasecret.com and on localhost without
+         anyone editing a URL. From file:// the origin is "null" and the field
+         is omitted, which leaves the service showing its own confirmation
+         page rather than sending anyone to a dead address. */
+      var back = contact.thanksUrl;
+      if (!back && window.location && /^https?:/.test(window.location.origin || "")) {
+        back = window.location.origin + "/thanks.html";
+      }
+      if (back) {
+        html += '<input type="hidden" name="redirect" value="' + esc(back) + '" />';
       }
 
       if (fields.indexOf("name") !== -1) {
