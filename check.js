@@ -117,7 +117,10 @@ function collectKeys(node, trail, out) {
      returns early for every string and silences the whole check, which is
      how this function spent its first version collecting nothing at all. */
   if (typeof node === "string") {
-    if (/(?:^|\.)(key|labelKey|subKey|titleKey|textKey|logKey|taskKey|noteKey|badgeKey)$/.test(trail || "")) {
+    /* any `somethingKey` property, plus a plain `.key` — a new key-suffixed
+       field must not be able to slip past validation just because it is not
+       in a hand-maintained list */
+    if (/Key$/.test(trail || "") || /(?:^|\.)key$/.test(trail || "")) {
       out.push(node);
     }
     return out;
@@ -152,6 +155,11 @@ var ALLOWED_NUMBERS = [
   "12.00", "10.00", "8.00", "25.00", "0.97",
   "1405.256", "0.263", "0.822",
   "344.26", "600", "1128", "778", "1280", "1576", "1812", "1447",
+  /* taken from the team's own repository (survival-v2/RESULTS.md,
+     drone-flyby/SERVED_CONFIG.md, medical-appointment/REPRODUCE.md and
+     SUBMISSIONS.md) rather than from the earlier verbal account */
+  "308", "437", "570", "709", "1014", "1239", "1484", "1815",
+  "0.5841", "0.263", "0.2630", "0.802", "0.8308", "0.8222",
   /* the team's rank on the highlighted row of each board: 1 in Denmark,
      2 in the Nordic combined. Listed as the real placements rather than a
      blanket 1-7, so a wrong rank on the team's own row still fails. */

@@ -10,7 +10,9 @@ window.I18N = {
       nordicLabel: "NORDIC",
       nordicPlace: "2nd",
       gapLabel: "gap to NO",
-      countdown: "Reykjavík final in"
+      countdown: "Reykjavík final in",
+      dayOne: "day",
+      dayMany: "days"
     },
     nav: {
       team: "The four",
@@ -37,27 +39,19 @@ window.I18N = {
       sub: "Four first-year bachelor students at the University of Southern Denmark. None of us had competed in an ML competition before.",
       alex: {
         task: "Survival Simulator",
-        log: "Evolutionary heuristic search across thousands of candidate controllers."
+        log: "Built an evolutionary search over thousands of candidate controllers, and spent three days refusing to accept the plateau it produced."
       },
       jakub: {
         task: "Medical Appointment",
-        log: "The highest Medical Appointment score in the entire Nordic field.",
-        badge: "Best Medical Appointment in the Nordics"
+        log: "Took the scheduling task and produced the highest score in the entire Nordic field."
       },
       javier: {
         task: "Drone Flyby",
-        log: "Our weakest task. Stated, not hidden — the place was never the point."
+        log: "Worked the control problem from the ground up, and kept iterating on the model with Franciszek until it moved."
       },
       franek: {
-        task: "Support / unblocker",
-        log: "Built an alternative controller in one long session. It went 778 → 1280 and turned the run around."
-      },
-      metric: {
-        raw: "Raw score",
-        points: "Points",
-        nordicPoints: "Nordic points",
-        first: "First validation",
-        then: "After the move"
+        task: "Across all three tasks",
+        log: "Built the alternative controller in one long session, then went to the other two tasks and helped improve the drone and medical models as well."
       }
     },
     board: {
@@ -83,27 +77,46 @@ window.I18N = {
     },
     run: {
       heading: "The run",
-      sub: "Four days, thousands of simulations, and a score that refused to move for three of them.",
-      p1: "First heuristic controller",
-      p1note: "Survival Simulator, first local score.",
-      p2: "Heuristics improved",
-      p3: "Plateau",
-      p3note: "Three days stuck here. Evolutionary search, thousands of simulations, no progress.",
-      p4: "A teammate's controller",
-      p4note: "Built from scratch in one long session. First validation, through a Cloudflare tunnel.",
-      p5: "Moved to a VPS",
-      p5note: "Relocated next to the grader. The network path had been part of the budget all along.",
-      p6: "Next validation",
-      p7: "Highest validation",
-      p7note: "The number everyone remembers. It is not the number that counted.",
+      sub: "Three tasks, three different problems, and three different scores. What they share is that every number below was measured, and the ones that only fit the validation data were thrown away.",
+      tabSurvival: "Survival Simulator",
+      tabDrone: "Drone Flyby",
+      tabMedical: "Medical Appointment",
+      survivalSub: "Alexandru's task — 4th in Denmark, 12 points. A colony policy with an evolutionary search over candidate controllers, and a bit-exact local simulator so the search could be trusted.",
+      droneSub: "Javier's task — 6th in Denmark, 8 points. Five detection passes per frame, a fixed six-quadrant camera sweep, ground motion refitted online, and all 249 frames answered.",
+      medicalSub: "Jakub's task — 1st in Denmark, 25 points. Word timestamps matched to the annotators' own coordinates, a 27B answer pass over the numbered transcript, and evidence spans chosen as the medoid of three independent producers.",
+      s1: "First smoke test",
+      s1n: "The first recorded score. Pose tracking was broken — the controller was acting on stale observations.",
+      s2: "Rot-check fix",
+      s2n: "Fruit of unknown age was being skipped entirely. One fix, +94.",
+      s3: "Need-based fruit value",
+      s3n: "Threat gating: stop valuing fruit a predator will reach before you do.",
+      s4: "Ripe-only eating, ranked breeding",
+      s4n: "Only eat ripe fruit; breed from a fitness ranking rather than whatever survived.",
+      s5: "Sprint reserve, spaced camps",
+      s5n: "Speed-weighted fitness and a sprint reserve. Kill chains came from adjacent campers, so campers stopped standing next to each other.",
+      s6: "Occupancy from claims",
+      s6n: "Camp occupancy counted from claims instead of positions. Switches per agent-minute fell from 9–14 to 3.6.",
+      s7: "Local mean, 40 seeds",
+      s7n: "The reliable local number — and the one the search was trusted on.",
+      s8: "Graded validation",
+      s8n: "Higher than anything measured locally, which is its own warning, not a win.",
+      d1: "Validation mean",
+      d1n: "Mean over 7 validation runs. Per-class box geometry, a sixth pass, Level-2 zoom and per-class thresholds were all tried here and rejected — they fit the validation flight, not the task.",
+      d2: "Graded evaluation",
+      d2n: "An unseen flight. Every frame answered, and half the score gone. This gap is the whole lesson.",
+      m1: "Earlier solution",
+      m1n: "The previous build, validated at 0.802. Kept on its own branch rather than overwritten.",
+      m2: "Graded build, validated",
+      m2n: "The same build validated four times and returned 0.8307887829198248 every time, byte-identically. Reproducibility measured, not assumed.",
       evaluated: "Final evaluated score",
-      evaluatedNote: "What actually counted. A validation peak is not a result — and reproducibility, not luck, is what carried it there.",
-      median: "Median validation attempt",
-      local: "Local",
+      survivalEvalNote: "Three games run back to back and averaged: 1319.9, 1298.2, 1599.0. Lower than the validation — a peak is not a result.",
+      medicalEvalNote: "Graded at 0.8222490889515863 with zero errors reported by the grader.",
+      local: "Local mean",
       validation: "Validation",
-      svgTitle: "Score progression across the Nordic AI Cup, from 344 to 1812",
-      svgDesc: "A line chart of the team's controller score over four days. It rises from 344 to about 1128, dips to 778 when a teammate's controller is first tested, then climbs to 1812.",
-      legend: "Each point is labelled with what it measured — a local simulation or a validation run."
+      evaluatedKind: "Evaluated",
+      svgTitle: "Score progression for each of the three tasks",
+      svgDesc: "Per-task line charts. Survival Simulator climbs from 308 to a graded validation of 1815. Drone Flyby falls from a validation mean of 0.5841 to a graded 0.2630. Medical Appointment moves from 0.802 to a graded 0.8222.",
+      legend: "A selection of the steps recorded in the team's repository. Each point is labelled with what it measured — a local simulator mean, an official validation run, or the graded evaluation."
     },
     about: {
       heading: "How we work",
@@ -142,19 +155,19 @@ window.I18N = {
         text: "We added a recurrent network to correct the heuristic. Thousands of simulations bought roughly five percent. The plain heuristic stayed competitive."
       }
     },
-    doors: {
-      sponsor: {
-        title: "For sponsors and SDU",
-        text: "We are four first-year students representing the University of Southern Denmark at the Nordic final in Reykjavík on 14–15 October, against the national champions of Sweden, Norway, Finland and Iceland. We are looking for support with travel and compute — and we are happy to explain exactly what we built and how we measured it."
-      },
-      roster: {
-        title: "For next season's roster",
-        text: "We are not looking for the most experienced people. We are looking for people who stay on a problem past the point where it stops being fun. If that is you, write to us and tell us what you are working on."
-      },
-      mailSubject: "Subject"
+    /* the boot sequence: commands are literal (config), these status lines are not */
+    boot: {
+      l1: "four students",
+      s1: "loaded",
+      l2: "three tasks",
+      s2: "loaded",
+      l3: "one final",
+      s3: "pending",
+      ready: "ready"
     },
     contact: {
       heading: "Get in touch",
+      sub: "We are four first-year students representing the University of Southern Denmark at the Nordic final in Reykjavík on 14–15 October, against the national champions of Sweden, Norway, Finland and Iceland. If you would like to support the trip, ask what we built, or just say hello — write to us.",
       email: "Email",
       phone: "Phone",
       name: "Your name",
@@ -186,7 +199,9 @@ window.I18N = {
       nordicLabel: "NORDISK",
       nordicPlace: "2.",
       gapLabel: "afstand til NO",
-      countdown: "Finalen i Reykjavík om"
+      countdown: "Finalen i Reykjavík om",
+      dayOne: "dag",
+      dayMany: "dage"
     },
     nav: {
       team: "De fire",
@@ -213,27 +228,19 @@ window.I18N = {
       sub: "Fire førsteårsstuderende på Syddansk Universitet. Ingen af os havde deltaget i en ML-konkurrence før.",
       alex: {
         task: "Survival Simulator",
-        log: "Evolutionær heuristisk søgning gennem tusindvis af kandidatcontrollere."
+        log: "Byggede en evolutionær søgning gennem tusindvis af kandidatcontrollere og nægtede i tre dage at acceptere det plateau, den gav."
       },
       jakub: {
         task: "Medical Appointment",
-        log: "Den højeste Medical Appointment-score i hele det nordiske felt.",
-        badge: "Bedste Medical Appointment i Norden"
+        log: "Tog planlægningsopgaven og leverede den højeste score i hele det nordiske felt."
       },
       javier: {
         task: "Drone Flyby",
-        log: "Vores svageste opgave. Nævnt, ikke skjult — placeringen var aldrig pointen."
+        log: "Angreb styreproblemet fra bunden og blev ved med at iterere på modellen sammen med Franciszek, indtil den flyttede sig."
       },
       franek: {
-        task: "Støtte / opblokering",
-        log: "Byggede en alternativ controller i én lang session. Den gik 778 → 1280 og vendte forløbet."
-      },
-      metric: {
-        raw: "Rå score",
-        points: "Point",
-        nordicPoints: "Nordiske point",
-        first: "Første validering",
-        then: "Efter flytningen"
+        task: "På tværs af alle tre opgaver",
+        log: "Byggede den alternative controller i én lang session og gik derefter til de to andre opgaver og hjalp med at forbedre både drone- og medical-modellen."
       }
     },
     board: {
@@ -259,27 +266,46 @@ window.I18N = {
     },
     run: {
       heading: "Forløbet",
-      sub: "Fire dage, tusindvis af simuleringer og en score, der nægtede at flytte sig i tre af dem.",
-      p1: "Første heuristiske controller",
-      p1note: "Survival Simulator, første lokale score.",
-      p2: "Heuristikker forbedret",
-      p3: "Plateau",
-      p3note: "Tre dage fast her. Evolutionær søgning, tusindvis af simuleringer, ingen fremgang.",
-      p4: "En holdkammerats controller",
-      p4note: "Bygget fra bunden i én lang session. Første validering, gennem en Cloudflare-tunnel.",
-      p5: "Flyttet til en VPS",
-      p5note: "Flyttet hen ved siden af bedømmeren. Netværksvejen havde været en del af budgettet hele tiden.",
-      p6: "Næste validering",
-      p7: "Højeste validering",
-      p7note: "Tallet alle husker. Det er ikke tallet, der talte.",
+      sub: "Tre opgaver, tre forskellige problemer og tre forskellige scorer. Det fælles er, at hvert tal nedenfor blev målt — og at det, der kun passede på valideringsdataene, blev smidt væk.",
+      tabSurvival: "Survival Simulator",
+      tabDrone: "Drone Flyby",
+      tabMedical: "Medical Appointment",
+      survivalSub: "Alexandrus opgave — nr. 4 i Danmark, 12 point. En kolonipolitik med en evolutionær søgning gennem kandidatcontrollere og en bittede-identisk lokal simulator, så søgningen kunne betros.",
+      droneSub: "Javiers opgave — nr. 6 i Danmark, 8 point. Fem detektionspas pr. frame, en fast sekskvadrant-kamerasweep, grundbevægelse efterjusteret undervejs, og alle 249 frames besvaret.",
+      medicalSub: "Jakubs opgave — nr. 1 i Danmark, 25 point. Ordtidsstempler matchet mod annotatørernes egne koordinater, et 27B-svarpas over den nummererede transskription og evidensspans valgt som medoiden af tre uafhængige producenter.",
+      s1: "Første smoke-test",
+      s1n: "Den første målte score. Pose-tracking var i stykker — controlleren handlede på forældede observationer.",
+      s2: "Rot-check-rettelse",
+      s2n: "Frugt med ukendt alder blev sprunget helt over. Én rettelse, +94.",
+      s3: "Behovsbaseret frugtværdi",
+      s3n: "Trusselsgating: hold op med at værdsætte frugt, et rovdyr når før dig.",
+      s4: "Kun moden frugt, rangeret avl",
+      s4n: "Spis kun moden frugt; avl efter en fitnessrangering i stedet for hvad der tilfældigt overlevede.",
+      s5: "Sprintreserve, spredte lejre",
+      s5n: "Hastighedsvægtet fitness og en sprintreserve. Dræberkæder kom fra naboer i lejren, så lejrmedlemmer holdt op med at stå ved siden af hinanden.",
+      s6: "Belægning fra krav",
+      s6n: "Lejrbelægning talt fra krav i stedet for positioner. Skift pr. agent-minut faldt fra 9–14 til 3.6.",
+      s7: "Lokalt gennemsnit, 40 seeds",
+      s7n: "Det pålidelige lokale tal — og det, søgningen blev betroet ud fra.",
+      s8: "Bedømt validering",
+      s8n: "Højere end noget, der blev målt lokalt, hvilket er en advarsel i sig selv, ikke en sejr.",
+      d1: "Valideringsgennemsnit",
+      d1n: "Gennemsnit over 7 valideringskørsler. Per-klasse box-geometri, et sjette pas, Level-2 zoom og per-klasse tærskler blev alle prøvet her og afvist — de passede på valideringsflyvningen, ikke på opgaven.",
+      d2: "Bedømt evaluering",
+      d2n: "En uset flyvning. Hver frame besvaret, og halvdelen af scoren væk. Det gab er hele lektionen.",
+      m1: "Tidligere løsning",
+      m1n: "Den forrige build, valideret til 0.802. Bevaret på sin egen branch i stedet for overskrevet.",
+      m2: "Bedømt build, valideret",
+      m2n: "Samme build valideret fire gange og returnerede 0.8307887829198248 hver gang, bittede-identisk. Reproducerbarhed målt, ikke antaget.",
       evaluated: "Endelig bedømt score",
-      evaluatedNote: "Det, der faktisk talte. En valideringstop er ikke et resultat — og reproducerbarhed, ikke held, bar den dertil.",
-      median: "Median af valideringsforsøg",
-      local: "Lokal",
+      survivalEvalNote: "Tre spil kørt lige efter hinanden og gennemsnittet: 1319.9, 1298.2, 1599.0. Lavere end valideringen — en top er ikke et resultat.",
+      medicalEvalNote: "Bedømt til 0.8222490889515863 uden fejl rapporteret af bedømmeren.",
+      local: "Lokalt gennemsnit",
       validation: "Validering",
-      svgTitle: "Scoreudvikling gennem Nordic AI Cup, fra 344 til 1812",
-      svgDesc: "Et linjediagram over holdets controllerscore gennem fire dage. Den stiger fra 344 til omkring 1128, falder til 778, da en holdkammerats controller først testes, og stiger derefter til 1812.",
-      legend: "Hvert punkt er mærket med, hvad det målte — en lokal simulering eller en valideringskørsel."
+      evaluatedKind: "Bedømt",
+      svgTitle: "Scoreudvikling for hver af de tre opgaver",
+      svgDesc: "Linjediagrammer pr. opgave. Survival Simulator stiger fra 308 til en bedømt validering på 1815. Drone Flyby falder fra et valideringsgennemsnit på 0.5841 til bedømt 0.2630. Medical Appointment går fra 0.802 til bedømt 0.8222.",
+      legend: "Et udvalg af de trin, der er registreret i holdets repository. Hvert punkt er mærket med, hvad det målte — et lokalt simuleringsgennemsnit, en officiel valideringskørsel eller den bedømte evaluering."
     },
     about: {
       heading: "Sådan arbejder vi",
@@ -318,19 +344,18 @@ window.I18N = {
         text: "Vi tilføjede et rekurrent netværk for at korrigere heuristikken. Tusindvis af simuleringer gav cirka fem procent. Den rene heuristik forblev konkurrencedygtig."
       }
     },
-    doors: {
-      sponsor: {
-        title: "For sponsorer og SDU",
-        text: "Vi er fire førsteårsstuderende, der repræsenterer Syddansk Universitet ved den nordiske finale i Reykjavík den 14.–15. oktober mod nationalmestrene fra Sverige, Norge, Finland og Island. Vi søger støtte til rejse og regnekraft — og vi forklarer gerne præcis, hvad vi byggede, og hvordan vi målte det."
-      },
-      roster: {
-        title: "Til næste sæsons hold",
-        text: "Vi leder ikke efter de mest erfarne. Vi leder efter dem, der bliver på et problem, efter det holder op med at være sjovt. Er det dig, så skriv til os og fortæl, hvad du arbejder på."
-      },
-      mailSubject: "Emne"
+    boot: {
+      l1: "fire studerende",
+      s1: "indlæst",
+      l2: "tre opgaver",
+      s2: "indlæst",
+      l3: "én finale",
+      s3: "afventer",
+      ready: "klar"
     },
     contact: {
       heading: "Kontakt os",
+      sub: "Vi er fire førsteårsstuderende, der repræsenterer Syddansk Universitet ved den nordiske finale i Reykjavík den 14.–15. oktober mod nationalmestrene fra Sverige, Norge, Finland og Island. Vil du støtte rejsen, spørge om hvad vi byggede, eller bare sige hej — så skriv til os.",
       email: "E-mail",
       phone: "Telefon",
       name: "Dit navn",

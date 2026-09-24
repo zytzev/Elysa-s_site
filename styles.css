@@ -38,6 +38,7 @@
   --mascot:      #E07A5B;
   --mascot-line: #F6F2ED;
   --mascot-eye:  #16120F;
+  --mascot-size: 128px;
 
   /* type */
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -355,7 +356,9 @@ a:hover { text-decoration: underline; }
 }
 .member__prompt { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-muted); }
 .member__sigil { color: var(--accent); }
-.member__head { display: flex; gap: 0.8rem; align-items: center; }
+/* fixed-height head + badge slots so the metric rows align across all four
+   panes; only the log then varies, and it bottom-aligns via margin-top: auto */
+.member__head { display: flex; gap: 0.8rem; align-items: center; min-height: 3.1rem; }
 .member__monogram {
   font-family: var(--font-mono);
   font-size: 0.9rem;
@@ -369,34 +372,9 @@ a:hover { text-decoration: underline; }
 }
 .member__name { font-size: 0.98rem; line-height: 1.25; }
 .member__task { font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-muted); margin-top: 0.15rem; }
-.member__badge {
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  color: var(--accent);
-  border-left: 2px solid var(--accent);
-  padding-left: 0.5rem;
-  line-height: 1.4;
-}
-.member__score {
-  display: flex;
-  gap: 1.25rem;
-  border-top: 1px solid var(--line);
-  padding-top: 0.7rem;
-  margin-top: auto;
-}
-.member__score dt {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--ink-muted);
-}
-.member__score dd {
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-  font-variant-numeric: tabular-nums;
-}
-.member__log { font-size: 0.82rem; color: var(--ink-muted); }
+/* margin-top: auto keeps the four log lines bottom-aligned regardless of how
+   long each one runs */
+.member__log { font-size: 0.85rem; color: var(--ink-muted); margin-top: auto; padding-top: 0.4rem; }
 
 /* --------------------------------------------------------- the board --- */
 .board__tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
@@ -459,6 +437,8 @@ a:hover { text-decoration: underline; }
 }
 
 /* ----------------------------------------------------------- the run --- */
+.run__tabs { margin-bottom: 1.5rem; }
+.run__task-sub { font-size: 0.88rem; color: var(--ink-muted); max-width: 62ch; margin-bottom: 1.5rem; }
 .run__figure { margin: 0 0 2rem; }
 .run__svg { width: 100%; height: auto; display: block; }
 .run__gridline { stroke: var(--line); stroke-width: 1; }
@@ -472,6 +452,10 @@ a:hover { text-decoration: underline; }
 }
 .run__dot--local { fill: var(--canvas); stroke: var(--ink-muted); stroke-width: 2; }
 .run__dot--validation { fill: var(--accent); stroke: var(--canvas); stroke-width: 2; }
+/* the graded evaluation is amber, the same colour used for every other number
+   on this site that is not flattering — the point is that it reads differently
+   from the green validation points at a glance */
+.run__dot--evaluated { fill: var(--warn); stroke: var(--canvas); stroke-width: 2; }
 .run__value {
   fill: var(--ink);
   font-family: var(--font-mono);
@@ -486,6 +470,11 @@ a:hover { text-decoration: underline; }
   border: 1px solid var(--line);
 }
 @media (min-width: 48em) { .run__legend { grid-template-columns: repeat(2, 1fr); } }
+/* seven points in two columns would leave an empty cell that reads as a
+   missing entry — let the odd one out span the full width instead */
+@media (min-width: 48em) {
+  .run__legend-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
 .run__legend-item {
   background: var(--surface);
   padding: 0.65rem 0.85rem;
@@ -498,6 +487,9 @@ a:hover { text-decoration: underline; }
 .run__legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .run__legend-item--local .run__legend-dot { background: var(--canvas); border: 2px solid var(--ink-muted); }
 .run__legend-item--validation .run__legend-dot { background: var(--accent); }
+.run__legend-item--evaluated .run__legend-dot { background: var(--warn); }
+.run__legend-item--evaluated .run__legend-label,
+.run__legend-item--evaluated .run__legend-value { color: var(--warn); }
 .run__legend-label { color: var(--ink); }
 .run__legend-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .run__legend-note { grid-column: 2 / -1; color: var(--ink-muted); font-size: 0.74rem; }
@@ -666,18 +658,31 @@ a:hover { text-decoration: underline; }
 }
 
 /* -------------------------------------------------------------- mascot ---
-   Fixed bottom-right. Decorative and pointer-events: none, so it can never
-   eat a click that belonged to the page. aria-hidden in the markup. */
+   Positioned entirely by transform: translate(x, y) scale(sx, sy). One
+   mechanism covers the entrance, the idle, dragging and the return home, so
+   nothing fights between CSS `right/bottom` and the animation.
+
+   It is draggable, so unlike the rest of the decorative layer it DOES take
+   pointer events. It is small, in a corner, and aria-hidden, so the cost is
+   bounded — but it is a deliberate reversal of the earlier
+   pointer-events: none, made only because dragging was requested. */
 .mascot {
   position: fixed;
-  right: 1.1rem;
-  bottom: 1.1rem;
-  z-index: 40;
-  width: 76px;
-  pointer-events: none;
+  left: 0;
+  top: 0;
+  z-index: 45;
+  width: var(--mascot-size);
+  height: calc(var(--mascot-size) * 0.883);
+  pointer-events: auto;
+  touch-action: none;      /* let pointermove track a drag instead of scrolling */
+  cursor: grab;
   user-select: none;
+  -webkit-user-select: none;
+  will-change: transform;
 }
-.mascot__svg { width: 100%; height: auto; display: block; overflow: visible; }
+.mascot--held { cursor: grabbing; }
+.mascot__svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.mascot__inner { transform-box: fill-box; transform-origin: 50% 78%; }
 .mascot__body {
   fill: var(--mascot);
   stroke: var(--mascot-line);
@@ -687,8 +692,30 @@ a:hover { text-decoration: underline; }
 .mascot__eye { fill: var(--mascot-eye); }
 .mascot__eyes { transform-origin: 50% 50%; transform-box: fill-box; }
 
-@media (max-width: 30em) { .mascot { width: 54px; right: 0.7rem; bottom: 0.7rem; } }
-@media (max-height: 26em) { .mascot { display: none; } }
+@media (max-width: 30em) { :root { --mascot-size: 92px; } }
+@media (max-height: 24em) { .mascot { display: none; } }
+
+/* ---------------------------------------------------------------- boot ---
+   The hero's boot log. The hero content itself stays hidden (opacity 0 via
+   .hero__reveal) until this sequence finishes, so the page reads as a machine
+   starting up rather than as text that failed to load. */
+.boot { font-family: var(--font-mono); font-size: 0.82rem; margin-bottom: 2rem; min-height: 9rem; }
+.boot__log { display: flex; flex-direction: column; gap: 0.3rem; }
+.boot__line { color: var(--ink-muted); display: flex; align-items: baseline; gap: 0.5rem; }
+.boot__sigil { color: var(--accent); }
+.boot__cmd { color: var(--ink); }
+.boot__key { color: var(--ink-muted); }
+/* the dotted leader is drawn, not typed — it costs nothing and never wraps */
+.boot__dots { flex: 1 1 auto; border-bottom: 1px dotted var(--line); transform: translateY(-0.22em); min-width: 1.5rem; }
+.boot__status { color: var(--accent); }
+.boot__line--ready .boot__ready-text { color: var(--accent); }
+.boot__ready { color: var(--accent); margin-top: 0.35rem; }
+
+/* The headline is scrambled through random glyphs before it settles. It only
+   needs a hairline reserve: the scramble keeps the character count, and the
+   longest headline fits the container even with the widest glyphs, so it
+   cannot reflow mid-animation. A full line reserve just left a dead gap. */
+.hero__headline { min-height: 1.05em; }
 
 /* ------------------------------------------------------------------ motion ---
    Every animated behaviour sits behind this query. With reduced motion the
@@ -696,9 +723,20 @@ a:hover { text-decoration: underline; }
 @media (prefers-reduced-motion: no-preference) {
   .caret { animation: caret-blink 1.05s steps(1) infinite; }
 
-  /* the mascot breathes, and every few beats does a small hop */
-  .mascot__svg { animation: mascot-bob 3.4s ease-in-out infinite; }
-  .mascot__eyes { animation: mascot-blink 5.1s ease-in-out infinite; }
+  /* the mascot breathes once it has landed, and blinks — but only when no
+     expression animation owns the eyes, or the two transforms fight */
+  .mascot--settled:not(.mascot--held):not(.mascot--annoyed):not(.mascot--giggle) .mascot__svg {
+    animation: mascot-bob 3.6s ease-in-out infinite;
+  }
+  .mascot--settled:not(.mascot--annoyed):not(.mascot--giggle) .mascot__eyes {
+    animation: mascot-blink 5.4s ease-in-out infinite;
+  }
+  /* dragged: squints and grumbles */
+  .mascot--annoyed .mascot__eyes { animation: mascot-squint 0.4s steps(2, end) infinite; }
+  .mascot--annoyed .mascot__inner { animation: mascot-grumble 0.38s ease-in-out infinite; }
+  /* released: giggling squash, three quick beats */
+  .mascot--giggle .mascot__eyes { animation: mascot-giggle-eyes 0.3s ease-in-out 3; }
+  .mascot--giggle .mascot__inner { animation: mascot-giggle-body 0.3s ease-in-out 3; }
 
   /* The run's hidden start state is OPT-IN via .is-animated. If motion.js
      never runs, or the observer never fires, the chart is simply complete —
@@ -729,6 +767,28 @@ a:hover { text-decoration: underline; }
   0%, 90%, 100% { transform: scaleY(1); }
   93% { transform: scaleY(0.12); }
   96% { transform: scaleY(1); }
+}
+
+/* Annoyed: eyes flattened to an unimpressed slit, whole body grumbling. */
+@keyframes mascot-squint {
+  0%, 100% { transform: scaleY(0.34); }
+  50% { transform: scaleY(0.26); }
+}
+@keyframes mascot-grumble {
+  0%, 100% { transform: rotate(-2.5deg) translateY(0); }
+  50% { transform: rotate(2.5deg) translateY(-1px); }
+}
+
+/* Giggling: eyes shut to dashes, body squashes and springs. */
+@keyframes mascot-giggle-eyes {
+  0%, 100% { transform: scaleY(1); }
+  40% { transform: scaleY(0.1); }
+  70% { transform: scaleY(0.55); }
+}
+@keyframes mascot-giggle-body {
+  0%, 100% { transform: scale(1, 1); }
+  40% { transform: scale(1.09, 0.9); }
+  70% { transform: scale(0.97, 1.04); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -74,7 +74,8 @@
     instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>',
     linkedin: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>',
     youtube: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
-    github: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>'
+    github: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>'
   };
   function icon(name) { return ICONS[name] || ICONS.star; }
 
@@ -125,10 +126,13 @@
       var rail = c.statusRail || {};
       el.innerHTML = (rail.items || [])
         .map(function (item) {
+          /* the place ("1st" / "1.") is translated, so it is a placeKey, not a
+             second value — rendering it as its own item printed it twice */
+          var place = item.placeKey ? " · " + t(item.placeKey) : "";
           return (
             '<span class="rail__item rail__item--' + esc(item.tone || "plain") + '">' +
             '<span class="rail__key">' + esc(t(item.key)) + "</span>" +
-            '<span class="rail__value">' + esc(item.value) + "</span>" +
+            '<span class="rail__value">' + esc(item.value) + esc(place) + "</span>" +
             "</span>"
           );
         })
@@ -158,19 +162,13 @@
         .join("");
     },
 
+    /* No scores here on purpose. Ranking four teammates against each other on
+       a public page is not candour, it is just unkind — the numbers belong on
+       the board and the run, where they are the competition's, not a
+       person's. Each pane says what that person did. */
     "team.members": function (el, c) {
       el.innerHTML = (c.team.members || [])
         .map(function (m) {
-          var metrics = (m.metrics || [])
-            .map(function (metric) {
-              return (
-                "<div>" +
-                "<dt>" + esc(t(metric.labelKey)) + "</dt>" +
-                "<dd>" + esc(metric.value) + "</dd>" +
-                "</div>"
-              );
-            })
-            .join("");
           return (
             '<article class="member">' +
             '<p class="member__prompt"><span class="member__sigil" aria-hidden="true">$</span> whoami</p>' +
@@ -181,8 +179,6 @@
             '<p class="member__task">' + esc(t(m.taskKey)) + "</p>" +
             "</div>" +
             "</div>" +
-            (m.badgeKey ? '<p class="member__badge">' + esc(t(m.badgeKey)) + "</p>" : "") +
-            '<dl class="member__score">' + metrics + "</dl>" +
             '<p class="member__log">' + esc(t(m.logKey)) + "</p>" +
             "</article>"
           );
@@ -222,23 +218,6 @@
             '<div class="feature-card__icon">' + icon(card.icon) + "</div>" +
             '<h3 class="feature-card__title">' + esc(t(card.titleKey)) + "</h3>" +
             '<p class="feature-card__text">' + esc(t(card.textKey)) + "</p>" +
-            "</article>"
-          );
-        })
-        .join("");
-    },
-
-    "contact.doors": function (el, c) {
-      el.innerHTML = (c.contact.doors || [])
-        .map(function (door) {
-          var href = "mailto:" + c.contact.email + "?subject=" +
-            encodeURIComponent(door.mailSubject);
-          return (
-            '<article class="door">' +
-            '<h3 class="door__title">' + esc(t(door.titleKey)) + "</h3>" +
-            '<p class="door__text">' + esc(t(door.textKey)) + "</p>" +
-            '<a class="btn btn--secondary door__cta" href="' + esc(href) + '">' +
-            esc(c.contact.email) + "</a>" +
             "</article>"
           );
         })
@@ -292,11 +271,14 @@
       }
     },
 
+    /* Empty hrefs are skipped rather than shipped as dead links — add a URL in
+       config and the icon appears on the next load. */
     "footer.socials": function (el, c) {
       el.innerHTML = (c.footer.socials || [])
+        .filter(function (social) { return social && social.href; })
         .map(function (social) {
-          return '<a href="' + esc(social.href) + '" aria-label="' + esc(social.name) + '">' +
-            icon(social.icon) + "</a>";
+          return '<a href="' + esc(social.href) + '" rel="me noopener" target="_blank" aria-label="' +
+            esc(social.name) + '">' + icon(social.icon) + "</a>";
         })
         .join("");
     },
@@ -422,17 +404,67 @@
     }
   }
 
-  /* ------------------------------------------------------------------ run --- */
-  function mountCurve() {
+  /* ------------------------------------------------------------------ run ---
+     One graph per task. Tabs render only when there is more than one task, so
+     a single graph never sits under a lone pointless tab. Adding a task is a
+     config entry — this code needs no change. */
+  var runTaskId = null;
+
+  function mountRun() {
+    var tasks = (config.run && config.run.tasks) || [];
+    if (!tasks.length) return;
+    if (runTaskId === null) runTaskId = tasks[0].id;
+
+    var task = tasks.filter(function (x) { return x.id === runTaskId; })[0] || tasks[0];
+
+    var tabsEl = document.querySelector('[data-slot="run-tabs"]');
+    if (tabsEl) {
+      if (tasks.length > 1) {
+        tabsEl.hidden = false;
+        tabsEl.innerHTML = tasks
+          .map(function (x) {
+            return (
+              '<button type="button" role="tab" class="board__tab" data-run-task="' + esc(x.id) + '"' +
+              ' aria-selected="' + (x.id === runTaskId ? "true" : "false") + '"' +
+              ' aria-controls="run-svg">' + esc(t(x.tabKey)) + "</button>"
+            );
+          })
+          .join("");
+        if (!tabsEl.getAttribute("data-wired")) {
+          tabsEl.setAttribute("data-wired", "1");
+          tabsEl.addEventListener("click", function (event) {
+            var btn = event.target.closest("[data-run-task]");
+            if (!btn) return;
+            runTaskId = btn.getAttribute("data-run-task");
+            Array.prototype.forEach.call(tabsEl.querySelectorAll("[data-run-task]"), function (b) {
+              b.setAttribute("aria-selected", String(b === btn));
+            });
+            mountRun();
+          });
+        }
+      } else {
+        tabsEl.hidden = true;
+        tabsEl.innerHTML = "";
+      }
+    }
+
+    var sub = document.querySelector('[data-slot="run-task-sub"]');
+    if (sub) sub.textContent = task.subKey ? t(task.subKey) : "";
+
     var svg = document.querySelector('[data-slot="run-svg"]');
     if (!svg || !window.SiteMotion) return;
 
     var titleEl = document.getElementById("run-svg-title");
     var descEl = document.getElementById("run-svg-desc");
     if (titleEl) titleEl.textContent = t("run.svgTitle");
-    if (descEl) descEl.textContent = t("run.svgDesc");
+    if (descEl) descEl.textContent = task.subKey ? t(task.subKey) : t("run.svgDesc");
 
-    window.SiteMotion.startCurve(svg, config.run.points, {
+    /* switching tasks must restart the draw, so clear the previous state and
+       the observer marker before handing the svg to startCurve again */
+    svg.classList.remove("is-complete", "is-animated");
+    svg.removeAttribute("data-observed");
+
+    window.SiteMotion.startCurve(svg, task.points, {
       t: t,
       legend: document.querySelector('[data-slot="run-legend"]'),
       onReady: function (el) {
@@ -447,13 +479,19 @@
     if (caption) caption.textContent = t("run.legend");
 
     var closing = document.querySelector('[data-slot="run-closing"]');
-    if (closing && config.run.evaluated) {
-      closing.innerHTML =
-        '<p class="run__closing-label">' + esc(t(config.run.evaluated.key)) + "</p>" +
-        '<p class="run__closing-value">' + esc(config.run.evaluated.value) + "</p>" +
-        '<p class="run__closing-note">' + esc(t(config.run.evaluated.noteKey)) + "</p>" +
-        '<p class="run__closing-median">' + esc(t(config.run.median.key)) +
-        " <span>" + esc(config.run.median.value) + "</span></p>";
+    if (closing) {
+      if (task.evaluated) {
+        closing.innerHTML =
+          '<p class="run__closing-label">' + esc(t(task.evaluated.key)) + "</p>" +
+          '<p class="run__closing-value">' + esc(task.evaluated.value) + "</p>" +
+          '<p class="run__closing-note">' + esc(t(task.evaluated.noteKey)) + "</p>" +
+          (task.median
+            ? '<p class="run__closing-median">' + esc(t(task.median.key)) +
+              " <span>" + esc(task.median.value) + "</span></p>"
+            : "");
+      } else {
+        closing.innerHTML = "";
+      }
     }
   }
 
@@ -469,27 +507,51 @@
     window.SiteMotion.startCountdown(
       el,
       config.statusRail.countdownTo,
-      t(config.statusRail.countdownKey)
+      t(config.statusRail.countdownKey),
+      { one: t(config.statusRail.dayOneKey), many: t(config.statusRail.dayManyKey) }
     );
   }
 
-  /* ---------------------------------------------------------------- hero --- */
-  var heroDone = false;
+  /* ----------------------------------------------------------------- boot ---
+     The hero is deliberately withheld until the boot log finishes: commands
+     type in turn, a short status readout prints, then the headline resolves
+     out of random glyphs (not a fade) and the numeric stats count up. */
+  var bootDone = false;
 
-  function mountHero() {
-    var typedEl = document.querySelector('[data-slot="typed"]');
-    var bits = document.querySelectorAll(
-      ".hero__headline, .hero__sub, .hero__stats, .hero__ctas"
-    );
-    Array.prototype.forEach.call(bits, function (el) { el.classList.add("hero__reveal"); });
+  function mountBoot() {
+    var bits = document.querySelectorAll(".hero__headline, .hero__sub, .hero__stats, .hero__ctas");
+    var headline = document.querySelector('[data-slot="headline"]');
+    var statValues = document.querySelectorAll(".hero__stat-value");
+    var log = document.querySelector('[data-slot="boot-log"]');
+    var readyEl = document.querySelector('[data-slot="boot-ready"]');
+    var cfg = config.boot || {};
 
     function reveal() {
       Array.prototype.forEach.call(bits, function (el) { el.classList.add("is-in"); });
+      if (!window.SiteMotion) return;
+      window.SiteMotion.scramble(headline, t("hero.headline"));
+      window.SiteMotion.countUp(statValues);
+      window.SiteMotion.mascotEnter();
     }
 
-    if (heroDone || !typedEl || !window.SiteMotion) { reveal(); return; }
-    heroDone = true;
-    window.SiteMotion.typeCommand(typedEl, config.hero.command, reveal);
+    if (bootDone) { reveal(); return; }
+    bootDone = true;
+
+    Array.prototype.forEach.call(bits, function (el) { el.classList.add("hero__reveal"); });
+
+    /* no log markup, or no motion available: show everything immediately */
+    if (!log || !window.SiteMotion) { reveal(); return; }
+
+    window.SiteMotion.bootSequence({
+      log: log,
+      readyEl: readyEl,
+      commands: cfg.commands || [],
+      steps: (cfg.steps || []).map(function (s) {
+        return { label: t(s.labelKey), status: t(s.statusKey) };
+      }),
+      readyLabel: t(cfg.readyKey),
+      done: reveal
+    });
   }
 
   /* ----------------------------------------------------------------- nav --- */
@@ -584,7 +646,7 @@
        markup that is not [data-fill]-driven. */
     renderAll(document);
     mountBoard();
-    mountCurve();
+    mountRun();
     mountRail();
     mountRailCountdown();
   }
@@ -610,8 +672,11 @@
     mountRail();
     mountRailCountdown();
     mountBoard();
-    mountCurve();
-    mountHero();
+    mountRun();
+    /* mascot must be placed and drag-wired BEFORE mountBoot's reveal calls
+       mascotEnter — otherwise the entrance has nothing to animate */
+    if (window.SiteMotion) window.SiteMotion.initMascot();
+    mountBoot();
   }
 
   if (document.readyState === "loading") {

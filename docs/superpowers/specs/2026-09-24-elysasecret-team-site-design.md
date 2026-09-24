@@ -7,6 +7,89 @@
 
 ---
 
+## Revision 2 — 2026-09-24, after the team's review and the repository
+
+The team reviewed the first build and corrected it. Where this revision
+conflicts with the sections below, **this revision wins.**
+
+### Content corrections
+
+1. **No scores on the member panes.** Revision 1 showed each member's raw score
+   and points, and described Javier's Drone Flyby as "our weakest task. Stated,
+   not hidden." The team rejected this, correctly: a public page is the wrong
+   place to rank four teammates, and telling a sponsor that a named person's
+   work was the weakest tells them nothing. Member panes now say only what each
+   person did. The numbers live on the board and in the run, where they are the
+   competition's numbers rather than a person's.
+2. **Franciszek's contribution is cross-task.** Revision 1 tied him to the
+   Survival Simulator controller alone. He also worked with Javier on the Drone
+   Flyby model and with Jakub on Medical Appointment. His pane says so.
+3. **The run is per task, with tabs.** One graph per task — Survival Simulator,
+   Drone Flyby, Medical Appointment — each with its own progression, its own
+   Danish rank, and its own closing result. Tabs render only when more than one
+   task exists.
+4. **The contact section has one door, not two.** The "next season's roster"
+   door is removed: this is a team that intends to last, and is not recruiting
+   through the site. The sponsor paragraph is kept as the section's intro copy,
+   so the sponsor purpose survives without a second door.
+5. **Socials:** Instagram, LinkedIn and TikTok are configured with empty hrefs.
+   The renderer skips empty hrefs, so nothing renders until real URLs are added
+   — a dead `<a href="">` never ships.
+6. **Boot sequence.** Revision 1 typed one command and then faded the hero in.
+   The team asked for something longer and less generic. The hero now runs a
+   boot log: three commands typed in turn, a status readout ending on
+   `one final ... pending`, then the headline resolving out of random glyphs and
+   the numeric stats counting up. No fade.
+7. **The mascot arrives, travels, and can be dragged.** It appears centred and
+   large, flies to the bottom-right corner on an arc with squash-and-stretch and
+   a fractal-noise displacement filter (organic shape dilation, not a slide),
+   then breathes. It is draggable; it squints and grumbles while held and
+   giggles when released. This is a deliberate reversal of Revision 1's
+   `pointer-events: none` — dragging was requested, so it now takes pointer
+   events, bounded by being small, cornered, and `aria-hidden`.
+
+### Data corrections — sourced from the team's repository
+
+Revision 1's numbers came from a verbal account. The team then supplied
+`github.com/emermelada/nordic-ai-cup`, which is authoritative and disagrees in
+places. **All figures now come from the repository.**
+
+| Source | Figure |
+|---|---|
+| `SUBMISSIONS.md` | Per-task Danish ranks: Medical Appointment 1st (25 pts), Survival Simulator 4th (12 pts), Drone Flyby 6th (8 pts). Total 45, 1st in Denmark |
+| `survival-v2/RESULTS.md` | The controller progression: 308 → 437 → 570 → 709 → 1014 → 1239 → 1484 local, then 1815 graded validation |
+| `survival-v2/EVALUATED.md` | Graded evaluation 1405.2561882564453; three games 1319.9 / 1298.2 / 1599.0 |
+| `drone-flyby/SERVED_CONFIG.md` | Validation mean 0.5841 over 7 runs; evaluation 0.2630; all 249 frames answered |
+| `medical-appointment/REPRODUCE.md` | Earlier build validated 0.802; graded build validated 0.8307887829198248 four times identically; evaluated 0.8222490889515863 |
+
+**Unresolved discrepancy:** Revision 1 recorded a highest validation of **1812**
+and a median validation of **1447**, both from the verbal account. The repository
+states a graded validation of **1815** and gives no median. The site uses
+**1815** and **omits the median** until the team confirms which is right. The
+1447 figure is not published anywhere on the site.
+
+**Framing consequence:** the honest story is not one heroic curve. It is three
+tasks where one was the best in the Nordics and two were mid-field, and where the
+drone task's validation-to-evaluation gap (0.5841 → 0.2630) is the single most
+instructive number the team produced. That gap is now a headline point rather
+than something to smooth over.
+
+### Additions
+
+- `smoke.js` — render smoke test. Builds the minimum DOM needed to run the real
+  `boot()` path and asserts 69 things about the produced markup. It exists
+  because a renderer that throws leaves a section *silently blank*, which no
+  data-level check can see.
+- `shot.js` — drives headless Chrome, captures per-viewport and per-section
+  screenshots, and asserts the score curve actually completes when scrolled into
+  view (if its observer never fires, the centrepiece renders invisible).
+- `check.js` grew three checks: every `[data-fill]` must be renderable, every
+  `[data-slot]` selector must match an element, and translation-key resolution
+  now mirrors `t()`'s nested walk exactly rather than a flattened map.
+- Contrast ratios are now measured from the token values, not asserted.
+
+---
+
 ## 1. Purpose
 
 A single-page team site for **Elysa's Secret**, four first-year bachelor students at the
@@ -101,8 +184,8 @@ result.
 - ~4 days of competition, frequently working until ~05:00
 - Cumulative **600-second request constraint**; round-trip network overhead counted against it
 - Task assigned to Alexandru: **Survival Simulator** (the team received a one-day-early preview)
-- Franciszek Kossut acted as the unblocker and built an alternative controller in an
-  ~11-hour AI-assisted session — the turning point from 778 to 1280
+- Franciszek Kossut acted as the unblocker and built an alternative controller in a
+  ~13-hour AI-assisted session — the turning point from 778 to 1280
 - Tools used: Python, Docker, FastAPI, a VPS colocated with the grader, evolutionary heuristic
   selection, an RNN correction layer (~+5%, not decisive), and AI coding assistants
 

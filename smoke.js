@@ -32,6 +32,7 @@ function makeEl(attrs) {
     _attrs: attrs || {},
     hidden: false,
     elements: {},
+    style: {},
     classList: {
       add: function (c) { if (classes.indexOf(c) === -1) classes.push(c); },
       remove: function (c) { classes = classes.filter(function (x) { return x !== c; }); },
@@ -44,6 +45,7 @@ function makeEl(attrs) {
     },
     getAttribute: function (k) { return k in el._attrs ? el._attrs[k] : null; },
     setAttribute: function (k, v) { el._attrs[k] = String(v); },
+    removeAttribute: function (k) { delete el._attrs[k]; },
     addEventListener: function () {},
     removeEventListener: function () {},
     closest: function () { return null; },
@@ -120,8 +122,22 @@ var documentStub = {
 
 var windowStub = {
   /* reduced motion ON: the simplest, most deterministic path — instant typing,
-     no timers, curve completes immediately. The animated path needs a browser. */
-  matchMedia: function () { return { matches: true, addEventListener: function () {} }; }
+     no timers, curve completes immediately, mascot placed without travelling.
+     The animated paths need a real browser; shot.js covers those. */
+  matchMedia: function () { return { matches: true, addEventListener: function () {} }; },
+  addEventListener: function () {},
+  removeEventListener: function () {},
+  innerWidth: 1440,
+  innerHeight: 900,
+  /* a real browser window carries these; motion.js reaches through window.*,
+     so the stub has to provide them or it tests something that cannot exist */
+  document: documentStub,
+  setTimeout: function (fn) { fn(); return 0; },
+  clearTimeout: function () {},
+  setInterval: function () { return 0; },
+  clearInterval: function () {},
+  requestAnimationFrame: function (fn) { fn(0); return 0; },
+  cancelAnimationFrame: function () {}
 };
 
 var ctx = {
@@ -174,17 +190,28 @@ if (!failures.length) {
 
   expectEq("hero headline", fills["hero.headline"].textContent, "First place. Denmark.");
   expect("hero sub is prose", fills["hero.sub"].textContent, "simulator");
-  expect("hero command is literal", fills["hero.command"].textContent, "elysa --status");
   expect("hero stats", fills["hero.stats"].innerHTML, "National result");
   expect("hero stats carry 45.00", fills["hero.stats"].innerHTML, "45.00");
+
+  /* the boot log + mascot are new surfaces; they must exist and be wired */
+  expect("boot log slot exists", slots["boot-log"] ? "yes" : "", "yes");
+  expect("boot ready slot exists", slots["boot-ready"] ? "yes" : "", "yes");
+  expect("mascot element exists", slots["mascot"] ? "yes" : "", "yes");
+  expect("mascot displacement filter wired", slots["mascot-displace"] ? "yes" : "", "yes");
+  expect("mascot gets positioned inline", slots["mascot"].style.transform || "", "translate");
 
   expect("team heading", fills["team.heading"].textContent, "The four");
   var team = fills["team.members"].innerHTML;
   ["Alexandru Zaitzev", "Jakub Furmaniuk", "Javier Arévalo Hernández",
-   "Franciszek Kossut", "0.822", "1405.256", "778", "1280"].forEach(function (s) {
+   "Franciszek Kossut", "Across all three tasks"].forEach(function (s) {
     expect("team members include " + s, team, s);
   });
-  expect("jakub badge", team, "Best Medical Appointment in the Nordics");
+  /* the fairness rule: a member pane must never carry a score, and must never
+     describe a teammate's task as a weakness */
+  ["0.822", "1405.256", "0.263", "778", "1280", "weakest", "weak"].forEach(function (bad) {
+    if (team.indexOf(bad) === -1) pass();
+    else fail("member panes must not contain " + JSON.stringify(bad));
+  });
 
   expect("board sub explains the two scales", fills["board.sub"].textContent, "own competition");
   var board = slots["board-table"].innerHTML;
@@ -195,16 +222,16 @@ if (!failures.length) {
   expect("board gap note", slots["board-gap"].textContent, "0.54");
 
   var legend = slots["run-legend"].innerHTML;
-  ["344.26", "600", "1128", "778", "1280", "1576", "1812"].forEach(function (n) {
-    expect("curve legend has " + n, legend, n);
+  ["308", "437", "570", "709", "1014", "1239", "1484", "1815"].forEach(function (n) {
+    expect("survival legend has " + n, legend, n);
   });
   expect("curve svg drawn", slots["run-svg"].innerHTML, "run__line");
   expect("curve svg axes", slots["run-svg"].innerHTML, "run__axis");
   expect("curve is complete under reduced motion",
     slots["run-svg"].classList.contains("is-complete") ? "is-complete" : "", "is-complete");
-  expect("curve a11y title", byId["run-svg-title"].textContent, "344 to 1812");
+  expect("curve a11y title", byId["run-svg-title"].textContent, "Score progression");
   expect("run closing is the evaluated score", slots["run-closing"].innerHTML, "1405.256");
-  expect("run median", slots["run-closing"].innerHTML, "1447");
+  expect("run closing names the three games", slots["run-closing"].innerHTML, "1319.9");
 
   expect("about loop", fills["about.loop"].innerHTML, "Change something");
   expect("about prose", fills["about.text"].textContent, "5 AM");
@@ -213,11 +240,19 @@ if (!failures.length) {
   expect("learned determinism card", learned, "Determinism is the experiment");
   expect("learned simplest mechanism", learned, "simplest mechanism that works");
 
-  expect("doors", fills["contact.doors"].innerHTML, "For sponsors and SDU");
-  expect("doors mailto", fills["contact.doors"].innerHTML, "hello@elysasecret.com");
+  expect("contact intro", fills["contact.sub"].textContent, "Nordic final");
   expect("contact info", fills["contact.info"].innerHTML, "hello@elysasecret.com");
   expect("form fields rendered", slots["contact-form"].innerHTML, "name=\"message\"");
   expect("form submit label", slots["contact-form"].innerHTML, ">Send<");
+  /* socials ship with empty hrefs, so nothing should render yet — and there
+     must be no dead <a href=""> in the footer */
+  expectEq("socials render nothing until URLs exist", fills["footer.socials"].innerHTML, "");
+
+  /* the run section: three tasks now, so the tab strip must appear */
+  expect("run task sub rendered", slots["run-task-sub"].textContent, "Alexandru");
+  expectEq("run tabs visible with multiple tasks", slots["run-tabs"].hidden, false);
+  expect("run tabs list all three tasks", slots["run-tabs"].innerHTML, "Medical Appointment");
+  expect("first tab selected by default", slots["run-tabs"].innerHTML, "\"true\"");
 
   expect("nav links", fills["nav.links"].innerHTML, "#team");
   expect("nav cta", fills["nav.cta"].innerHTML, "Contact");

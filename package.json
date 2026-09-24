@@ -1,0 +1,17 @@
+{
+  "name": "team",
+  "version": "1.0.0",
+  "description": "Team site for **Elysa's Secret** — Nordic AI Cup 2026, 1st place (Denmark). Four first-year bachelor students at the University of Southern Denmark.",
+  "main": "check.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "devDependencies": {
+    "puppeteer": "^25.12.0"
+  }
+}

@@ -26,14 +26,14 @@
            spec's allowlist by check.js. */
         statusRail: {
           items: [
-            { key: "rail.dkLabel", value: "45.00", tone: "good" },
-            { key: "rail.dkPlace", value: "1st", tone: "good" },
-            { key: "rail.nordicLabel", value: "35.97", tone: "plain" },
-            { key: "rail.nordicPlace", value: "2nd", tone: "plain" },
+            { key: "rail.dkLabel", value: "45.00", placeKey: "rail.dkPlace", tone: "good" },
+            { key: "rail.nordicLabel", value: "35.97", placeKey: "rail.nordicPlace", tone: "plain" },
             { key: "rail.gapLabel", value: "-0.54", tone: "warn" }
           ],
           countdownTo: "2026-10-14T09:00:00Z",
-          countdownKey: "rail.countdown"
+          countdownKey: "rail.countdown",
+          dayOneKey: "rail.dayOne",
+          dayManyKey: "rail.dayMany"
         },
 
         nav: {
@@ -48,7 +48,6 @@
         },
 
         hero: {
-          command: "elysa --status",
           stats: [
             { key: "hero.place", value: "1st", subKey: "hero.placeSub" },
             { key: "hero.points", value: "45.00", subKey: "hero.pointsSub" },
@@ -60,44 +59,15 @@
           ]
         },
 
-        /* Each member's two headline numbers carry their own label, because
-           they mean different things: a raw score, awarded points, or a
-           before/after. Do not collapse these into "raw / points". */
+        /* No scores on the member panes. A public site is the wrong place to
+           rank four teammates against each other — each pane says what that
+           person did, and the numbers live on the board and the run. */
         team: {
           members: [
-            {
-              name: "Alexandru Zaitzev", monogram: "AZ",
-              taskKey: "team.alex.task", logKey: "team.alex.log",
-              metrics: [
-                { labelKey: "team.metric.raw", value: "1405.256" },
-                { labelKey: "team.metric.nordicPoints", value: "10.00" }
-              ]
-            },
-            {
-              name: "Jakub Furmaniuk", monogram: "JF",
-              taskKey: "team.jakub.task", logKey: "team.jakub.log",
-              badgeKey: "team.jakub.badge",
-              metrics: [
-                { labelKey: "team.metric.raw", value: "0.822" },
-                { labelKey: "team.metric.points", value: "25.00" }
-              ]
-            },
-            {
-              name: "Javier Arévalo Hernández", monogram: "JA",
-              taskKey: "team.javier.task", logKey: "team.javier.log",
-              metrics: [
-                { labelKey: "team.metric.raw", value: "0.263" },
-                { labelKey: "team.metric.nordicPoints", value: "0.97" }
-              ]
-            },
-            {
-              name: "Franciszek Kossut", monogram: "FK",
-              taskKey: "team.franek.task", logKey: "team.franek.log",
-              metrics: [
-                { labelKey: "team.metric.first", value: "778" },
-                { labelKey: "team.metric.then", value: "1280" }
-              ]
-            }
+            { name: "Alexandru Zaitzev", monogram: "AZ", taskKey: "team.alex.task", logKey: "team.alex.log" },
+            { name: "Jakub Furmaniuk", monogram: "JF", taskKey: "team.jakub.task", logKey: "team.jakub.log" },
+            { name: "Javier Arévalo Hernández", monogram: "JA", taskKey: "team.javier.task", logKey: "team.javier.log" },
+            { name: "Franciszek Kossut", monogram: "FK", taskKey: "team.franek.task", logKey: "team.franek.log" }
           ]
         },
 
@@ -155,20 +125,63 @@
           gapNote: { leader: "Ifftikhar Amiri", value: "0.54", key: "board.gap" }
         },
 
-        /* The curve. `kind` is load-bearing: it keeps the chart from implying
-           these were all the same measurement. */
+        /* The run is per task. Every figure here comes from the team's own
+           repository (survival-v2/RESULTS.md, drone-flyby/SERVED_CONFIG.md,
+           medical-appointment/REPRODUCE.md, SUBMISSIONS.md) — not from the
+           earlier verbal account, which disagreed on one validation number.
+
+           `kind` distinguishes a local simulator mean from an official
+           validation run from the graded evaluation. Never merge them: the
+           whole point of this section is that they are different numbers. */
         run: {
-          points: [
-            { value: 344.26, kind: "local",      labelKey: "run.p1", noteKey: "run.p1note" },
-            { value: 600,    kind: "local",      labelKey: "run.p2", noteKey: null, approx: true },
-            { value: 1128,   kind: "local",      labelKey: "run.p3", noteKey: "run.p3note", approx: true },
-            { value: 778,    kind: "validation", labelKey: "run.p4", noteKey: "run.p4note" },
-            { value: 1280,   kind: "validation", labelKey: "run.p5", noteKey: "run.p5note" },
-            { value: 1576,   kind: "validation", labelKey: "run.p6", noteKey: null },
-            { value: 1812,   kind: "validation", labelKey: "run.p7", noteKey: "run.p7note" }
+          tasks: [
+            {
+              id: "survival",
+              tabKey: "run.tabSurvival",
+              subKey: "run.survivalSub",
+              points: [
+                { value: 308,  kind: "local",      labelKey: "run.s1", noteKey: "run.s1n" },
+                { value: 437,  kind: "local",      labelKey: "run.s2", noteKey: "run.s2n" },
+                { value: 570,  kind: "local",      labelKey: "run.s3", noteKey: "run.s3n" },
+                { value: 709,  kind: "local",      labelKey: "run.s4", noteKey: "run.s4n" },
+                { value: 1014, kind: "local",      labelKey: "run.s5", noteKey: "run.s5n" },
+                { value: 1239, kind: "local",      labelKey: "run.s6", noteKey: "run.s6n" },
+                { value: 1484, kind: "local",      labelKey: "run.s7", noteKey: "run.s7n" },
+                { value: 1815, kind: "validation", labelKey: "run.s8", noteKey: "run.s8n" }
+              ],
+              evaluated: { value: "1405.256", key: "run.evaluated", noteKey: "run.survivalEvalNote" }
+            },
+            {
+              id: "drone",
+              tabKey: "run.tabDrone",
+              subKey: "run.droneSub",
+              points: [
+                { value: 0.5841, kind: "validation", labelKey: "run.d1", noteKey: "run.d1n" },
+                { value: 0.2630, kind: "evaluated",  labelKey: "run.d2", noteKey: "run.d2n" }
+              ],
+              evaluated: null
+            },
+            {
+              id: "medical",
+              tabKey: "run.tabMedical",
+              subKey: "run.medicalSub",
+              points: [
+                { value: 0.802,  kind: "validation", labelKey: "run.m1", noteKey: "run.m1n" },
+                { value: 0.8308, kind: "validation", labelKey: "run.m2", noteKey: "run.m2n" }
+              ],
+              evaluated: { value: "0.8222", key: "run.evaluated", noteKey: "run.medicalEvalNote" }
+            }
+          ]
+        },
+
+        boot: {
+          commands: ["elysa --status", "elysa --whoami", "elysa --run"],
+          steps: [
+            { labelKey: "boot.l1", statusKey: "boot.s1" },
+            { labelKey: "boot.l2", statusKey: "boot.s2" },
+            { labelKey: "boot.l3", statusKey: "boot.s3" }
           ],
-          evaluated: { value: "1405.256", key: "run.evaluated", noteKey: "run.evaluatedNote" },
-          median: { value: "1447", key: "run.median" }
+          readyKey: "boot.ready"
         },
 
         about: {
@@ -193,14 +206,18 @@
         contact: {
           email: "hello@elysasecret.com",
           fields: ["name", "email", "message", "consent"],
-          endpoint: "",
-          doors: [
-            { titleKey: "doors.sponsor.title", textKey: "doors.sponsor.text", mailSubject: "Sponsorship" },
-            { titleKey: "doors.roster.title", textKey: "doors.roster.text", mailSubject: "Joining" }
-          ]
+          endpoint: ""
         },
 
-        footer: { socials: [] }
+        /* Empty hrefs are skipped by the renderer rather than shipped as dead
+           links — add the URLs and the icons appear on the next load. */
+        footer: {
+          socials: [
+            { name: "Instagram", href: "", icon: "instagram" },
+            { name: "LinkedIn", href: "", icon: "linkedin" },
+            { name: "TikTok", href: "", icon: "tiktok" }
+          ]
+        }
       };
     </script>
 
@@ -246,8 +263,13 @@
       <!-- SLOT: hero — the boot sequence -->
       <section id="hero" class="section section--hero" data-section="hero">
         <div class="container hero__inner">
-          <p class="hero__prompt"><span class="hero__sigil" aria-hidden="true">$</span> <span data-slot="typed" data-fill="hero.command"></span><span class="caret" aria-hidden="true"></span></p>
-          <h1 class="hero__headline" data-fill="hero.headline"></h1>
+          <!-- The boot log is theatre, not content: aria-hidden so nobody has
+               to sit through it, and skipped entirely under reduced motion. -->
+          <div class="boot" data-slot="boot" aria-hidden="true">
+            <ol class="boot__log" data-slot="boot-log"></ol>
+            <p class="boot__ready" data-slot="boot-ready"></p>
+          </div>
+          <h1 class="hero__headline" data-slot="headline" data-fill="hero.headline"></h1>
           <p class="hero__sub" data-fill="hero.sub"></p>
           <dl class="hero__stats" data-fill="hero.stats"></dl>
           <div class="hero__ctas" data-fill="hero.ctas"></div>
@@ -285,7 +307,9 @@
             <h2 class="section__title" data-fill="run.heading"></h2>
             <p class="section__sub" data-fill="run.sub"></p>
           </div>
+          <div class="board__tabs run__tabs" role="tablist" aria-label="Task" data-slot="run-tabs" hidden></div>
           <figure class="run__figure">
+            <p class="run__task-sub" data-slot="run-task-sub"></p>
             <svg class="run__svg" data-slot="run-svg" viewBox="0 0 800 360" role="img" aria-labelledby="run-svg-title run-svg-desc" preserveAspectRatio="xMidYMid meet">
               <title id="run-svg-title"></title>
               <desc id="run-svg-desc"></desc>
@@ -324,8 +348,8 @@
         <div class="container">
           <div class="section__heading">
             <h2 class="section__title" data-fill="contact.heading"></h2>
+            <p class="section__sub" data-fill="contact.sub"></p>
           </div>
-          <div class="doors" data-fill="contact.doors"></div>
           <div class="contact__inner">
             <div class="contact__info" data-fill="contact.info"></div>
             <form class="contact__form" data-slot="contact-form" data-fill="contact.fields" novalidate>
@@ -358,17 +382,30 @@
     </footer>
 
     <!-- ============================================================
-         MASCOT — fixed bottom-right, decorative, pointer-events: none.
-         Silhouette + chevron eyes. The eyes are `>` and `<`, which is
-         why this shape belongs on a terminal-themed site.
-         Swap for a raster by replacing the <svg> with <img>.
+         MASCOT — arrives centre-screen after the boot sequence, then travels
+         to the bottom-right corner under its own steam. Draggable, with
+         expressions. Decorative: aria-hidden, and the drag affordance is
+         mouse/touch only, so keyboard users are never blocked by it.
          ============================================================ -->
-    <div class="mascot" aria-hidden="true">
-      <svg class="mascot__svg" viewBox="0 0 120 100" focusable="false">
-        <path class="mascot__body" d="M30 12 H90 Q96 12 96 18 V34 H106 Q112 34 112 40 V52 Q112 58 106 58 H96 V72 H93 V87 Q93 90 90 90 H85 Q82 90 82 87 V72 H75 V87 Q75 90 72 90 H67 Q64 90 64 87 V72 H57 V87 Q57 90 54 90 H49 Q46 90 46 87 V72 H39 V87 Q39 90 36 90 H31 Q28 90 28 87 V72 H24 V58 H14 Q8 58 8 52 V40 Q8 34 14 34 H24 V18 Q24 12 30 12 Z" />
-        <g class="mascot__eyes">
-          <path class="mascot__eye" d="M42 36 L55 42 L42 48 Z" />
-          <path class="mascot__eye" d="M78 36 L65 42 L78 48 Z" />
+    <div class="mascot" data-slot="mascot" aria-hidden="true">
+      <svg class="mascot__svg" viewBox="0 0 120 106" focusable="false">
+        <defs>
+          <!-- fractal noise displacement: this is what gives the body its
+               organic, breathing surface instead of a flat vector shape.
+               `scale` is driven from JS so it can be switched off for
+               reduced-motion users. -->
+          <filter id="mascot-goo" x="-40%" y="-40%" width="180%" height="180%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.015 0.022" numOctaves="2" seed="7" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" data-slot="mascot-displace"
+              scale="0" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+        <g class="mascot__inner" filter="url(#mascot-goo)">
+          <path class="mascot__body" d="M32 10 H88 Q94 10 94 16 V32 H104 Q110 32 110 38 V52 Q110 58 104 58 H94 V72 H93 V93 Q93 96 90 96 H85 Q82 96 82 93 V72 H75 V93 Q75 96 72 96 H67 Q64 96 64 93 V72 H57 V93 Q57 96 54 96 H49 Q46 96 46 93 V72 H39 V93 Q39 96 36 96 H31 Q28 96 28 93 V72 H26 V58 H16 Q10 58 10 52 V38 Q10 32 16 32 H26 V16 Q26 10 32 10 Z" />
+          <g class="mascot__eyes">
+            <path class="mascot__eye" d="M43 34 L56 41 L43 48 Z" />
+            <path class="mascot__eye" d="M77 34 L64 41 L77 48 Z" />
+          </g>
         </g>
       </svg>
     </div>
