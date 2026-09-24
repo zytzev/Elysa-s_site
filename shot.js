@@ -15,7 +15,8 @@ var puppeteer = require("puppeteer");
 
 var ROOT = __dirname;
 var OUT = path.join(ROOT, "shots");
-var URL = "file://" + path.join(ROOT, "index.html");
+/* the site lives in public/; only that folder is deployed */
+var URL = "file://" + path.join(ROOT, "public", "index.html");
 
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT);
 

@@ -17,6 +17,8 @@ var path = require("path");
 var vm = require("vm");
 
 var ROOT = __dirname;
+/* the site lives in public/; only that folder is deployed */
+var SITE = path.join(ROOT, "public");
 var failures = [];
 var checked = 0;
 
@@ -65,7 +67,7 @@ function makeEl(attrs) {
   return el;
 }
 
-var html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+var html = fs.readFileSync(path.join(SITE, "index.html"), "utf8");
 
 /* one stub element per declared data-fill and data-slot, exactly as the page
    declares them — so a typo'd slot is a real miss, not a silent pass */
@@ -154,7 +156,7 @@ vm.createContext(ctx);
 
 /* ------------------------------------------------------- load the real code */
 function run(file) {
-  var src = fs.readFileSync(path.join(ROOT, file), "utf8");
+  var src = fs.readFileSync(path.join(SITE, file), "utf8");
   vm.runInContext(src, ctx, { filename: file });
 }
 

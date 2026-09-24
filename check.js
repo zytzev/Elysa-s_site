@@ -10,6 +10,9 @@ var path = require("path");
 var vm = require("vm");
 
 var ROOT = __dirname;
+/* Only public/ is deployed. Everything else at the root — the tooling, the
+   docs, the plan and spec — stays off the live site. */
+var SITE = path.join(ROOT, "public");
 var failures = [];
 var passed = 0;
 
@@ -20,9 +23,9 @@ function ok() {
   passed++;
 }
 function read(file) {
-  var p = path.join(ROOT, file);
+  var p = path.join(SITE, file);
   if (!fs.existsSync(p)) {
-    fail("file exists: " + file);
+    fail("file exists: public/" + file);
     return null;
   }
   return fs.readFileSync(p, "utf8");
@@ -263,11 +266,35 @@ if (config && config.contact) {
   else ok();
 }
 
-/* ---- 9. required files exist ------------------------------------------- */
-["index.html", "i18n.js", "styles.css", "script.js", "motion.js", "README.md"].forEach(function (f) {
-  if (fs.existsSync(path.join(ROOT, f))) ok();
-  else fail("required file present: " + f);
+/* ---- 9. required files exist -------------------------------------------
+   Site files in public/, the readme at the root. */
+["index.html", "i18n.js", "styles.css", "script.js", "motion.js"].forEach(function (f) {
+  if (fs.existsSync(path.join(SITE, f))) ok();
+  else fail("required site file present: public/" + f);
 });
+if (fs.existsSync(path.join(ROOT, "README.md"))) ok();
+else fail("required file present: README.md");
+
+/* ---- 12. nothing but site files in the deployable folder ----------------
+   public/ is what a visitor can fetch. A stray file here is published: a spec,
+   a plan, a screenshot, an editor backup. This is the check that would have
+   caught the design doc being served at the domain. */
+var ALLOWED_IN_PUBLIC = [
+  "index.html", "i18n.js", "styles.css", "script.js", "motion.js",
+  /* files Cloudflare Pages itself may add, and editor/system noise we ignore */
+  "_headers", "_redirects", "_routes.json"
+];
+if (fs.existsSync(SITE)) {
+  var strays = fs.readdirSync(SITE).filter(function (f) {
+    if (f.charAt(0) === ".") return false;              /* .DS_Store etc */
+    return ALLOWED_IN_PUBLIC.indexOf(f) === -1;
+  });
+  if (strays.length) {
+    fail("deployable folder contains only site files", "unexpected in public/: " + strays.join(", "));
+  } else ok();
+} else {
+  fail("public/ exists");
+}
 
 /* ---- 10. every data-fill in index.html can actually be filled -----------
    The three-file contract: each [data-fill] must be a renderer, a translated

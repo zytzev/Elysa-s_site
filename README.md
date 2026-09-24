@@ -7,15 +7,28 @@ Static site. No build step, no framework, no dependencies.
 
 ## Files
 
-| File | Responsibility |
-| --- | --- |
-| `index.html` | Structure + `SITE_CONFIG` — all **data**: scores, names, dates |
-| `i18n.js` | All **prose**, English and Danish |
-| `styles.css` | Tokens, layout, motion CSS |
-| `script.js` | Rendering, section order, nav, board tabs, language toggle, form |
-| `motion.js` | Every animated behaviour, reduced-motion aware |
-| `check.js` | Integrity and honesty checks |
-| `smoke.js` | Render smoke test (dev only — not part of the site) |
+**Only `public/` is deployed.** Everything else at the root is tooling and
+documentation and never reaches the live site.
+
+```
+public/            ← this folder is the website
+├── index.html     structure + SITE_CONFIG — all data: scores, names, dates
+├── i18n.js        all prose, English and Danish
+├── styles.css     tokens, layout, motion CSS
+├── script.js      rendering, sections, board tabs, language toggle, form
+└── motion.js      every animated behaviour, reduced-motion aware
+
+check.js           integrity and honesty checks
+smoke.js           render smoke test
+shot.js            headless-Chrome screenshots
+docs/              the design spec and implementation plan (NOT published)
+shots/             screenshots (NOT published, gitignored)
+```
+
+`check.js` fails the build if anything unexpected appears in `public/`. That is
+deliberate: `public/` is what a stranger can fetch, so a stray file there is
+published — and this project's spec and plan contain private working notes that
+have no business being on the live site.
 
 **Data and prose are deliberately separated.** A score lives in
 `SITE_CONFIG`; a sentence lives in `i18n.js`. This means the Danish
@@ -47,10 +60,10 @@ Both are dev-only and are not served by the site.
 
 ## Local preview
 
-    python3 -m http.server 8000     # http://localhost:8000
+    cd public && python3 -m http.server 8000     # http://localhost:8000
 
-Opening `index.html` directly also works — no `type="module"`, so there is no
-CORS restriction on `file://`.
+Opening `public/index.html` directly also works — no `type="module"`, so there
+is no CORS restriction on `file://`.
 
 ## Danish
 
@@ -103,12 +116,17 @@ but cannot blink.
 
 1. Push this repository to GitHub.
 2. Cloudflare dashboard → Workers & Pages → Create → Pages → connect the repo.
-3. Build command: *(none)*. Output directory: `/`.
+3. Build command: *(none)*. **Output directory: `public`** — not `/`. Setting
+   it to `/` would publish the tooling, the screenshots and the design spec,
+   including the private notes in `docs/`.
 4. Custom domain: `elysasecret.com`.
 
 No VPS. There is no server process and no state to keep — a VPS would mean
 owning TLS renewal, OS patching and a single point of failure in exchange for
 nothing.
+
+After the first deploy, load `https://elysasecret.com/check.js` once. It must
+return 404. If it returns source, the output directory is wrong.
 
 ## Contact form
 
