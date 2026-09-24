@@ -287,7 +287,7 @@ if (!failures.length) {
   expectEq("socials render nothing until URLs exist", fills["footer.socials"].innerHTML, "");
 
   /* the run section: three tasks now, so the tab strip must appear */
-  expect("run task sub rendered", slots["run-task-sub"].textContent, "Alexandru");
+  expect("run task sub rendered", slots["run-task-sub"].textContent, "Denmark");
   expectEq("run tabs visible with multiple tasks", slots["run-tabs"].hidden, false);
   expect("run tabs list all three tasks", slots["run-tabs"].innerHTML, "Medical Appointment");
   expect("first tab selected by default", slots["run-tabs"].innerHTML, "\"true\"");

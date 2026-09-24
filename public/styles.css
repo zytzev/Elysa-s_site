@@ -477,6 +477,9 @@ a:hover { text-decoration: underline; }
 /* the graded evaluation is amber, the same colour used for every other number
    on this site that is not flattering — the point is that it reads differently
    from the green validation points at a glance */
+/* a build that was replaced outright — dashed so it never reads as part of the
+   same climb as the points after it */
+.run__dot--superseded { fill: none; stroke: var(--ink-muted); stroke-width: 2; stroke-dasharray: 2.5 2.5; }
 .run__dot--evaluated { fill: var(--warn); stroke: var(--canvas); stroke-width: 2; }
 .run__value {
   fill: var(--ink);
@@ -512,6 +515,8 @@ a:hover { text-decoration: underline; }
 .run__legend-item--evaluated .run__legend-dot { background: var(--warn); }
 .run__legend-item--evaluated .run__legend-label,
 .run__legend-item--evaluated .run__legend-value { color: var(--warn); }
+.run__legend-item--superseded .run__legend-dot { background: none; border: 2px dashed var(--ink-muted); }
+.run__legend-item--superseded .run__legend-label { color: var(--ink-muted); font-style: italic; }
 .run__legend-label { color: var(--ink); }
 .run__legend-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .run__legend-note { grid-column: 2 / -1; color: var(--ink-muted); font-size: 0.74rem; }

@@ -49,7 +49,7 @@ window.I18N = {
       sub: "Four first-year bachelor students at the University of Southern Denmark. None of us had competed in an ML competition before.",
       alex: {
         task: "Survival Simulator",
-        log: "Rebuilt the official simulator to be bit-exact and 8.5× faster, then ran an evolutionary search over thousands of candidate controllers against it, pushing the score from 308 to a graded 1815."
+        log: "Owned Survival Simulator: read the reward straight out of the simulator source, ran the evolutionary search over candidate controllers, and chased determinism until a seed meant the same run. Added the stray-payload guard that keeps the organisers' probe from wiping a live game."
       },
       jakub: {
         task: "Medical Appointment",
@@ -57,11 +57,11 @@ window.I18N = {
       },
       javier: {
         task: "Drone Flyby",
-        log: "Took the perception task: five detection passes per frame, a fixed six-quadrant camera sweep, ground motion refitted online mid-flight, and every one of the 249 frames answered on an unseen flight."
+        log: "Took the perception task: five detection passes per frame, a camera sweep alternating quadrant and whole-frame views, ground motion refitted mid-flight, and all 249 frames answered on an unseen flight. The box-convention theory was Franciszek's."
       },
       franek: {
         task: "All three tasks",
-        log: "Built the alternative controller that turned the run around in one long session, then moved across the other two tasks — working with Javier on the drone model and with Jakub on the medical one."
+        log: "Worked across all three tasks. On Drone Flyby he worked out the grader's box convention and found the camera pattern used in the final submission, then helped Javier and Jakub push their models further."
       }
     },
     board: {
@@ -91,7 +91,7 @@ window.I18N = {
       tabSurvival: "Survival Simulator",
       tabDrone: "Drone Flyby",
       tabMedical: "Medical Appointment",
-      survivalSub: "Alexandru's task — 4th in Denmark, 12 points. A colony policy with an evolutionary search over candidate controllers, and a bit-exact local simulator so the search could be trusted.",
+      survivalSub: "4th in Denmark, 12 points. A colony policy with an evolutionary search over candidate controllers, a bit-exact local simulator so the search could be trusted, and a stray-payload guard in the served build.",
       droneSub: "Javier's task — 6th in Denmark, 8 points. Four attempts at a better single detector all failed. What worked was combining models that fail on different classes, and matching the grader's own box convention.",
       medicalSub: "Jakub's task — 1st in Denmark, 25 points. Word timestamps matched to the annotators' own coordinates, a 27B answer pass over the numbered transcript, and evidence spans chosen as the medoid of three independent producers.",
       s1: "First smoke test",
@@ -118,14 +118,16 @@ window.I18N = {
       d3n: "Four attempts at a better single detector had failed. Pairing two that fail on different classes was the first real gain.",
       d4: "Separate resolutions",
       d4n: "Each model run at its own inference resolution, rather than one setting for both.",
-      d5: "The grader's box convention",
-      d5n: "Aligning our boxes with the official convention was worth +0.157 in a single change — the largest jump of the three days.",
+      d5: "Box growth toward the convention",
+      d5n: "Reported boxes were tight; growing them toward the official convention was worth +0.157 in a single change. Franciszek's theory behind it was later measured dead — the gain was real, the explanation was wrong.",
       d6: "Box growth and track threshold",
       d6n: "One flat box-growth factor of 1.3, and a lower threshold for starting a new track.",
       d7: "Camera sweep, five passes",
       d7n: "Alternating quadrant views with whole-frame views, and five inference passes. Mean over 7 runs; the best single run reached 0.6071.",
       d8: "The unseen flight",
       d8n: "Only about 45% of the validation score carried over. Roughly 60% of our training backgrounds had been cut from that flight — the likely cause, and one we never got to retest.",
+      m0: "Earlier architecture, replaced",
+      m0n: "A working 0.802 under a completely different architecture, kept on its own branch. The rebuild below was a full replacement, not an extension — it starts lower and has to climb past this.",
       m1: "First working checkpoint",
       m1n: "Transcribe the recording, have a local model answer and quote its evidence, then map those quotes back to timestamps.",
       m2: "Evidence gets its own pass",
@@ -271,7 +273,7 @@ window.I18N = {
       sub: "Fire førsteårsstuderende på Syddansk Universitet. Ingen af os havde deltaget i en ML-konkurrence før.",
       alex: {
         task: "Survival Simulator",
-        log: "Genopbyggede den officielle simulator, så den er bittede-identisk og 8.5× hurtigere, og kørte derefter en evolutionær søgning gennem tusindvis af kandidatcontrollere imod den — fra 308 til en bedømt 1815."
+        log: "Havde Survival Simulator: læste reward-funktionen direkte ud af simulatorkilden, kørte den evolutionære søgning gennem kandidatcontrollere og jagtede determinisme, indtil et seed betød samme kørsel. Tilføjede stray-payload-guardet, der forhindrer arrangørernes probe i at slette en kørende kamp."
       },
       jakub: {
         task: "Medical Appointment",
@@ -279,11 +281,11 @@ window.I18N = {
       },
       javier: {
         task: "Drone Flyby",
-        log: "Tog perceptionsopgaven: fem detektionspas pr. frame, en fast sekskvadrant-kamerasweep, grundbevægelse efterjusteret online undervejs, og alle 249 frames besvaret på en flyvning han aldrig havde set."
+        log: "Tog perceptionsopgaven: fem detektionspas pr. frame, en kamerasweep der skifter mellem kvadrant- og helbilledvisninger, grundbevægelse efterjusteret undervejs, og alle 249 frames besvaret på en uset flyvning. Box-konventionsteorien var Franciszeks."
       },
       franek: {
         task: "Alle tre opgaver",
-        log: "Byggede den alternative controller, der vendte forløbet, i én lang session, og gik derefter på tværs af de to andre opgaver — sammen med Javier om drone-modellen og med Jakub om medical-modellen."
+        log: "På Drone Flyby regnede han bedømmerens box-konvention ud og fandt det kameramønster, der blev brugt i den endelige indsendelse. Derefter hjalp han Javier og Jakub med at presse deres modeller videre."
       }
     },
     board: {
@@ -313,7 +315,7 @@ window.I18N = {
       tabSurvival: "Survival Simulator",
       tabDrone: "Drone Flyby",
       tabMedical: "Medical Appointment",
-      survivalSub: "Alexandrus opgave — nr. 4 i Danmark, 12 point. En kolonipolitik med en evolutionær søgning gennem kandidatcontrollere og en bittede-identisk lokal simulator, så søgningen kunne betros.",
+      survivalSub: "Nr. 4 i Danmark, 12 point. En kolonipolitik med en evolutionær søgning gennem kandidatcontrollere, en bittede-identisk lokal simulator, så søgningen kunne betros, og et stray-payload-guard i den udrullede build.",
       droneSub: "Javiers opgave — nr. 6 i Danmark, 8 point. Fire forsøg på en bedre enkeltdetektor mislykkedes alle. Det, der virkede, var at kombinere modeller, der fejler på forskellige klasser, og at matche bedømmerens egen box-konvention.",
       medicalSub: "Jakubs opgave — nr. 1 i Danmark, 25 point. Ordtidsstempler matchet mod annotatørernes egne koordinater, et 27B-svarpas over den nummererede transskription og evidensspans valgt som medoiden af tre uafhængige producenter.",
       s1: "Første smoke-test",
@@ -340,14 +342,16 @@ window.I18N = {
       d3n: "Fire forsøg på en bedre enkeltdetektor var mislykkedes. At parre to, der fejler på forskellige klasser, gav den første rigtige fremgang.",
       d4: "Hver sin opløsning",
       d4n: "Hver model kørt i sin egen inferensopløsning i stedet for én indstilling for begge.",
-      d5: "Bedømmerens box-konvention",
-      d5n: "At tilpasse vores boxes til den officielle konvention var værd +0.157 i én enkelt ændring — det største spring på de tre dage.",
+      d5: "Box-vækst mod konventionen",
+      d5n: "De rapporterede boxes var stramme; at vokse dem mod den officielle konvention var værd +0.157 i én enkelt ændring. Franciszeks teori bag blev senere målt død — gevinsten var reel, forklaringen var forkert.",
       d6: "Box-vækst og track-tærskel",
       d6n: "Én flad box-vækstfaktor på 1.3 og en lavere tærskel for at starte et nyt track.",
       d7: "Kamerasweep, fem pas",
       d7n: "Skiftende kvadrantvisninger og helbilledvisninger, og fem inferenspas. Gennemsnit over 7 kørsler; den bedste enkeltkørsel nåede 0.6071.",
       d8: "Den usete flyvning",
       d8n: "Kun omkring 45% af valideringsscoren fulgte med over. Cirka 60% af vores træningsbaggrunde var klippet fra netop den flyvning — den sandsynlige årsag, og en vi aldrig fik testet igen.",
+      m0: "Tidligere arkitektur, erstattet",
+      m0n: "En fungerende 0.802 under en helt anden arkitektur, bevaret på sin egen branch. Genopbygningen nedenfor var en fuld erstatning, ikke en udvidelse — den starter lavere og skal kravle forbi denne.",
       m1: "Første fungerende checkpoint",
       m1n: "Transskribér optagelsen, lad en lokal model svare og citere sin evidens, og map citaterne tilbage til tidsstempler.",
       m2: "Evidensen får sit eget pas",

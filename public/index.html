@@ -204,6 +204,12 @@
                  task's score, so most of these are about choosing the right
                  passage rather than about answering better. */
               points: [
+                /* 0.802 came FIRST, under a different architecture, and was
+                   replaced outright rather than extended (repo commit
+                   "Replace medical-appointment with the code that produced the
+                   0.822 evaluation"). Its own kind so the chart never implies
+                   the climb below was built on top of it. */
+                { value: 0.802,   kind: "superseded", labelKey: "run.m0", noteKey: "run.m0n" },
                 { value: 0.732,   kind: "validation", labelKey: "run.m1", noteKey: "run.m1n" },
                 { value: 0.75457, kind: "validation", labelKey: "run.m2", noteKey: "run.m2n" },
                 { value: 0.79296, kind: "validation", labelKey: "run.m3", noteKey: "run.m3n" },
