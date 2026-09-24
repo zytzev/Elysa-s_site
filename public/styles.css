@@ -511,26 +511,28 @@ a:hover { text-decoration: underline; }
   font-variant-numeric: tabular-nums;
 }
 
+/* Step list, read DOWN each column and then across: step 1, 2, 3 down the first
+   column, then the rest down the second. The grid that was here flowed
+   left-to-right, so consecutive steps read across a row instead of down a list.
+   Multi-column does this natively and has no empty-cell problem on odd counts. */
 .run__legend {
-  display: grid;
-  gap: 1px;
-  background: var(--line);
+  list-style: none;
   border: 1px solid var(--line);
+  border-bottom: 0;      /* the items' own bottom borders close the box */
+  background: var(--surface);
 }
-@media (min-width: 48em) { .run__legend { grid-template-columns: repeat(2, 1fr); } }
-/* seven points in two columns would leave an empty cell that reads as a
-   missing entry — let the odd one out span the full width instead */
 @media (min-width: 48em) {
-  .run__legend-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .run__legend { columns: 2; column-gap: 0; column-rule: 1px solid var(--line); }
 }
 .run__legend-item {
-  background: var(--surface);
+  break-inside: avoid;
   padding: 0.65rem 0.85rem;
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 0.35rem 0.7rem;
   align-items: baseline;
   font-size: 0.8rem;
+  border-bottom: 1px solid var(--line);
 }
 .run__legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .run__legend-item--local .run__legend-dot { background: var(--canvas); border: 2px solid var(--ink-muted); }
