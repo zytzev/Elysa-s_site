@@ -9,32 +9,20 @@ window.I18N = {
       dkPlace: "1st",
       nordicLabel: "NORDIC",
       nordicPlace: "2nd",
-      gapLabel: "gap to NO",
-      countdown: "Reykjavík final in",
-      dayOne: "day",
-      dayMany: "days"
+      gapLabel: "gap to NO"
     },
     nav: {
       team: "The four",
       board: "The board",
       run: "The run",
-      final: "Reykjavík",
       learned: "What we learned",
       about: "How we work",
+      project: "Make-a-Ring",
       contact: "Contact"
-    },
-    final: {
-      heading: "The final",
-      sub: "Four days of qualifying are behind us. This is what is left.",
-      days: "Days",
-      hours: "Hours",
-      minutes: "Minutes",
-      seconds: "Seconds",
-      venue: "Nordic AI Meet · Reykjavík, Iceland · 14–15 October 2026 · against the national champions of Sweden, Norway, Finland and Iceland."
     },
     hero: {
       headline: "First place. Denmark.",
-      sub: "Four first-year students, seven days of preparation, and a simulator that turned out not to be deterministic. Nordic AI Cup 2026 — now on to Reykjavík.",
+      sub: "Four students, seven days of preparation, and a simulator that turned out not to be deterministic. Nordic AI Cup 2026.",
       place: "National result",
       placeSub: "Nordic AI Cup 2026",
       points: "Danish total",
@@ -46,7 +34,12 @@ window.I18N = {
     },
     team: {
       heading: "The four",
-      sub: "Four first-year bachelor students at the University of Southern Denmark. None of us had competed in an ML competition before.",
+      sub: "Four students at the University of Southern Denmark. None of us had competed in an ML competition before.",
+      countries: {
+        md: "Moldova",
+        pl: "Poland",
+        es: "Spain"
+      },
       alex: {
         task: "Survival Simulator",
         log: "Survival Simulator is his task: he read the reward straight out of the simulator source, ran the evolutionary search over candidate controllers, and chased determinism until a seed meant the same run."
@@ -197,13 +190,25 @@ window.I18N = {
       s1: "loaded",
       l2: "three tasks",
       s2: "loaded",
-      l3: "one final",
+      l3: "one hackathon",
       s3: "pending",
       ready: "ready"
     },
+    project: {
+      heading: "What we built next",
+      sub: "After the cup, two of us entered a design hackathon under the team name. The judging is still going on.",
+      text: "A ring studio for people who aren't jewellers. Scroll through patterns like a character creator, or draw one tile of your own and watch it wrap around the band. Try the ring on a hand at its real size, then download a print-ready STL or OBJ file — all in the browser.",
+      eventLabel: "Hackathon",
+      eventKind: "UI/UX & Web Design, on Devpost",
+      buildersLabel: "Built by",
+      statusPending: "Awaiting results",
+      linkDemo: "Live demo",
+      linkRepo: "Source on GitHub",
+      linkEvent: "The hackathon"
+    },
     contact: {
       heading: "Get in touch",
-      sub: "We are four first-year students representing the University of Southern Denmark at the Nordic final in Reykjavík on 14–15 October, against the national champions of Sweden, Norway, Finland and Iceland. If you would like to support the trip, ask what we built, or just say hello — write to us.",
+      sub: "We are four students at the University of Southern Denmark. If you would like to ask what we built, work with us, or just say hello — write to us.",
       email: "Email",
       phone: "Phone",
       name: "Your name",
@@ -231,32 +236,20 @@ window.I18N = {
       dkPlace: "1.",
       nordicLabel: "NORDISK",
       nordicPlace: "2.",
-      gapLabel: "afstand til NO",
-      countdown: "Finalen i Reykjavík om",
-      dayOne: "dag",
-      dayMany: "dage"
+      gapLabel: "afstand til NO"
     },
     nav: {
       team: "De fire",
       board: "Ranglisten",
       run: "Forløbet",
-      final: "Reykjavík",
       learned: "Hvad vi lærte",
       about: "Sådan arbejder vi",
+      project: "Make-a-Ring",
       contact: "Kontakt"
-    },
-    final: {
-      heading: "Finalen",
-      sub: "Fire dages kvalifikation ligger bag os. Det her er, hvad der er tilbage.",
-      days: "Dage",
-      hours: "Timer",
-      minutes: "Minutter",
-      seconds: "Sekunder",
-      venue: "Nordic AI Meet · Reykjavík, Island · 14.–15. oktober 2026 · mod nationalmestrene fra Sverige, Norge, Finland og Island."
     },
     hero: {
       headline: "Førstepladsen. Danmark.",
-      sub: "Fire førsteårsstuderende, syv dages forberedelse og en simulator, der viste sig ikke at være deterministisk. Nordic AI Cup 2026 — nu videre til Reykjavík.",
+      sub: "Fire studerende, syv dages forberedelse og en simulator, der viste sig ikke at være deterministisk. Nordic AI Cup 2026.",
       place: "Nationalt resultat",
       placeSub: "Nordic AI Cup 2026",
       points: "Dansk total",
@@ -268,7 +261,12 @@ window.I18N = {
     },
     team: {
       heading: "De fire",
-      sub: "Fire førsteårsstuderende på Syddansk Universitet. Ingen af os havde deltaget i en ML-konkurrence før.",
+      sub: "Fire studerende på Syddansk Universitet. Ingen af os havde deltaget i en ML-konkurrence før.",
+      countries: {
+        md: "Moldova",
+        pl: "Polen",
+        es: "Spanien"
+      },
       alex: {
         task: "Survival Simulator",
         log: "Survival Simulator er hans opgave: han læste reward-funktionen direkte ud af simulatorkilden, kørte den evolutionære søgning gennem kandidatcontrollere og jagtede determinisme, indtil et seed betød samme kørsel."
@@ -418,13 +416,25 @@ window.I18N = {
       s1: "indlæst",
       l2: "tre opgaver",
       s2: "indlæst",
-      l3: "én finale",
+      l3: "ét hackathon",
       s3: "afventer",
       ready: "klar"
     },
+    project: {
+      heading: "Det byggede vi bagefter",
+      sub: "Efter konkurrencen deltog to af os i et designhackathon under holdets navn. Bedømmelsen er stadig i gang.",
+      text: "Et ringstudie for folk, der ikke er guldsmede. Bladr gennem mønstre som i en figurskaber, eller tegn din egen flise og se den gå hele vejen rundt om ringen. Prøv ringen på en hånd i sin rigtige størrelse, og download derefter en printklar STL- eller OBJ-fil — alt sammen i browseren.",
+      eventLabel: "Hackathon",
+      eventKind: "UI/UX & Web Design, på Devpost",
+      buildersLabel: "Bygget af",
+      statusPending: "Afventer resultat",
+      linkDemo: "Live demo",
+      linkRepo: "Kildekode på GitHub",
+      linkEvent: "Hackathonet"
+    },
     contact: {
       heading: "Kontakt os",
-      sub: "Vi er fire førsteårsstuderende, der repræsenterer Syddansk Universitet ved den nordiske finale i Reykjavík den 14.–15. oktober mod nationalmestrene fra Sverige, Norge, Finland og Island. Vil du støtte rejsen, spørge om hvad vi byggede, eller bare sige hej — så skriv til os.",
+      sub: "Vi er fire studerende på Syddansk Universitet. Vil du spørge om, hvad vi byggede, arbejde sammen med os, eller bare sige hej — så skriv til os.",
       email: "E-mail",
       phone: "Telefon",
       name: "Dit navn",

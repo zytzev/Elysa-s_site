@@ -285,6 +285,8 @@ else fail("required file present: README.md");
 var ALLOWED_IN_PUBLIC = [
   "index.html", "thanks.html",
   "i18n.js", "styles.css", "script.js", "motion.js",
+  /* the favicon folder */
+  "images",
   /* files Cloudflare Pages itself may add, and editor/system noise we ignore */
   "_headers", "_redirects", "_routes.json"
 ];
@@ -310,7 +312,7 @@ var rendererKeys = (scriptSrc.match(/\n\s*"([A-Za-z0-9._-]+)":\s*function/g) || 
 
 /* mirrors TEXT_KEYS in script.js — keep the two in step, or a real
    data-fill silently stops resolving */
-var TEXT_KEYS_RE = /(?:^|\.)(headline|heading|sub|text|tagline|legal|title|badge|note|caption|label|days|hours|minutes|seconds|venue)$/;
+var TEXT_KEYS_RE = /(?:^|\.)(headline|heading|sub|text|tagline|legal|title|badge|note|caption|label)$/;
 function at(obj, key) {
   return String(key).split(".").reduce(function (node, part) {
     return node == null ? undefined : node[part];

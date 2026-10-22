@@ -62,7 +62,6 @@ async function capture(browser, name, opts) {
       innerWidth: window.innerWidth,
       overflowX: document.documentElement.scrollWidth - window.innerWidth,
       rail: txt(".rail__items"),
-      countdown: txt(".rail__countdown"),
       headline: txt(".hero__headline"),
       prompt: txt(".hero__prompt"),
       teamPanels: document.querySelectorAll(".member").length,
@@ -130,7 +129,6 @@ async function capture(browser, name, opts) {
   console.log("  lang=" + metrics.htmlLang + "  overflowX=" + metrics.overflowX + "px" +
     "  sections=" + metrics.sections.join(","));
   console.log("  rail: " + JSON.stringify(metrics.rail));
-  console.log("  countdown: " + JSON.stringify(metrics.countdown));
   console.log("  h1: " + JSON.stringify(metrics.headline));
   console.log("  prompt: " + JSON.stringify(metrics.prompt));
   console.log("  members=" + metrics.teamPanels + "  boardRows=" + metrics.boardRows +
