@@ -1,7 +1,7 @@
 # elysasecret.com
 
 Team site for **Elysa's Secret** — Nordic AI Cup 2026
-Four first-year bachelor students at the University of Southern Denmark.
+Four students at the University of Southern Denmark.
 
 Static site. No build step, no framework, no dependencies.
 

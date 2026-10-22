@@ -31,7 +31,7 @@
 
   /* signal colours */
   --accent:     #5CE1A0;  /* phosphor green — the team's own numbers, successes */
-  --warn:       #F2B455;  /* amber — reserved for the unflattering numbers       */
+  --warn:       #F2B455;  /* amber — the unflattering numbers, and results not in yet */
   --dk:         #C8102E;  /* Danish red — used exactly once, the DK chip         */
   --marked:     #E5484D;  /* red — means "a named person pushed this point"      */
 
@@ -200,7 +200,6 @@ a:hover { text-decoration: underline; }
 .rail__item--good .rail__value { color: var(--accent); }
 .rail__item--warn .rail__value { color: var(--warn); }
 .rail__right { display: flex; align-items: center; gap: 0.9rem; margin-left: auto; flex: 0 0 auto; }
-.rail__countdown { color: var(--ink-muted); white-space: nowrap; }
 
 .lang { display: inline-flex; gap: 0.25rem; }
 .lang__btn {
@@ -368,17 +367,23 @@ a:hover { text-decoration: underline; }
 /* fixed-height head slot: a two-line name (Javier's) must not push its log out
    of line with the other three */
 .member__head { display: flex; gap: 0.8rem; align-items: center; min-height: 3.6rem; }
-.member__monogram {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  letter-spacing: 0.04em;
-  color: var(--accent);
+/* the same box the initials used to sit in, now holding the flag. Flags keep
+   their own ratios (Moldova 1:2, Poland 5:8, Spain 2:3), so the box is sized
+   for the widest and centres the rest — the four names still start in line. */
+.member__flag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(3.2rem + 0.8rem + 2px);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 0.5rem 0.55rem;
+  padding: 0.4rem;
   background: var(--canvas);
   flex: 0 0 auto;
+  line-height: 0;
 }
+.member__flag img, .member__flag svg { display: block; height: 1.6rem; width: auto; }
+.member__flag svg { width: 2.56rem; }
 .member__name { font-size: 0.98rem; line-height: 1.25; }
 .member__task { font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-muted); margin-top: 0.15rem; }
 /* text runs straight down from the header. It is deliberately NOT
@@ -853,44 +858,53 @@ a:hover { text-decoration: underline; }
 .mascot__speech.is-on { opacity: 1; }
 .is-booting .mascot__speech { display: none; }
 
-/* --------------------------------------------------------------- final ---
-   The countdown. It is revealed by JS after the command above it types out;
-   the hidden state is applied inline by JS rather than in CSS, so with JS
-   disabled the clock is simply visible instead of missing. */
-.final__cmd {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--ink-muted);
-  margin-bottom: 1.5rem;
-}
-.final__clock {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--line);
+/* ------------------------------------------------------------- project ---
+   One card, built like a member pane: a prompt line, a head, prose, then the
+   links in a row at the bottom. The status chip is amber because the result
+   is not in yet — accent green is kept for results we actually have. */
+.project {
+  background: var(--surface);
   border: 1px solid var(--line);
-  margin-bottom: 1.25rem;
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 52rem;
 }
-.final__unit { background: var(--surface); padding: 1.4rem 0.75rem; text-align: center; }
-.final__num {
-  display: block;
+.project__cmd { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted); }
+.project__head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; }
+.project__name { font-size: clamp(1.4rem, 3.5vw, 1.9rem); letter-spacing: -0.02em; line-height: 1.1; }
+.project__status {
   font-family: var(--font-mono);
-  font-size: clamp(1.9rem, 7vw, 3.75rem);
-  line-height: 1;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-}
-.final__label {
-  display: block;
-  margin-top: 0.6rem;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  color: var(--warn);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  white-space: nowrap;
+}
+.project__text { color: var(--ink-muted); max-width: 64ch; }
+.project__meta { display: grid; gap: 0.5rem; }
+@media (min-width: 40em) { .project__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; } }
+.project__meta dt {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
   color: var(--ink-muted);
 }
-.final__venue { font-size: 0.85rem; color: var(--ink-muted); max-width: 68ch; }
+.project__meta dd { margin: 0.2rem 0 0; font-size: 0.9rem; }
+.project__links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; padding-top: 0.25rem; }
+.project__link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--line);
+  line-height: 1.2;
+}
+.project__link:hover { color: var(--accent); border-bottom-color: var(--accent); text-decoration: none; }
 
 @media (max-width: 30em) { :root { --mascot-size: 106px; } }
 @media (max-height: 24em) { .mascot { display: none; } }

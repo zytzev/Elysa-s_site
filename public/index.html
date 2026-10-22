@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Elysa's Secret</title>
-    <meta name="description" content="Nordic AI Cup 2026 — 1st place, Denmark. Four first-year students from the University of Southern Denmark." />
+    <meta name="description" content="Nordic AI Cup 2026 — 1st place, Denmark. Four students from the University of Southern Denmark." />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" type="image/x-icon" href="./images/KikasLogo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -38,7 +38,7 @@
 
     <script>
       window.SITE_CONFIG = {
-        sections: ["hero", "team", "board", "final", "run", "about", "learned", "contact"],
+        sections: ["hero", "team", "board", "run", "about", "learned", "project", "contact"],
 
         brand: { name: "Elysa's Secret", logo: "" },
 
@@ -49,11 +49,7 @@
             { key: "rail.dkLabel", value: "45.00", placeKey: "rail.dkPlace", tone: "good" },
             { key: "rail.nordicLabel", value: "35.97", placeKey: "rail.nordicPlace", tone: "plain" },
             { key: "rail.gapLabel", value: "-0.54", tone: "warn" }
-          ],
-          countdownTo: "2026-10-14T09:00:00Z",
-          countdownKey: "rail.countdown",
-          dayOneKey: "rail.dayOne",
-          dayManyKey: "rail.dayMany"
+          ]
         },
 
         /* nav order mirrors sections[] exactly — a nav that lists "what we
@@ -62,10 +58,10 @@
           links: [
             { key: "nav.team", href: "#team" },
             { key: "nav.board", href: "#board" },
-            { key: "nav.final", href: "#final" },
             { key: "nav.run", href: "#run" },
             { key: "nav.about", href: "#about" },
-            { key: "nav.learned", href: "#learned" }
+            { key: "nav.learned", href: "#learned" },
+            { key: "nav.project", href: "#project" }
           ],
           cta: { key: "nav.contact", href: "#contact" }
         },
@@ -84,16 +80,18 @@
 
         /* No scores on the member panes. A public site is the wrong place to
            rank four teammates against each other — each pane says what that
-           person did, and the numbers live on the board and the run. */
+           person did, and the numbers live on the board and the run.
+           `country` picks a flag from FLAGS in script.js; the country's name
+           is translated (team.countries.*) and is the flag's accessible label. */
         team: {
           members: [
-            { name: "Alexandru Zaitzev", monogram: "AZ", taskKey: "team.alex.task", logKey: "team.alex.log",
+            { name: "Alexandru Zaitzev", country: "md", taskKey: "team.alex.task", logKey: "team.alex.log",
               linkedin: "https://www.linkedin.com/in/zaitzev/" },
-            { name: "Jakub Furmaniuk", monogram: "JF", taskKey: "team.jakub.task", logKey: "team.jakub.log",
+            { name: "Jakub Furmaniuk", country: "pl", taskKey: "team.jakub.task", logKey: "team.jakub.log",
               linkedin: "https://www.linkedin.com/in/jakub-furmaniuk/" },
-            { name: "Javier Arévalo Hernández", monogram: "JA", taskKey: "team.javier.task", logKey: "team.javier.log",
+            { name: "Javier Arévalo Hernández", country: "es", taskKey: "team.javier.task", logKey: "team.javier.log",
               linkedin: "https://www.linkedin.com/in/javier-arevalo-hernandez" },
-            { name: "Franciszek Kossut", monogram: "FK", taskKey: "team.franek.task", logKey: "team.franek.log",
+            { name: "Franciszek Kossut", country: "pl", taskKey: "team.franek.task", logKey: "team.franek.log",
               linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" }
           ]
         },
@@ -224,12 +222,20 @@
           ]
         },
 
-        /* The final, at the top of the page's second act. Iceland has no
-           daylight saving, so UTC is the right zone. Change this one instant if
-           the start time is confirmed as something other than 09:00. */
-        final: {
-          countdownTo: "2026-10-14T09:00:00Z",
-          command: "elysa --reykjavik"
+        /* What we did after the cup. Built by two of the four, entered under
+           the team name. No result yet: when HyperBloom announces one, change
+           statusKey (and its two strings in i18n.js), nothing else. */
+        project: {
+          command: "elysa --next",
+          name: "Make-a-Ring",
+          event: "HyperBloom October 2026",
+          builders: ["Franciszek Kossut", "Javier Arévalo Hernández"],
+          statusKey: "project.statusPending",
+          links: [
+            { key: "project.linkDemo", href: "https://make-a-ring.deployxa.online" },
+            { key: "project.linkRepo", href: "https://github.com/FearedLynx/make-a-ring" },
+            { key: "project.linkEvent", href: "https://hyperbloom-october.devpost.com" }
+          ]
         },
 
         /* Things we type at Claude. EXACTLY these four — nothing else gets
@@ -322,7 +328,6 @@
       <div class="rail__inner container">
         <span class="rail__items" data-fill="rail.items"></span>
         <span class="rail__right">
-          <span class="rail__countdown" data-slot="countdown"></span>
           <span class="lang" role="group" aria-label="Language">
             <button type="button" class="lang__btn" data-lang="en" aria-pressed="true">EN</button>
             <button type="button" class="lang__btn" data-lang="da" aria-pressed="false">DA</button>
@@ -405,38 +410,6 @@
         </div>
       </section>
 
-      <!-- SLOT: final — the countdown to Reykjavík. It runs a command first and
-           only then reveals the clock, so the number arrives rather than just
-           sitting there. -->
-      <section id="final" class="section section--final" data-section="final">
-        <div class="container">
-          <div class="section__heading">
-            <h2 class="section__title" data-fill="final.heading"></h2>
-            <p class="section__sub" data-fill="final.sub"></p>
-          </div>
-          <p class="final__cmd"><span class="hero__sigil" aria-hidden="true">$</span> <span data-slot="final-typed"></span><span class="caret" data-slot="final-caret" aria-hidden="true"></span></p>
-          <div class="final__clock" data-slot="final-clock">
-            <div class="final__unit">
-              <span class="final__num" data-slot="final-d">--</span>
-              <span class="final__label" data-fill="final.days"></span>
-            </div>
-            <div class="final__unit">
-              <span class="final__num" data-slot="final-h">--</span>
-              <span class="final__label" data-fill="final.hours"></span>
-            </div>
-            <div class="final__unit">
-              <span class="final__num" data-slot="final-m">--</span>
-              <span class="final__label" data-fill="final.minutes"></span>
-            </div>
-            <div class="final__unit">
-              <span class="final__num" data-slot="final-s">--</span>
-              <span class="final__label" data-fill="final.seconds"></span>
-            </div>
-          </div>
-          <p class="final__venue" data-fill="final.venue"></p>
-        </div>
-      </section>
-
       <!-- SLOT: about — how we work -->
       <section id="about" class="section section--about" data-section="about">
         <div class="container">
@@ -456,6 +429,17 @@
             <p class="section__sub" data-fill="learned.sub"></p>
           </div>
           <div class="features__grid" data-fill="learned.cards"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: project — what we built after the cup -->
+      <section id="project" class="section section--project" data-section="project">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="project.heading"></h2>
+            <p class="section__sub" data-fill="project.sub"></p>
+          </div>
+          <div data-fill="project.card"></div>
         </div>
       </section>
 

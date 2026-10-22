@@ -58,7 +58,20 @@
   /* data-fill keys that name a translation rather than a raw config value.
      NOTE: `command` is deliberately absent — config.hero.command is a literal
      shell command, identical in both languages. */
-  var TEXT_KEYS = /(?:^|\.)(headline|heading|sub|text|tagline|legal|title|badge|note|caption|label|days|hours|minutes|seconds|venue)$/;
+  var TEXT_KEYS = /(?:^|\.)(headline|heading|sub|text|tagline|legal|title|badge|note|caption|label)$/;
+
+  /* ---------------------------------------------------------------- flags ---
+     Spain and Moldova are the real flags (Wikimedia Commons, public domain),
+     downscaled to 3x their displayed size in images/ — their coats of arms
+     cannot be redrawn by hand without looking wrong up close. Poland is two
+     stripes, so it is drawn inline. No emoji: Windows has no flag emoji and
+     prints the bare letters instead. Each keeps its own official ratio. */
+  var FLAGS = {
+    es: '<img src="images/flag-es.png" width="117" height="78" alt="" />',
+    md: '<img src="images/flag-md.png" width="156" height="78" alt="" />',
+    pl: '<svg viewBox="0 0 16 10" aria-hidden="true" focusable="false">' +
+      '<rect width="16" height="5" fill="#FFFFFF"/><rect y="5" width="16" height="5" fill="#DC143C"/></svg>'
+  };
 
   /* ---------------------------------------------------------------- icons --- */
   var ICONS = {
@@ -175,7 +188,10 @@
             '<article class="member">' +
             '<p class="member__prompt"><span class="member__sigil" aria-hidden="true">$</span> whoami</p>' +
             '<div class="member__head">' +
-            '<span class="member__monogram" aria-hidden="true">' + esc(m.monogram) + "</span>" +
+            /* the flag is content, not decoration: it says where each of us
+               is from, so it is labelled for screen readers and on hover */
+            '<span class="member__flag" role="img" aria-label="' + esc(t("team.countries." + m.country)) +
+            '" title="' + esc(t("team.countries." + m.country)) + '">' + (FLAGS[m.country] || "") + "</span>" +
             "<div>" +
             '<h3 class="member__name">' + esc(m.name) + "</h3>" +
             '<p class="member__task">' + esc(t(m.taskKey)) + "</p>" +
@@ -229,6 +245,36 @@
           );
         })
         .join("");
+    },
+
+    /* One project card. Name, event and builders are data (config); every
+       sentence around them is translated. */
+    "project.card": function (el, c) {
+      var p = c.project || {};
+      el.innerHTML =
+        '<article class="project">' +
+        '<p class="project__cmd"><span class="hero__sigil" aria-hidden="true">$</span> ' + esc(p.command) + "</p>" +
+        '<div class="project__head">' +
+        '<h3 class="project__name">' + esc(p.name) + "</h3>" +
+        '<span class="project__status">' + esc(t(p.statusKey)) + "</span>" +
+        "</div>" +
+        '<p class="project__text">' + esc(t("project.text")) + "</p>" +
+        '<dl class="project__meta">' +
+        "<div><dt>" + esc(t("project.eventLabel")) + "</dt>" +
+        "<dd>" + esc(p.event) + " · " + esc(t("project.eventKind")) + "</dd></div>" +
+        "<div><dt>" + esc(t("project.buildersLabel")) + "</dt>" +
+        "<dd>" + esc((p.builders || []).join(", ")) + "</dd></div>" +
+        "</dl>" +
+        '<p class="project__links">' +
+        (p.links || [])
+          .filter(function (link) { return link && link.href; })
+          .map(function (link) {
+            return '<a class="project__link" href="' + esc(link.href) + '" target="_blank" rel="noopener">' +
+              esc(t(link.key)) + '<span aria-hidden="true"> ↗</span></a>';
+          })
+          .join("") +
+        "</p>" +
+        "</article>";
     },
 
     "contact.info": function (el, c) {
@@ -567,90 +613,6 @@
     if (items) RENDERERS["rail.items"](items, config);
   }
 
-  function mountRailCountdown() {
-    var el = document.querySelector('[data-slot="countdown"]');
-    if (!el || !window.SiteMotion) return;
-    window.SiteMotion.startCountdown(
-      el,
-      config.statusRail.countdownTo,
-      t(config.statusRail.countdownKey),
-      { one: t(config.statusRail.dayOneKey), many: t(config.statusRail.dayManyKey) }
-    );
-  }
-
-  /* ---------------------------------------------------------------- final ---
-     The clock is revealed only after the command above it has typed out, and
-     only when the section is actually reached — otherwise the whole sequence
-     plays off-screen and the visitor arrives at a countdown that has already
-     finished arriving.
-
-     The hidden state is applied inline here rather than in CSS, so with JS
-     disabled the clock is simply visible instead of never appearing. */
-  var finalDone = false;
-
-  function mountFinal() {
-    var cfg = config.final || {};
-    var typed = document.querySelector('[data-slot="final-typed"]');
-    var caret = document.querySelector('[data-slot="final-caret"]');
-    var clock = document.querySelector('[data-slot="final-clock"]');
-    var els = {
-      d: document.querySelector('[data-slot="final-d"]'),
-      h: document.querySelector('[data-slot="final-h"]'),
-      m: document.querySelector('[data-slot="final-m"]'),
-      s: document.querySelector('[data-slot="final-s"]')
-    };
-    if (!els.d || !window.SiteMotion) return;
-
-    function show() {
-      if (clock) { clock.style.opacity = ""; clock.style.transform = ""; }
-      if (caret) caret.hidden = true;
-      window.SiteMotion.startClock(cfg.countdownTo, els);
-    }
-
-    function run() {
-      if (typed) typed.textContent = "";
-      if (caret) caret.hidden = false;
-      if (clock) { clock.style.opacity = "0"; clock.style.transform = "translateY(8px)"; }
-      window.SiteMotion.typeCommand(typed, cfg.command || "", function () {
-        if (caret) caret.hidden = true;
-        if (clock) {
-          window.requestAnimationFrame(function () {
-            clock.style.opacity = "";
-            clock.style.transform = "";
-          });
-        }
-        window.SiteMotion.startClock(cfg.countdownTo, els);
-      });
-    }
-
-    if (finalDone) { show(); return; }
-    finalDone = true;
-
-    if (window.SiteMotion.reduced) { if (typed) typed.textContent = cfg.command || ""; show(); return; }
-
-    var section = document.getElementById("final");
-    if (section && "IntersectionObserver" in window) {
-      var io = new IntersectionObserver(
-        function (entries) {
-          entries.forEach(function (entry) {
-            if (!entry.isIntersecting) return;
-            io.disconnect();
-            run();
-          });
-        },
-        { threshold: 0.2 }
-      );
-      io.observe(section);
-      /* if it never intersects (odd viewport, observer quirk) the clock must
-         still start rather than sit at "--" forever */
-      window.setTimeout(function () {
-        if (els.d && els.d.textContent === "--") { io.disconnect(); run(); }
-      }, 9000);
-    } else {
-      run();
-    }
-  }
-
   /* ----------------------------------------------------------------- boot ---
      The terminal owns the viewport until it finishes. On completion the page
      is revealed FIRST and the terminal then slides up and out of the way —
@@ -776,14 +738,12 @@
     });
 
     /* every renderer reads t() at call time, so a re-render is the whole swap.
-       The board, curve and countdown are mounted explicitly because they build
-       markup that is not [data-fill]-driven. */
+       The board and curve are mounted explicitly because they build markup
+       that is not [data-fill]-driven. */
     renderAll(document);
     mountBoard();
     mountRun();
-    mountFinal();
     mountRail();
-    mountRailCountdown();
   }
 
   function wireLang() {
@@ -805,10 +765,8 @@
     wireNav();
     wireLang();
     mountRail();
-    mountRailCountdown();
     mountBoard();
     mountRun();
-    mountFinal();
     /* mascot must be placed and drag-wired before mountBoot's reveal places it */
     if (window.SiteMotion) window.SiteMotion.initMascot();
     mountBoot();

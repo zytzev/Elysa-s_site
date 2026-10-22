@@ -220,6 +220,13 @@ if (!failures.length) {
    "linkedin.com/in/javier-arevalo-hernandez"].forEach(function (u) {
     expect("member linkedin " + u, team, u);
   });
+  /* a flag per pane, each labelled with its country: one Moldovan, two Polish, one Spanish */
+  var flagCount = (team.match(/class="member__flag"/g) || []).length;
+  if (flagCount === 4) pass();
+  else fail("expected a flag on each of the 4 member panes, got " + flagCount);
+  expectEq("one Moldova flag", (team.match(/aria-label="Moldova"/g) || []).length, 1);
+  expectEq("two Poland flags", (team.match(/aria-label="Poland"/g) || []).length, 2);
+  expectEq("one Spain flag", (team.match(/aria-label="Spain"/g) || []).length, 1);
 
   /* the fairness rule: a member pane must never carry a score, and must never
      describe a teammate's task as a weakness */
@@ -278,7 +285,7 @@ if (!failures.length) {
   expect("learned determinism card", learned, "Determinism is the experiment");
   expect("learned combine-models card", learned, "Combine models that fail differently");
 
-  expect("contact intro", fills["contact.sub"].textContent, "Nordic final");
+  expect("contact intro", fills["contact.sub"].textContent, "University of Southern Denmark");
   expect("contact info", fills["contact.info"].innerHTML, "elysassecret@gmail.com");
   expect("form fields rendered", slots["contact-form"].innerHTML, "name=\"message\"");
   expect("form submit label", slots["contact-form"].innerHTML, ">Send<");
@@ -299,14 +306,23 @@ if (!failures.length) {
   expect("run tabs list all three tasks", slots["run-tabs"].innerHTML, "Medical Appointment");
   expect("first tab selected by default", slots["run-tabs"].innerHTML, "\"true\"");
 
-  /* the countdown section */
-  ["final-d", "final-h", "final-m", "final-s"].forEach(function (slot) {
-    var v = (slots[slot] || {}).textContent || "";
-    if (/^\d+$/.test(v)) pass();
-    else fail("countdown " + slot + " did not render a number: " + JSON.stringify(v));
+  /* the project section: one card, with its result still pending */
+  var project = fills["project.card"].innerHTML;
+  expect("project heading", fills["project.heading"].textContent, "What we built next");
+  expect("project card name", project, "Make-a-Ring");
+  expect("project card event", project, "HyperBloom October 2026");
+  expect("project card builders", project, "Franciszek Kossut, Javier Arévalo Hernández");
+  expect("project card status", project, "Awaiting results");
+  ["make-a-ring.deployxa.online", "github.com/FearedLynx/make-a-ring", "hyperbloom-october.devpost.com"]
+    .forEach(function (u) { expect("project card links " + u, project, u); });
+
+  /* the finals are over: nothing on the page may still point at them */
+  var everything = fillEls.concat(slotEls)
+    .map(function (e) { return e.innerHTML + e.textContent; }).join(" ") + html;
+  ["Reykjav", "first-year", "førsteårs"].forEach(function (gone) {
+    if (everything.indexOf(gone) === -1) pass();
+    else fail("page still mentions " + JSON.stringify(gone));
   });
-  expect("countdown labels translated", fills["final.days"].textContent, "Days");
-  expect("countdown venue", fills["final.venue"].textContent, "Reykjavík");
 
   /* the mascot's state-dependent parts must all ship in the markup */
   ["mascot__arm", "mascot__beret", "mascot__eyes-uwu", "mascot__eyes-angry",

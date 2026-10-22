@@ -33,63 +33,6 @@
     ? window.requestAnimationFrame.bind(window)
     : function (fn) { return window.setTimeout(function () { fn(Date.now()); }, 16); };
 
-  /* ============================================================ countdown === */
-  function startCountdown(el, iso, label, units) {
-    if (!el) return;
-    /* A language switch re-mounts the countdown. Clear the previous timer
-       first, or every swap leaves another interval ticking behind it. */
-    if (el.__countdownTimer) {
-      window.clearInterval(el.__countdownTimer);
-      el.__countdownTimer = null;
-    }
-
-    /* The unit words are translated, not hard-coded — "20 days" is wrong in
-       Danish, where it must read "20 dage". */
-    var u = units || { one: "day", many: "days" };
-
-    var target = new Date(iso).getTime();
-    if (isNaN(target)) { el.textContent = ""; return; }
-
-    function days() {
-      return Math.max(0, Math.ceil((target - Date.now()) / 86400000));
-    }
-    function paint() {
-      var d = days();
-      el.textContent = (label ? label + " " : "") + d + " " + (d === 1 ? u.one : u.many);
-    }
-    paint();
-    if (REDUCED) return;
-    el.__countdownTimer = window.setInterval(paint, 60000);
-  }
-
-  /* ========================================================= detailed clock ===
-     Days / hours / minutes / seconds, ticking once a second. Reduced motion
-     paints a single frame and stops: a ticking clock is exactly the kind of
-     motion that setting exists to suppress. */
-  var clockTimer = null;
-
-  function startClock(iso, els) {
-    if (!els || !els.d) return;
-    var target = new Date(iso).getTime();
-    if (isNaN(target)) return;
-
-    function pad(n) {
-      n = String(n);
-      return n.length < 2 ? "0" + n : n;
-    }
-    function paint() {
-      var s = Math.max(0, Math.floor((target - Date.now()) / 1000));
-      els.d.textContent = pad(Math.floor(s / 86400));
-      if (els.h) els.h.textContent = pad(Math.floor((s % 86400) / 3600));
-      if (els.m) els.m.textContent = pad(Math.floor((s % 3600) / 60));
-      if (els.s) els.s.textContent = pad(s % 60);
-    }
-    paint();
-    if (clockTimer) { window.clearInterval(clockTimer); clockTimer = null; }
-    if (REDUCED) return;
-    clockTimer = window.setInterval(paint, 1000);
-  }
-
   /* ============================================================ typewriter === */
   function typeCommand(el, text, done) {
     if (!el) { if (done) done(); return; }
@@ -687,8 +630,6 @@
 
   window.SiteMotion = {
     reduced: REDUCED,
-    startCountdown: startCountdown,
-    startClock: startClock,
     typeCommand: typeCommand,
     scramble: scramble,
     countUp: countUp,
