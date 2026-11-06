@@ -2,7 +2,7 @@
    elysasecret.com — behaviour
    ============================================================================
    Reads window.SITE_CONFIG (data) and window.I18N (prose), fills every
-   [data-fill] node, orders sections from config.sections, wires nav, the
+   [data-fill] node on whichever page loaded it, and wires the nav, the
    board tabs, the language toggle and the contact form.
 
    Data and prose are deliberately separate: config holds scores, names and
@@ -15,6 +15,10 @@
   var config = window.SITE_CONFIG || {};
   var dict = window.I18N || { en: {}, da: {} };
   var LANG_KEY = "elysasecret.lang";
+  var BOOT_KEY = "elysasecret.booted";
+
+  /* which page this is: home, cup or ring. Set on <html> in each page. */
+  var page = document.documentElement.getAttribute("data-page") || "home";
 
   /* ------------------------------------------------------------- language --- */
   function readStoredLang() {
@@ -109,6 +113,80 @@
       return node == null ? undefined : node[part];
     }, obj);
   }
+  /* A link out opens in a new tab and says so; a link to one of our own pages
+     does neither. */
+  function isExternal(href) { return /^https?:/.test(href); }
+  function ctaHtml(cta) {
+    var variant = cta.variant === "secondary" ? "btn--secondary" : "btn--primary";
+    var ext = isExternal(cta.href);
+    return '<a class="btn ' + variant + '" href="' + esc(cta.href) + '"' +
+      (ext ? ' target="_blank" rel="noopener"' : "") + ">" + esc(t(cta.key)) +
+      (ext ? '<span aria-hidden="true"> ↗</span>' : "") + "</a>";
+  }
+  function statsHtml(stats) {
+    return (stats || [])
+      .map(function (stat) {
+        return (
+          '<div class="hero__stat">' +
+          '<dt class="hero__stat-label">' + esc(t(stat.key)) + "</dt>" +
+          '<dd class="hero__stat-value">' + esc(stat.value) + "</dd>" +
+          '<dd class="hero__stat-sub">' + esc(t(stat.subKey)) + "</dd>" +
+          "</div>"
+        );
+      })
+      .join("");
+  }
+  function featureCardsHtml(cards) {
+    return (cards || [])
+      .map(function (card) {
+        return (
+          '<article class="feature-card">' +
+          '<div class="feature-card__icon">' + icon(card.icon) + "</div>" +
+          '<h3 class="feature-card__title">' + esc(t(card.titleKey)) + "</h3>" +
+          '<p class="feature-card__text">' + esc(t(card.textKey)) + "</p>" +
+          "</article>"
+        );
+      })
+      .join("");
+  }
+  function projectLinksHtml(links) {
+    return (
+      '<p class="project__links">' +
+      (links || [])
+        .filter(function (link) { return link && link.href; })
+        .map(function (link) {
+          var ext = isExternal(link.href);
+          return '<a class="project__link' + (ext ? "" : " project__link--page") + '" href="' + esc(link.href) + '"' +
+            (ext ? ' target="_blank" rel="noopener"' : "") + ">" + esc(t(link.key)) +
+            '<span aria-hidden="true">' + (ext ? " ↗" : " →") + "</span></a>";
+        })
+        .join("") +
+      "</p>"
+    );
+  }
+  function memberTop(m, withTask) {
+    return (
+      '<p class="member__prompt"><span class="member__sigil" aria-hidden="true">$</span> whoami</p>' +
+      '<div class="member__head">' +
+      /* the flag is content, not decoration: it says where each of us
+         is from, so it is labelled for screen readers and on hover */
+      '<span class="member__flag" role="img" aria-label="' + esc(t("team.countries." + m.country)) +
+      '" title="' + esc(t("team.countries." + m.country)) + '">' + (FLAGS[m.country] || "") + "</span>" +
+      "<div>" +
+      '<h3 class="member__name">' + esc(m.name) + "</h3>" +
+      (withTask ? '<p class="member__task">' + esc(t(m.taskKey)) + "</p>" : "") +
+      "</div>" +
+      "</div>"
+    );
+  }
+  function memberLink(m) {
+    /* LinkedIn is per person, not one team link: each of the four points at
+       their own profile */
+    return m.linkedin
+      ? '<a class="member__link" href="' + esc(m.linkedin) + '" target="_blank" rel="noopener">LinkedIn<span aria-hidden="true"> ↗</span></a>'
+      : "";
+  }
+
   function logoHtml(brand) {
     var logo = brand.logo || "";
     if (/^(https?:|\/)/.test(logo)) {
@@ -139,40 +217,117 @@
 
     "rail.items": function (el, c) {
       var rail = c.statusRail || {};
-      el.innerHTML = (rail.items || [])
+      var items = page === "cup" ? rail.cupItems : rail.items;
+      el.innerHTML = (items || [])
         .map(function (item) {
           /* the place ("1st" / "1.") is translated, so it is a placeKey, not a
-             second value — rendering it as its own item printed it twice */
-          var place = item.placeKey ? " · " + t(item.placeKey) : "";
+             second value. An item can be a place alone, with no number. */
+          var place = item.placeKey ? t(item.placeKey) : "";
+          var shown = item.value && place ? item.value + " · " + place : (item.value || place);
           return (
             '<span class="rail__item rail__item--' + esc(item.tone || "plain") + '">' +
             '<span class="rail__key">' + esc(t(item.key)) + "</span>" +
-            '<span class="rail__value">' + esc(item.value) + esc(place) + "</span>" +
+            '<span class="rail__value">' + esc(shown) + "</span>" +
             "</span>"
           );
         })
         .join("");
     },
 
-    "hero.stats": function (el, c) {
-      el.innerHTML = (c.hero.stats || [])
-        .map(function (stat) {
+    "hero.stats": function (el, c) { el.innerHTML = statsHtml(c.hero.stats); },
+    "hero.ctas": function (el, c) { el.innerHTML = (c.hero.ctas || []).map(ctaHtml).join(""); },
+    "cup.stats": function (el, c) { el.innerHTML = statsHtml(c.cup.stats); },
+    "cup.ctas": function (el, c) { el.innerHTML = (c.cup.ctas || []).map(ctaHtml).join(""); },
+    "ring.stats": function (el, c) { el.innerHTML = statsHtml(c.ring.stats); },
+    "ring.ctas": function (el, c) { el.innerHTML = (c.ring.ctas || []).map(ctaHtml).join(""); },
+
+    /* the Nordic AI Cup page is long, so it gets its own jump links */
+    "cup.subnav": function (el, c) {
+      el.innerHTML = (c.cup.subnav || [])
+        .map(function (link) {
+          return '<a href="' + esc(link.href) + '">' + esc(t(link.key)) + "</a>";
+        })
+        .join("");
+    },
+
+    /* One card per hackathon, all the same shape: that is what keeps the home
+       page from leaning towards any one of them. */
+    "hackathons.cards": function (el, c) {
+      el.innerHTML = (c.hackathons.cards || [])
+        .map(function (h) {
           return (
-            '<div class="hero__stat">' +
-            '<dt class="hero__stat-label">' + esc(t(stat.key)) + "</dt>" +
-            '<dd class="hero__stat-value">' + esc(stat.value) + "</dd>" +
-            '<dd class="hero__stat-sub">' + esc(t(stat.subKey)) + "</dd>" +
-            "</div>"
+            '<article class="project hackathon">' +
+            '<p class="project__cmd"><span class="hero__sigil" aria-hidden="true">$</span> ' + esc(h.command) + "</p>" +
+            '<div class="project__head">' +
+            '<h3 class="project__name">' + esc(h.name) + "</h3>" +
+            '<span class="project__status' + (h.live ? " project__status--live" : "") + '">' + esc(t(h.statusKey)) + "</span>" +
+            "</div>" +
+            '<p class="project__text">' + esc(t(h.textKey)) + "</p>" +
+            '<dl class="project__meta">' +
+            "<div><dt>" + esc(t("hackathons.whenLabel")) + "</dt><dd>" + esc(h.when) + "</dd></div>" +
+            "<div><dt>" + esc(t("hackathons.formatLabel")) + "</dt><dd>" + esc(t(h.formatKey)) + "</dd></div>" +
+            "<div><dt>" + esc(t("hackathons.resultLabel")) + "</dt><dd>" + esc(t(h.resultKey)) + "</dd></div>" +
+            "</dl>" +
+            projectLinksHtml(h.links) +
+            "</article>"
           );
         })
         .join("");
     },
 
-    "hero.ctas": function (el, c) {
-      el.innerHTML = (c.hero.ctas || [])
-        .map(function (cta) {
-          var variant = cta.variant === "secondary" ? "btn--secondary" : "btn--primary";
-          return '<a class="btn ' + variant + '" href="' + esc(cta.href) + '">' + esc(t(cta.key)) + "</a>";
+    "ring.shots": function (el, c) {
+      el.innerHTML = (c.ring.shots || [])
+        .map(function (shot) {
+          return (
+            '<figure class="shot">' +
+            '<img src="' + esc(shot.src) + '" alt="' + esc(t(shot.altKey)) + '" loading="lazy" />' +
+            "<figcaption>" + esc(t(shot.captionKey)) + "</figcaption>" +
+            "</figure>"
+          );
+        })
+        .join("");
+    },
+
+    "ring.cards": function (el, c) { el.innerHTML = featureCardsHtml(c.ring.cards); },
+
+    /* Name, event and builders are data (config); every sentence around them
+       is translated. */
+    "ring.credits.card": function (el, c) {
+      var p = c.ring.credits || {};
+      el.innerHTML =
+        '<article class="project">' +
+        '<p class="project__cmd"><span class="hero__sigil" aria-hidden="true">$</span> ' + esc(p.command) + "</p>" +
+        '<div class="project__head">' +
+        '<h3 class="project__name">' + esc(p.name) + "</h3>" +
+        '<span class="project__status">' + esc(t("hackathons.statusFirst")) + "</span>" +
+        "</div>" +
+        '<dl class="project__meta">' +
+        "<div><dt>" + esc(t("ring.credits.eventLabel")) + "</dt>" +
+        "<dd>" + esc(p.event) + " · " + esc(t("ring.credits.eventKind")) + "</dd></div>" +
+        "<div><dt>" + esc(t("ring.credits.buildersLabel")) + "</dt>" +
+        "<dd>" + esc((p.builders || []).join(", ")) + "</dd></div>" +
+        "</dl>" +
+        projectLinksHtml(p.links) +
+        "</article>";
+    },
+
+    /* The home page's four panes: who we are and what each of us entered. */
+    "team.roster": function (el, c) {
+      el.innerHTML = (c.team.members || [])
+        .map(function (m) {
+          return (
+            '<article class="member">' +
+            memberTop(m, false) +
+            '<ul class="member__roles">' +
+            (m.roles || [])
+              .map(function (r) {
+                return "<li><span>" + esc(r.event) + "</span> " + esc(r.key ? t(r.key) : r.text) + "</li>";
+              })
+              .join("") +
+            "</ul>" +
+            memberLink(m) +
+            "</article>"
+          );
         })
         .join("");
     },
@@ -186,23 +341,9 @@
         .map(function (m) {
           return (
             '<article class="member">' +
-            '<p class="member__prompt"><span class="member__sigil" aria-hidden="true">$</span> whoami</p>' +
-            '<div class="member__head">' +
-            /* the flag is content, not decoration: it says where each of us
-               is from, so it is labelled for screen readers and on hover */
-            '<span class="member__flag" role="img" aria-label="' + esc(t("team.countries." + m.country)) +
-            '" title="' + esc(t("team.countries." + m.country)) + '">' + (FLAGS[m.country] || "") + "</span>" +
-            "<div>" +
-            '<h3 class="member__name">' + esc(m.name) + "</h3>" +
-            '<p class="member__task">' + esc(t(m.taskKey)) + "</p>" +
-            "</div>" +
-            "</div>" +
+            memberTop(m, true) +
             '<p class="member__log">' + esc(t(m.logKey)) + "</p>" +
-            /* LinkedIn is per person, not one team link — each of the four
-               points at their own profile */
-            (m.linkedin
-              ? '<a class="member__link" href="' + esc(m.linkedin) + '" target="_blank" rel="noopener">LinkedIn<span aria-hidden="true"> ↗</span></a>'
-              : "") +
+            memberLink(m) +
             "</article>"
           );
         })
@@ -233,49 +374,7 @@
         .join("");
     },
 
-    "learned.cards": function (el, c) {
-      el.innerHTML = (c.learned.cards || [])
-        .map(function (card) {
-          return (
-            '<article class="feature-card">' +
-            '<div class="feature-card__icon">' + icon(card.icon) + "</div>" +
-            '<h3 class="feature-card__title">' + esc(t(card.titleKey)) + "</h3>" +
-            '<p class="feature-card__text">' + esc(t(card.textKey)) + "</p>" +
-            "</article>"
-          );
-        })
-        .join("");
-    },
-
-    /* One project card. Name, event and builders are data (config); every
-       sentence around them is translated. */
-    "project.card": function (el, c) {
-      var p = c.project || {};
-      el.innerHTML =
-        '<article class="project">' +
-        '<p class="project__cmd"><span class="hero__sigil" aria-hidden="true">$</span> ' + esc(p.command) + "</p>" +
-        '<div class="project__head">' +
-        '<h3 class="project__name">' + esc(p.name) + "</h3>" +
-        '<span class="project__status">' + esc(t(p.statusKey)) + "</span>" +
-        "</div>" +
-        '<p class="project__text">' + esc(t("project.text")) + "</p>" +
-        '<dl class="project__meta">' +
-        "<div><dt>" + esc(t("project.eventLabel")) + "</dt>" +
-        "<dd>" + esc(p.event) + " · " + esc(t("project.eventKind")) + "</dd></div>" +
-        "<div><dt>" + esc(t("project.buildersLabel")) + "</dt>" +
-        "<dd>" + esc((p.builders || []).join(", ")) + "</dd></div>" +
-        "</dl>" +
-        '<p class="project__links">' +
-        (p.links || [])
-          .filter(function (link) { return link && link.href; })
-          .map(function (link) {
-            return '<a class="project__link" href="' + esc(link.href) + '" target="_blank" rel="noopener">' +
-              esc(t(link.key)) + '<span aria-hidden="true"> ↗</span></a>';
-          })
-          .join("") +
-        "</p>" +
-        "</article>";
-    },
+    "learned.cards": function (el, c) { el.innerHTML = featureCardsHtml(c.learned.cards); },
 
     "contact.info": function (el, c) {
       /* no icon: it indented the address so it no longer lined up with the
@@ -395,26 +494,6 @@
         var v = at(config, key);
         el.textContent = v == null ? "" : v;
       }
-    });
-  }
-
-  function orderSections() {
-    var main = document.getElementById("main");
-    if (!main) return;
-    var order = (config.sections || []).slice();
-    var byName = {};
-    Array.prototype.forEach.call(main.querySelectorAll("[data-section]"), function (section) {
-      byName[section.getAttribute("data-section")] = section;
-    });
-    order.forEach(function (name) {
-      var section = byName[name];
-      if (section) {
-        section.hidden = false;
-        main.appendChild(section);
-      }
-    });
-    Object.keys(byName).forEach(function (name) {
-      if (order.indexOf(name) === -1) byName[name].hidden = true;
     });
   }
 
@@ -630,6 +709,27 @@
     var cfg = config.boot || {};
     var reduced = !!(window.SiteMotion && window.SiteMotion.reduced);
 
+    /* The terminal plays once per visit. Coming back from a detail page should
+       land on the home page, not sit through the same theatre again. */
+    function bootSeen() {
+      try { return window.sessionStorage.getItem(BOOT_KEY) === "1"; }
+      catch (e) { return false; }
+    }
+    function markBootSeen() {
+      try { window.sessionStorage.setItem(BOOT_KEY, "1"); } catch (e) { /* non-fatal */ }
+    }
+
+    /* The browser jumps to a #section before the sections have their content,
+       so a link from a detail page would land in the wrong place. Jump again
+       now that the page is full. */
+    function jumpToHash() {
+      var hash = window.location && window.location.hash;
+      var target = hash && document.getElementById(hash.slice(1));
+      /* "instant", or the site's smooth scrolling applies: arriving from another
+         page should land on the section, not glide there from the top */
+      if (target) target.scrollIntoView({ behavior: "instant" });
+    }
+
     function unveil() {
       /* reveal the page, decode the hero (it is on screen already), then let
          the terminal slide away over it */
@@ -637,7 +737,8 @@
       var hero = document.querySelector('[data-section="hero"]');
       if (hero) hero.classList.add("is-unlocked");
       if (window.SiteMotion) {
-        window.SiteMotion.scramble(headline, t("hero.headline"));
+        var headlineKey = headline && headline.getAttribute("data-fill");
+        window.SiteMotion.scramble(headline, t(headlineKey || "hero.headline"));
         window.SiteMotion.countUp(statValues);
         window.SiteMotion.mascotPlace();
         window.SiteMotion.revealSections(document);
@@ -645,6 +746,7 @@
         window.SiteMotion.startMascotEvents();
       }
       root.classList.remove("is-booting");
+      jumpToHash();
 
       if (!overlay || reduced) {
         if (overlay) overlay.classList.remove("boot--shown");
@@ -661,8 +763,9 @@
 
     /* no terminal available (no JS motion, or reduced motion): the page is
        simply shown, and nothing is ever hidden in the first place */
-    if (!log || !window.SiteMotion || reduced) { unveil(); return; }
+    if (!log || !window.SiteMotion || reduced || bootSeen()) { unveil(); return; }
 
+    markBootSeen();
     if (overlay) overlay.classList.add("boot--shown");
 
     window.SiteMotion.bootSequence({
@@ -721,9 +824,11 @@
   /* ------------------------------------------------------------ language --- */
   function applyStaticText() {
     document.documentElement.setAttribute("lang", lang);
-    document.title = config.brand.name || "Elysa's Secret";
+    var brand = config.brand.name || "Elysa's Secret";
+    var pageTitle = t(page + ".pageTitle");
+    document.title = pageTitle ? pageTitle + " — " + brand : brand;
     var desc = document.querySelector('meta[name="description"]');
-    if (desc) desc.setAttribute("content", t("footer.tagline"));
+    if (desc) desc.setAttribute("content", t(page + ".meta"));
   }
 
   function setLang(next) {
@@ -761,7 +866,6 @@
   function boot() {
     applyStaticText();
     renderAll(document);
-    orderSections();
     wireNav();
     wireLang();
     mountRail();

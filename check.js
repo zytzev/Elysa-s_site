@@ -35,19 +35,10 @@ function read(file) {
 function loadGlobals() {
   var ctx = { window: {} };
   vm.createContext(ctx);
-  var html = read("index.html");
-  if (html) {
-    var blocks = html.match(/<script>([\s\S]*?)<\/script>/g) || [];
-    blocks.forEach(function (b) {
-      var body = b.replace(/^<script>/, "").replace(/<\/script>$/, "");
-      /* only the config block — the page also carries a tiny bootstrap script
-         that touches document, which does not exist in this sandbox */
-      if (body.indexOf("SITE_CONFIG") === -1) return;
-      vm.runInContext(body, ctx);
-    });
-  }
-  var i18n = read("i18n.js");
-  if (i18n) vm.runInContext(i18n, ctx);
+  ["config.js", "i18n.js"].forEach(function (f) {
+    var src = read(f);
+    if (src) vm.runInContext(src, ctx);
+  });
   return ctx.window;
 }
 
@@ -56,7 +47,7 @@ var config = w.SITE_CONFIG;
 var i18n = w.I18N;
 
 if (config) ok();
-else fail("SITE_CONFIG present in index.html");
+else fail("SITE_CONFIG present in config.js");
 if (i18n) ok();
 else fail("I18N present in i18n.js");
 
@@ -165,6 +156,10 @@ var ALLOWED_NUMBERS = [
      drone-flyby/SERVED_CONFIG.md, medical-appointment/REPRODUCE.md and
      SUBMISSIONS.md) rather than from the earlier verbal account */
   "308", "437", "570", "709", "1014", "1239", "1484", "1815",
+  /* the home page's count: three hackathons, two wins, one in progress */
+  "3",
+  /* HyperBloom October, from its Devpost pages */
+  "239", "738",
   "0.5841", "0.263", "0.2630", "0.802", "0.8308", "0.8222",
   /* Drone Flyby's recorded validation progression, from the team's notes and
      the repo record */
@@ -193,6 +188,8 @@ if (config) {
   var claimRoots = [
     ["statusRail", config.statusRail],
     ["hero.stats", config.hero && config.hero.stats],
+    ["cup.stats", config.cup && config.cup.stats],
+    ["ring.stats", config.ring && config.ring.stats],
     ["team.members", config.team && config.team.members],
     ["run", config.run]
   ];
@@ -213,31 +210,51 @@ if (config) {
   else ok();
 }
 
-/* ---- 5. sections[] only names shells that exist -------------------------- */
-var html = read("index.html") || "";
-var shellIds = (html.match(/data-section="[a-z-]+"/g) || []).map(function (s) {
-  return s.replace(/data-section="|"/g, "");
-});
-if (config && config.sections) {
-  var ghost = config.sections.filter(function (s) { return shellIds.indexOf(s) === -1; });
-  if (ghost.length) fail("sections[] only lists shells present in index.html", ghost.join(", "));
-  else ok();
-}
+/* ---- 5. all the markup, read as one -------------------------------------
+   Every page, plus the chrome they share. The checks below only care that a
+   data-fill or data-slot exists somewhere the site can reach it. */
+var PAGES = ["index.html", "nordic-ai-cup.html", "hyperbloom.html"];
+var pageHtml = {};
+PAGES.forEach(function (f) { pageHtml[f] = read(f) || ""; });
+var chromeSrc = read("chrome.js") || "";
+var html = PAGES.map(function (f) { return pageHtml[f]; }).join("\n") + "\n" + chromeSrc;
 
-/* ---- 6. nav links point at active sections ------------------------------ */
-if (config && config.nav && config.sections) {
-  var badNav = (config.nav.links || []).filter(function (l) {
-    return config.sections.indexOf(String(l.href).replace("#", "")) === -1;
+/* ---- 6. every internal link lands somewhere ------------------------------
+   Written by hand because a link to a missing page or section looks fine until
+   someone clicks it. "./#x" is a section of the home page, "#x" one of the page
+   the link sits on, and "name.html" another page. */
+function collectHrefs(node, out) {
+  out = out || [];
+  if (Array.isArray(node)) node.forEach(function (n) { collectHrefs(n, out); });
+  else if (node && typeof node === "object") {
+    Object.keys(node).forEach(function (k) {
+      if (k === "href" && typeof node[k] === "string") out.push(node[k]);
+      else collectHrefs(node[k], out);
+    });
+  }
+  return out;
+}
+if (config) {
+  var homeIds = (pageHtml["index.html"].match(/ id="[^"]+"/g) || []).join(" ");
+  var badLinks = collectHrefs(config).filter(function (href) {
+    if (!href || /^https?:/.test(href)) return false;
+    var hash = href.split("#")[1];
+    if (href.indexOf("./#") === 0) return homeIds.indexOf(' id="' + hash + '"') === -1;
+    if (href.charAt(0) === "#") return html.indexOf(' id="' + hash + '"') === -1;
+    return PAGES.indexOf(href) === -1;
   });
-  if (badNav.length) fail("nav links match active sections",
-    badNav.map(function (l) { return l.href; }).join(", "));
+  if (badLinks.length) fail("internal links land on a real page or section", badLinks.join(", "));
   else ok();
 }
 
 /* ---- 7. forbidden strings ----------------------------------------------- */
 var sources = {
-  "index.html": html,
+  "index.html": pageHtml["index.html"],
+  "nordic-ai-cup.html": pageHtml["nordic-ai-cup.html"],
+  "hyperbloom.html": pageHtml["hyperbloom.html"],
   "thanks.html": read("thanks.html") || "",
+  "config.js": read("config.js") || "",
+  "chrome.js": chromeSrc,
   "i18n.js": read("i18n.js") || "",
   "styles.css": read("styles.css") || "",
   "script.js": read("script.js") || "",
@@ -271,7 +288,8 @@ if (config && config.contact) {
 
 /* ---- 9. required files exist -------------------------------------------
    Site files in public/, the readme at the root. */
-["index.html", "thanks.html", "i18n.js", "styles.css", "script.js", "motion.js"].forEach(function (f) {
+["index.html", "nordic-ai-cup.html", "hyperbloom.html", "thanks.html", "config.js", "chrome.js",
+ "i18n.js", "styles.css", "script.js", "motion.js"].forEach(function (f) {
   if (fs.existsSync(path.join(SITE, f))) ok();
   else fail("required site file present: public/" + f);
 });
@@ -283,9 +301,9 @@ else fail("required file present: README.md");
    a plan, a screenshot, an editor backup. This is the check that would have
    caught the design doc being served at the domain. */
 var ALLOWED_IN_PUBLIC = [
-  "index.html", "thanks.html",
-  "i18n.js", "styles.css", "script.js", "motion.js",
-  /* the favicon folder */
+  "index.html", "nordic-ai-cup.html", "hyperbloom.html", "thanks.html",
+  "config.js", "chrome.js", "i18n.js", "styles.css", "script.js", "motion.js",
+  /* the favicon, flags and screenshots */
   "images",
   /* files Cloudflare Pages itself may add, and editor/system noise we ignore */
   "_headers", "_redirects", "_routes.json"
@@ -302,7 +320,7 @@ if (fs.existsSync(SITE)) {
   fail("public/ exists");
 }
 
-/* ---- 10. every data-fill in index.html can actually be filled -----------
+/* ---- 10. every data-fill on any page can actually be filled -----------
    The three-file contract: each [data-fill] must be a renderer, a translated
    key, or a resolvable config path. A typo here renders as an empty element
    and is invisible until someone reads the page. */
@@ -353,7 +371,7 @@ var ghostSlots = queriedSlots.filter(function (s) {
   return slotAttrs.indexOf(s) === -1 && DYNAMIC_SLOTS.indexOf(s) === -1;
 });
 if (ghostSlots.length) {
-  fail("every [data-slot] selector matches an element in index.html",
+  fail("every [data-slot] selector matches an element on a page",
     ghostSlots.join(", "));
 } else ok();
 

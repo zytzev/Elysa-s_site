@@ -1,6 +1,6 @@
 /* Every user-visible sentence on elysasecret.com, in both languages.
    Danish must mirror the English key set exactly — check.js enforces it.
-   Never put a score, name or date in this file; those live in SITE_CONFIG.
+   Scores, names and dates that check.js verifies live in config.js.
    DA: proofread pending — see README.md before launching the Danish version. */
 window.I18N = {
   en: {
@@ -9,18 +9,75 @@ window.I18N = {
       dkPlace: "1st",
       nordicLabel: "NORDIC",
       nordicPlace: "2nd",
-      gapLabel: "gap to NO"
+      gapLabel: "gap to NO",
+      edthLabel: "EDTH",
+      edthPlace: "live",
+      ringLabel: "HYPERBLOOM",
+      ringPlace: "1st",
+      cupLabel: "NORDIC",
+      cupPlace: "1st DK"
     },
     nav: {
-      team: "The four",
+      hackathons: "Hackathons",
+      team: "The team",
+      cup: "Nordic AI Cup",
+      ring: "HyperBloom",
+      four: "The four",
       board: "The board",
       run: "The run",
       learned: "What we learned",
       about: "How we work",
-      project: "Make-a-Ring",
       contact: "Contact"
     },
+    page: {
+      back: { label: "All hackathons" }
+    },
+    home: {
+      meta: "Elysa's Secret, a hackathon team from the University of Southern Denmark. 1st in Denmark at the Nordic AI Cup 2026 and 1st place at HyperBloom October 2026."
+    },
     hero: {
+      headline: "Four students. Two wins.",
+      sub: "We are Elysa's Secret, a hackathon team from the University of Southern Denmark. We build fast, measure everything and show our work.",
+      hackathons: "Hackathons",
+      hackathonsSub: "Nordic AI Cup · HyperBloom · EDTH",
+      wins: "Wins",
+      winsSub: "Nordic AI Cup Denmark · HyperBloom October",
+      live: "In progress",
+      liveSub: "EDTH Copenhagen",
+      ctaPrimary: "See our hackathons",
+      ctaSecondary: "Get in touch"
+    },
+    hackathons: {
+      heading: "Our hackathons",
+      sub: "Where we have competed and how it went. Finished hackathons have their own page with the full story.",
+      whenLabel: "When",
+      formatLabel: "Format",
+      resultLabel: "Result",
+      statusLive: "In progress",
+      statusFirst: "1st place",
+      statusDenmark: "1st in Denmark",
+      linkMore: "Full story",
+      linkDemo: "Live demo",
+      linkEvent: "Event page",
+      edth: {
+        text: "We are at the European Defense Tech Hackathon in Copenhagen right now. The story goes up here once the event is over.",
+        format: "Defense tech, on site in Copenhagen",
+        result: "Not in yet"
+      },
+      hyperbloom: {
+        text: "We built Make-a-Ring, a ring studio where you draw one tile, watch it wrap around a 3D ring and download a print-ready file.",
+        format: "UI/UX and web design, online",
+        result: "1st of 239 projects, 738 participants"
+      },
+      cup: {
+        text: "Three AI tasks scored together: a survival simulator, object detection from a drone, and questions about recorded medical conversations.",
+        format: "AI competition, three tasks",
+        result: "1st in Denmark, 2nd in the Nordics"
+      }
+    },
+    cup: {
+      pageTitle: "Nordic AI Cup 2026",
+      meta: "Elysa's Secret at the Nordic AI Cup 2026: 1st in Denmark and 2nd in the Nordics, with the leaderboards, the score progressions and what we learned.",
       headline: "First place. Denmark.",
       sub: "Four students, seven days of preparation, and a simulator that turned out not to be deterministic. Nordic AI Cup 2026.",
       place: "National result",
@@ -32,9 +89,79 @@ window.I18N = {
       ctaPrimary: "See how it ran",
       ctaSecondary: "Get in touch"
     },
+    ring: {
+      pageTitle: "HyperBloom October 2026",
+      meta: "Make-a-Ring won 1st place at HyperBloom October 2026 out of 239 projects: a ring studio in the browser with print-ready STL and OBJ files.",
+      headline: "First place. Make-a-Ring.",
+      sub: "After the Nordic AI Cup, two of us entered HyperBloom October, a UI/UX and web design hackathon, under the team name. We built a ring studio for people who aren't jewellers.",
+      place: "Result",
+      placeSub: "HyperBloom October 2026",
+      projects: "Submitted projects",
+      projectsSub: "On Devpost",
+      participants: "Participants",
+      participantsSub: "Online, October 2026",
+      ctaPrimary: "Try the live demo",
+      ctaSecondary: "Source on GitHub",
+      what: {
+        heading: "What it does",
+        sub: "Scroll through patterns like a character creator, or draw one tile of your own and watch it wrap around the band. Try the ring on a hand at its real size, then download a print-ready STL or OBJ file, all in the browser."
+      },
+      shots: {
+        studioAlt: "The Make-a-Ring studio: a 3D ring in the middle with pattern choices around it.",
+        studioCaption: "The studio. Up and down change the middle pattern, left and right the sides.",
+        tryOnAlt: "A ring shown on a 3D hand in the try-on screen.",
+        tryOnCaption: "Try it on a 3D hand, or on a photo of your own hand.",
+        reviewAlt: "A drawing sheet of the ring with a READY TO PRINT stamp.",
+        reviewCaption: "Check the design and download the print files."
+      },
+      how: {
+        heading: "How we built it",
+        sub: "No build step and no backend: Preact and three.js in the browser, hosted as a static site on Deployxa."
+      },
+      cards: {
+        "1": {
+          title: "A real ring, not a picture",
+          text: "Each pattern is a tile of strokes, drawn into a heightmap of the unrolled band. The band is revolved and displaced by that heightmap, and the same mesh is shown on screen and exported."
+        },
+        "2": {
+          title: "Smooth while you browse",
+          text: "The mesh is built in a Web Worker, so rotation never stalls. The studio pre-builds the neighbouring rings, so the 3D ring and the 2D pattern change in the same frame."
+        },
+        "3": {
+          title: "Checked against the material",
+          text: "Wall thickness, smallest detail and engraving depth are checked live against real limits for each material, and every warning has a one-click fix."
+        },
+        "4": {
+          title: "A seamless wrap",
+          text: "A tile only wraps cleanly when a whole number of tiles fits around the band, so the repeat count and line weight are worked out from the real circumference in millimetres."
+        },
+        "5": {
+          title: "True scale on a hand",
+          text: "The try-on uses an open-source 3D hand, with ring positions measured from the mesh. You can also use a photo of your own hand, which never leaves your device."
+        },
+        "6": {
+          title: "Accessibility we measured",
+          text: "The whole flow works by keyboard and pattern changes are announced to screen readers. axe-core reports 0 WCAG 2.2 AA violations on every screen, in all four colour themes."
+        }
+      },
+      credits: {
+        heading: "Who built it",
+        eventLabel: "Hackathon",
+        eventKind: "UI/UX & Web Design, on Devpost",
+        buildersLabel: "Built by",
+        linkDemo: "Live demo",
+        linkRepo: "Source on GitHub",
+        linkProject: "Project on Devpost",
+        linkEvent: "The hackathon"
+      }
+    },
     team: {
-      heading: "The four",
-      sub: "Four students at the University of Southern Denmark. None of us had competed in an ML competition before.",
+      heading: "The team",
+      sub: "Four students at the University of Southern Denmark, and what each of us has entered so far.",
+      four: {
+        heading: "The four",
+        sub: "Four students at the University of Southern Denmark. None of us had competed in an ML competition before."
+      },
       countries: {
         md: "Moldova",
         pl: "Poland",
@@ -184,27 +311,16 @@ window.I18N = {
         text: "We gave the colony perfect knowledge of every tree, fruit and predator. It still went extinct. Perception was never the limit — the decision logic was, and that is much harder to fix."
       }
     },
-    /* the boot sequence: commands are literal (config), these status lines are not */
+    /* the boot sequence: commands are literal (config), these status lines are
+       not. l3 is true while EDTH runs; change it when the result is in. */
     boot: {
       l1: "four students",
       s1: "loaded",
-      l2: "three tasks",
+      l2: "two wins",
       s2: "loaded",
       l3: "one hackathon",
       s3: "pending",
       ready: "ready"
-    },
-    project: {
-      heading: "What we built next",
-      sub: "After the cup, two of us entered a design hackathon under the team name. The judging is still going on.",
-      text: "A ring studio for people who aren't jewellers. Scroll through patterns like a character creator, or draw one tile of your own and watch it wrap around the band. Try the ring on a hand at its real size, then download a print-ready STL or OBJ file — all in the browser.",
-      eventLabel: "Hackathon",
-      eventKind: "UI/UX & Web Design, on Devpost",
-      buildersLabel: "Built by",
-      statusPending: "Awaiting results",
-      linkDemo: "Live demo",
-      linkRepo: "Source on GitHub",
-      linkEvent: "The hackathon"
     },
     contact: {
       heading: "Get in touch",
@@ -222,7 +338,7 @@ window.I18N = {
       notConnected: "The contact form is not connected yet, so nothing was sent. Please email us directly in the meantime."
     },
     footer: {
-      tagline: "Nordic AI Cup 2026 — 1st place, Denmark. University of Southern Denmark.",
+      tagline: "A hackathon team from the University of Southern Denmark.",
       legal: "[YEAR] Elysa's Secret. University of Southern Denmark."
     }
   },
@@ -236,18 +352,75 @@ window.I18N = {
       dkPlace: "1.",
       nordicLabel: "NORDISK",
       nordicPlace: "2.",
-      gapLabel: "afstand til NO"
+      gapLabel: "afstand til NO",
+      edthLabel: "EDTH",
+      edthPlace: "live",
+      ringLabel: "HYPERBLOOM",
+      ringPlace: "1.",
+      cupLabel: "NORDIC",
+      cupPlace: "1. DK"
     },
     nav: {
-      team: "De fire",
+      hackathons: "Hackathons",
+      team: "Holdet",
+      cup: "Nordic AI Cup",
+      ring: "HyperBloom",
+      four: "De fire",
       board: "Ranglisten",
       run: "Forløbet",
       learned: "Hvad vi lærte",
       about: "Sådan arbejder vi",
-      project: "Make-a-Ring",
       contact: "Kontakt"
     },
+    page: {
+      back: { label: "Alle hackathons" }
+    },
+    home: {
+      meta: "Elysa's Secret, et hackathon-hold fra Syddansk Universitet. 1. plads i Danmark ved Nordic AI Cup 2026 og 1. plads ved HyperBloom October 2026."
+    },
     hero: {
+      headline: "Fire studerende. To sejre.",
+      sub: "Vi er Elysa's Secret, et hackathon-hold fra Syddansk Universitet. Vi bygger hurtigt, måler alt og viser vores arbejde.",
+      hackathons: "Hackathons",
+      hackathonsSub: "Nordic AI Cup · HyperBloom · EDTH",
+      wins: "Sejre",
+      winsSub: "Nordic AI Cup Danmark · HyperBloom October",
+      live: "I gang",
+      liveSub: "EDTH Copenhagen",
+      ctaPrimary: "Se vores hackathons",
+      ctaSecondary: "Kontakt os"
+    },
+    hackathons: {
+      heading: "Vores hackathons",
+      sub: "Her har vi deltaget, og sådan gik det. Afsluttede hackathons har deres egen side med hele historien.",
+      whenLabel: "Hvornår",
+      formatLabel: "Format",
+      resultLabel: "Resultat",
+      statusLive: "I gang",
+      statusFirst: "1. plads",
+      statusDenmark: "1. plads i Danmark",
+      linkMore: "Hele historien",
+      linkDemo: "Live demo",
+      linkEvent: "Eventets side",
+      edth: {
+        text: "Vi er til European Defense Tech Hackathon i København lige nu. Historien kommer her, når eventet er slut.",
+        format: "Forsvarsteknologi, fysisk i København",
+        result: "Ikke klart endnu"
+      },
+      hyperbloom: {
+        text: "Vi byggede Make-a-Ring, et ringstudie, hvor du tegner én flise, ser den gå rundt om en 3D-ring og downloader en printklar fil.",
+        format: "UI/UX og webdesign, online",
+        result: "1. ud af 239 projekter, 738 deltagere"
+      },
+      cup: {
+        text: "Tre AI-opgaver bedømt samlet: en overlevelsessimulator, objektgenkendelse fra en drone og spørgsmål om optagede lægesamtaler.",
+        format: "AI-konkurrence, tre opgaver",
+        result: "1. plads i Danmark, 2. plads i Norden"
+      }
+    },
+    cup: {
+      pageTitle: "Nordic AI Cup 2026",
+      meta: "Elysa's Secret ved Nordic AI Cup 2026: 1. plads i Danmark og 2. plads i Norden, med ranglisterne, scoreforløbene og hvad vi lærte.",
       headline: "Førstepladsen. Danmark.",
       sub: "Fire studerende, syv dages forberedelse og en simulator, der viste sig ikke at være deterministisk. Nordic AI Cup 2026.",
       place: "Nationalt resultat",
@@ -259,9 +432,79 @@ window.I18N = {
       ctaPrimary: "Se forløbet",
       ctaSecondary: "Kontakt os"
     },
+    ring: {
+      pageTitle: "HyperBloom October 2026",
+      meta: "Make-a-Ring vandt 1. plads ved HyperBloom October 2026 ud af 239 projekter: et ringstudie i browseren med printklare STL- og OBJ-filer.",
+      headline: "Førstepladsen. Make-a-Ring.",
+      sub: "Efter Nordic AI Cup deltog to af os i HyperBloom October, et hackathon om UI/UX og webdesign, under holdets navn. Vi byggede et ringstudie for folk, der ikke er guldsmede.",
+      place: "Resultat",
+      placeSub: "HyperBloom October 2026",
+      projects: "Indsendte projekter",
+      projectsSub: "På Devpost",
+      participants: "Deltagere",
+      participantsSub: "Online, oktober 2026",
+      ctaPrimary: "Prøv live demoen",
+      ctaSecondary: "Kildekode på GitHub",
+      what: {
+        heading: "Det kan den",
+        sub: "Bladr gennem mønstre som i en figurskaber, eller tegn din egen flise og se den gå hele vejen rundt om ringen. Prøv ringen på en hånd i sin rigtige størrelse, og download derefter en printklar STL- eller OBJ-fil, alt sammen i browseren."
+      },
+      shots: {
+        studioAlt: "Make-a-Ring-studiet: en 3D-ring i midten med mønstervalg omkring den.",
+        studioCaption: "Studiet. Op og ned skifter det midterste mønster, venstre og højre siderne.",
+        tryOnAlt: "En ring vist på en 3D-hånd på prøveskærmen.",
+        tryOnCaption: "Prøv den på en 3D-hånd eller på et foto af din egen hånd.",
+        reviewAlt: "En tegning af ringen med et READY TO PRINT-stempel.",
+        reviewCaption: "Tjek designet, og download printfilerne."
+      },
+      how: {
+        heading: "Sådan byggede vi den",
+        sub: "Intet build-trin og ingen backend: Preact og three.js i browseren, hostet som et statisk site på Deployxa."
+      },
+      cards: {
+        "1": {
+          title: "En rigtig ring, ikke et billede",
+          text: "Hvert mønster er en flise af streger, der tegnes ind i et heightmap af det udrullede bånd. Båndet drejes og forskydes af dette heightmap, og det samme mesh vises på skærmen og eksporteres."
+        },
+        "2": {
+          title: "Flydende, mens du browser",
+          text: "Meshet bygges i en Web Worker, så rotationen aldrig går i stå. Studiet bygger nabo-ringene på forhånd, så 3D-ringen og 2D-mønsteret skifter i samme frame."
+        },
+        "3": {
+          title: "Tjekket mod materialet",
+          text: "Vægtykkelse, mindste detalje og gravurdybde tjekkes løbende mod rigtige grænser for hvert materiale, og hver advarsel har en rettelse med ét klik."
+        },
+        "4": {
+          title: "En sømløs omkreds",
+          text: "En flise går kun pænt rundt, når et helt antal fliser passer om båndet, så antallet af gentagelser og stregtykkelsen beregnes ud fra den rigtige omkreds i millimeter."
+        },
+        "5": {
+          title: "Rigtig størrelse på en hånd",
+          text: "Prøverummet bruger en open source 3D-hånd, hvor ringens placering er målt på meshet. Du kan også bruge et foto af din egen hånd, som aldrig forlader din enhed."
+        },
+        "6": {
+          title: "Tilgængelighed, vi har målt",
+          text: "Hele forløbet virker med tastatur, og mønsterskift annonceres til skærmlæsere. axe-core rapporterer 0 WCAG 2.2 AA-fejl på alle skærme i alle fire farvetemaer."
+        }
+      },
+      credits: {
+        heading: "Hvem byggede den",
+        eventLabel: "Hackathon",
+        eventKind: "UI/UX & Web Design, på Devpost",
+        buildersLabel: "Bygget af",
+        linkDemo: "Live demo",
+        linkRepo: "Kildekode på GitHub",
+        linkProject: "Projektet på Devpost",
+        linkEvent: "Hackathonet"
+      }
+    },
     team: {
-      heading: "De fire",
-      sub: "Fire studerende på Syddansk Universitet. Ingen af os havde deltaget i en ML-konkurrence før.",
+      heading: "Holdet",
+      sub: "Fire studerende på Syddansk Universitet, og hvad vi hver især har deltaget i indtil nu.",
+      four: {
+        heading: "De fire",
+        sub: "Fire studerende på Syddansk Universitet. Ingen af os havde deltaget i en ML-konkurrence før."
+      },
       countries: {
         md: "Moldova",
         pl: "Polen",
@@ -414,23 +657,11 @@ window.I18N = {
     boot: {
       l1: "fire studerende",
       s1: "indlæst",
-      l2: "tre opgaver",
+      l2: "to sejre",
       s2: "indlæst",
       l3: "ét hackathon",
       s3: "afventer",
       ready: "klar"
-    },
-    project: {
-      heading: "Det byggede vi bagefter",
-      sub: "Efter konkurrencen deltog to af os i et designhackathon under holdets navn. Bedømmelsen er stadig i gang.",
-      text: "Et ringstudie for folk, der ikke er guldsmede. Bladr gennem mønstre som i en figurskaber, eller tegn din egen flise og se den gå hele vejen rundt om ringen. Prøv ringen på en hånd i sin rigtige størrelse, og download derefter en printklar STL- eller OBJ-fil — alt sammen i browseren.",
-      eventLabel: "Hackathon",
-      eventKind: "UI/UX & Web Design, på Devpost",
-      buildersLabel: "Bygget af",
-      statusPending: "Afventer resultat",
-      linkDemo: "Live demo",
-      linkRepo: "Kildekode på GitHub",
-      linkEvent: "Hackathonet"
     },
     contact: {
       heading: "Kontakt os",
@@ -448,7 +679,7 @@ window.I18N = {
       notConnected: "Kontaktformularen er endnu ikke sat op, så der blev ikke sendt noget. Skriv til os på mail i mellemtiden."
     },
     footer: {
-      tagline: "Nordic AI Cup 2026 — 1. plads, Danmark. Syddansk Universitet.",
+      tagline: "Et hackathon-hold fra Syddansk Universitet.",
       legal: "[YEAR] Elysa's Secret. Syddansk Universitet."
     }
   }

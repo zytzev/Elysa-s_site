@@ -1,0 +1,109 @@
+<!doctype html>
+<!-- Elysa's Secret at the Nordic AI Cup 2026: the full story.
+     Data lives in config.js, all prose (EN + DA) in i18n.js, and the top bar,
+     footer and mascot in chrome.js. Never hard-code copy in this file. -->
+<html lang="en" data-page="cup">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nordic AI Cup 2026 — Elysa's Secret</title>
+    <meta name="description" content="Elysa's Secret at the Nordic AI Cup 2026: 1st in Denmark and 2nd in the Nordics, with the leaderboards, the score progressions and what we learned." />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/x-icon" href="./images/KikasLogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body id="top">
+    <main id="main">
+      <section id="hero" class="section section--hero" data-section="hero">
+        <div class="container hero__inner">
+          <a class="page__back" href="./#hackathons"><span aria-hidden="true">← </span><span data-fill="page.back.label"></span></a>
+          <h1 class="hero__headline" data-slot="headline" data-fill="cup.headline"></h1>
+          <p class="hero__sub" data-fill="cup.sub"></p>
+          <dl class="hero__stats" data-fill="cup.stats"></dl>
+          <div class="hero__ctas" data-fill="cup.ctas"></div>
+          <nav class="subnav" aria-label="On this page" data-fill="cup.subnav"></nav>
+        </div>
+      </section>
+
+      <!-- SLOT: the four: who did what at this event -->
+      <section id="four" class="section section--team" data-section="four">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="team.four.heading"></h2>
+            <p class="section__sub" data-fill="team.four.sub"></p>
+          </div>
+          <div class="team__grid" data-fill="team.members"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: board — two leaderboards, tabbed -->
+      <section id="board" class="section section--board" data-section="board">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="board.heading"></h2>
+            <p class="section__sub" data-fill="board.sub"></p>
+          </div>
+          <div class="board__tabs" role="tablist" aria-label="Leaderboard" data-slot="board-tabs"></div>
+          <div class="board__mount" data-slot="board-table"></div>
+          <p class="board__gap" data-slot="board-gap" hidden></p>
+        </div>
+      </section>
+
+      <!-- SLOT: run — the animated score curve -->
+      <section id="run" class="section section--run" data-section="run">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="run.heading"></h2>
+            <p class="section__sub" data-fill="run.sub"></p>
+          </div>
+          <div class="board__tabs run__tabs" role="tablist" aria-label="Task" data-slot="run-tabs" hidden></div>
+          <figure class="run__figure">
+            <p class="run__task-sub" data-slot="run-task-sub"></p>
+            <svg class="run__svg" data-slot="run-svg" viewBox="0 0 800 360" role="img" aria-labelledby="run-svg-title run-svg-desc" preserveAspectRatio="xMidYMid meet">
+              <title id="run-svg-title"></title>
+              <desc id="run-svg-desc"></desc>
+            </svg>
+            <ol class="run__legend" data-slot="run-legend"></ol>
+            <figcaption class="run__caption" data-slot="run-caption"></figcaption>
+            <p class="run__note" data-slot="run-note" hidden></p>
+          </figure>
+          <div class="run__closing" data-slot="run-closing"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: about — how we work -->
+      <section id="about" class="section section--about" data-section="about">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="about.heading"></h2>
+          </div>
+          <ol class="loop" data-fill="about.loop"></ol>
+          <div class="about__text" data-fill="about.text"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: learned — five principles -->
+      <section id="learned" class="section section--learned" data-section="learned">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="learned.heading"></h2>
+            <p class="section__sub" data-fill="learned.sub"></p>
+          </div>
+          <div class="features__grid" data-fill="learned.cards"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="chrome.js"></script>
+    <!-- motion.js defines window.SiteMotion, which script.js's boot() consumes.
+         It must load first, or the boot has to guard for a missing API. -->
+    <script src="motion.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
