@@ -6,16 +6,18 @@ window.SITE_CONFIG = {
   /* The team's own claims. Every value here is checked against the spec's
      allowlist by check.js. `items` is the rail on the home page and the
      HyperBloom page, one entry per hackathon, newest first. `cupItems` is the
-     rail on the Nordic AI Cup page. */
+     rail on the Nordic AI Cup page. A `tone` of gold, silver or bronze means
+     1st, 2nd or 3rd place, and live means still in progress, everywhere on
+     the site: the rail, the cards, the stats and the board's ranks. */
   statusRail: {
     items: [
-      { key: "rail.edthLabel", placeKey: "rail.edthPlace", tone: "warn" },
-      { key: "rail.ringLabel", placeKey: "rail.ringPlace", tone: "good" },
-      { key: "rail.cupLabel", placeKey: "rail.cupPlace", tone: "good" }
+      { key: "rail.edthLabel", placeKey: "rail.edthPlace", tone: "live" },
+      { key: "rail.ringLabel", placeKey: "rail.ringPlace", tone: "gold" },
+      { key: "rail.cupLabel", placeKey: "rail.cupPlace", tone: "gold" }
     ],
     cupItems: [
-      { key: "rail.dkLabel", value: "45.00", placeKey: "rail.dkPlace", tone: "good" },
-      { key: "rail.nordicLabel", value: "35.97", placeKey: "rail.nordicPlace", tone: "plain" },
+      { key: "rail.dkLabel", value: "45.00", placeKey: "rail.dkPlace", tone: "gold" },
+      { key: "rail.nordicLabel", value: "35.97", placeKey: "rail.nordicPlace", tone: "silver" },
       { key: "rail.gapLabel", value: "-0.54", tone: "warn" }
     ]
   },
@@ -35,8 +37,8 @@ window.SITE_CONFIG = {
   hero: {
     stats: [
       { key: "hero.hackathons", value: "3", subKey: "hero.hackathonsSub" },
-      { key: "hero.wins", value: "2", subKey: "hero.winsSub" },
-      { key: "hero.live", value: "1", subKey: "hero.liveSub" }
+      { key: "hero.wins", value: "2", subKey: "hero.winsSub", tone: "gold" },
+      { key: "hero.live", value: "1", subKey: "hero.liveSub", tone: "live" }
     ],
     ctas: [
       { key: "hero.ctaPrimary", href: "#hackathons", variant: "primary" },
@@ -55,7 +57,7 @@ window.SITE_CONFIG = {
         command: "elysa --now",
         name: "EDTH Copenhagen",
         when: "6–8 Nov 2026",
-        live: true,
+        tone: "live",
         statusKey: "hackathons.statusLive",
         textKey: "hackathons.edth.text",
         formatKey: "hackathons.edth.format",
@@ -69,6 +71,7 @@ window.SITE_CONFIG = {
         command: "elysa --hyperbloom",
         name: "HyperBloom October",
         when: "1–19 Oct 2026",
+        tone: "gold",
         statusKey: "hackathons.statusFirst",
         textKey: "hackathons.hyperbloom.text",
         formatKey: "hackathons.hyperbloom.format",
@@ -83,6 +86,7 @@ window.SITE_CONFIG = {
         command: "elysa --cup",
         name: "Nordic AI Cup",
         when: "Sep 2026",
+        tone: "gold",
         statusKey: "hackathons.statusDenmark",
         textKey: "hackathons.cup.text",
         formatKey: "hackathons.cup.format",
@@ -98,20 +102,28 @@ window.SITE_CONFIG = {
      that page's too. */
   cup: {
     stats: [
-      { key: "cup.place", value: "1st", subKey: "cup.placeSub" },
-      { key: "cup.points", value: "45.00", subKey: "cup.pointsSub" },
-      { key: "cup.final", value: "35.97", subKey: "cup.finalSub" }
+      { key: "cup.place", value: "1st", subKey: "cup.placeSub", tone: "gold" },
+      { key: "cup.points", value: "45.00", subKey: "cup.pointsSub", tone: "gold" },
+      { key: "cup.final", value: "35.97", subKey: "cup.finalSub", tone: "silver" }
     ],
     ctas: [
       { key: "cup.ctaPrimary", href: "#run", variant: "primary" },
       { key: "cup.ctaSecondary", href: "./#contact", variant: "secondary" }
     ],
     subnav: [
-      { key: "nav.four", href: "#four" },
       { key: "nav.board", href: "#board" },
       { key: "nav.run", href: "#run" },
       { key: "nav.about", href: "#about" },
-      { key: "nav.learned", href: "#learned" }
+      { key: "nav.learned", href: "#learned" },
+      { key: "nav.contributors", href: "#contributors" }
+    ],
+    /* who worked on it. `id` is a person in team.members, the role and text
+       are what they did here. */
+    contributors: [
+      { id: "alex", roleKey: "team.alex.task", textKey: "team.alex.log" },
+      { id: "jakub", roleKey: "team.jakub.task", textKey: "team.jakub.log" },
+      { id: "javier", roleKey: "team.javier.task", textKey: "team.javier.log" },
+      { id: "franek", roleKey: "team.franek.task", textKey: "team.franek.log" }
     ]
   },
 
@@ -119,7 +131,7 @@ window.SITE_CONFIG = {
      738 participants. Built by two of the four, entered under the team name. */
   ring: {
     stats: [
-      { key: "ring.place", value: "1st", subKey: "ring.placeSub" },
+      { key: "ring.place", value: "1st", subKey: "ring.placeSub", tone: "gold" },
       { key: "ring.projects", value: "239", subKey: "ring.projectsSub" },
       { key: "ring.participants", value: "738", subKey: "ring.participantsSub" }
     ],
@@ -140,39 +152,38 @@ window.SITE_CONFIG = {
       { icon: "eye", titleKey: "ring.cards.5.title", textKey: "ring.cards.5.text" },
       { icon: "shield", titleKey: "ring.cards.6.title", textKey: "ring.cards.6.text" }
     ],
-    credits: {
-      command: "elysa --credits",
-      name: "Make-a-Ring",
-      event: "HyperBloom October 2026",
-      builders: ["Franciszek Kossut", "Javier Arévalo Hernández"],
-      links: [
-        { key: "ring.credits.linkDemo", href: "https://make-a-ring.deployxa.online" },
-        { key: "ring.credits.linkRepo", href: "https://github.com/FearedLynx/make-a-ring" },
-        { key: "ring.credits.linkProject", href: "https://devpost.com/software/make-a-ring" },
-        { key: "ring.credits.linkEvent", href: "https://hyperbloom-october.devpost.com" }
-      ]
-    }
+    /* from the commit history of github.com/FearedLynx/make-a-ring */
+    contributors: [
+      { id: "franek", roleKey: "ring.contributors.franek.role", textKey: "ring.contributors.franek.text" },
+      { id: "javier", roleKey: "ring.contributors.javier.role", textKey: "ring.contributors.javier.text" }
+    ],
+    links: [
+      { key: "ring.links.demo", href: "https://make-a-ring.deployxa.online" },
+      { key: "ring.links.repo", href: "https://github.com/FearedLynx/make-a-ring" },
+      { key: "ring.links.project", href: "https://devpost.com/software/make-a-ring" },
+      { key: "ring.links.event", href: "https://hyperbloom-october.devpost.com" }
+    ]
   },
 
   /* No scores on the member panes, on either page. `roles` is the short list
-     on the home page; the task and log are the full panes on the Nordic AI Cup
-     page. A public site is the wrong place to
+     on the home page; the task and log are that person's entry under "Who
+     contributed" on the Nordic AI Cup page. A public site is the wrong place to
      rank four teammates against each other — each pane says what that
      person did, and the numbers live on the board and the run.
      `country` picks a flag from FLAGS in script.js; the country's name
      is translated (team.countries.*) and is the flag's accessible label. */
   team: {
     members: [
-      { name: "Alexandru Zaitzev", country: "md", taskKey: "team.alex.task", logKey: "team.alex.log",
+      { id: "alex", name: "Alexandru Zaitzev", country: "md", taskKey: "team.alex.task", logKey: "team.alex.log",
         roles: [{ event: "Nordic AI Cup", key: "team.alex.task" }],
         linkedin: "https://www.linkedin.com/in/zaitzev/" },
-      { name: "Jakub Furmaniuk", country: "pl", taskKey: "team.jakub.task", logKey: "team.jakub.log",
+      { id: "jakub", name: "Jakub Furmaniuk", country: "pl", taskKey: "team.jakub.task", logKey: "team.jakub.log",
         roles: [{ event: "Nordic AI Cup", key: "team.jakub.task" }],
         linkedin: "https://www.linkedin.com/in/jakub-furmaniuk/" },
-      { name: "Javier Arévalo Hernández", country: "es", taskKey: "team.javier.task", logKey: "team.javier.log",
+      { id: "javier", name: "Javier Arévalo Hernández", country: "es", taskKey: "team.javier.task", logKey: "team.javier.log",
         roles: [{ event: "HyperBloom", text: "Make-a-Ring" }, { event: "Nordic AI Cup", key: "team.javier.task" }],
         linkedin: "https://www.linkedin.com/in/javier-arevalo-hernandez" },
-      { name: "Franciszek Kossut", country: "pl", taskKey: "team.franek.task", logKey: "team.franek.log",
+      { id: "franek", name: "Franciszek Kossut", country: "pl", taskKey: "team.franek.task", logKey: "team.franek.log",
         roles: [{ event: "HyperBloom", text: "Make-a-Ring" }, { event: "Nordic AI Cup", key: "team.franek.task" }],
         linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" }
     ]

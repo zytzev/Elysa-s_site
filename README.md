@@ -13,7 +13,7 @@ documentation and never reaches the live site.
 ```
 public/            ← this folder is the website
 ├── index.html          home: the team, every hackathon with its result, contact
-├── nordic-ai-cup.html  Nordic AI Cup: the four, boards, the run, what we learned
+├── nordic-ai-cup.html  Nordic AI Cup: boards, the run, what we learned, who contributed
 ├── hyperbloom.html     HyperBloom October: Make-a-Ring
 ├── config.js      all data: scores, names, dates, links
 ├── i18n.js        all prose, English and Danish

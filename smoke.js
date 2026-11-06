@@ -192,7 +192,7 @@ if (!failures.length) {
   ["NORDIC", "HYPERBLOOM", "EDTH"].forEach(function (s) {
     expect("rail names " + s, fills["rail.items"].innerHTML, s);
   });
-  expect("rail live event is amber", fills["rail.items"].innerHTML, "rail__item--warn");
+  expect("rail live event is blue", fills["rail.items"].innerHTML, "rail__item--live");
   var cupRail = JSON.stringify(ctx.window.SITE_CONFIG.statusRail.cupItems);
   expect("cup rail carries the Danish total", cupRail, "45.00");
   expect("cup rail carries the gap", cupRail, "-0.54");
@@ -219,6 +219,7 @@ if (!failures.length) {
   expect("card links to the cup page", cards, "nordic-ai-cup.html");
   expect("card links to the HyperBloom page", cards, "hyperbloom.html");
   expect("live card is marked", cards, "project__status--live");
+  expectEq("two gold cards", (cards.match(/project__status--gold/g) || []).length, 2);
   expect("cup card shows both results", cards, "2nd in the Nordics");
 
   /* the boot log + mascot are new surfaces; they must exist and be wired */
@@ -229,14 +230,14 @@ if (!failures.length) {
   expect("mascot gets positioned inline", slots["mascot"].style.transform || "", "translate");
 
   expect("team heading", fills["team.heading"].textContent, "The team");
-  expect("cup team heading", fills["team.four.heading"].textContent, "The four");
+  expect("cup contributors heading", fills["cup.contributors.heading"].textContent, "Who contributed");
   var roster = fills["team.roster"].innerHTML;
   ["Alexandru Zaitzev", "Jakub Furmaniuk", "Javier Arévalo Hernández",
    "Franciszek Kossut", "Make-a-Ring", "Nordic AI Cup"].forEach(function (s) {
     expect("roster includes " + s, roster, s);
   });
   expectEq("roster has all four LinkedIn links", (roster.match(/member__link/g) || []).length, 4);
-  var team = fills["team.members"].innerHTML;
+  var team = fills["cup.contributors.list"].innerHTML;
   ["Alexandru Zaitzev", "Jakub Furmaniuk", "Javier Arévalo Hernández",
    "Franciszek Kossut", "All three tasks"].forEach(function (s) {
     expect("team members include " + s, team, s);
@@ -251,34 +252,18 @@ if (!failures.length) {
     expect("member linkedin " + u, team, u);
   });
   /* a flag per pane, each labelled with its country: one Moldovan, two Polish, one Spanish */
-  var flagCount = (team.match(/class="member__flag"/g) || []).length;
+  var flagCount = (roster.match(/class="member__flag"/g) || []).length;
   if (flagCount === 4) pass();
   else fail("expected a flag on each of the 4 member panes, got " + flagCount);
-  expectEq("one Moldova flag", (team.match(/aria-label="Moldova"/g) || []).length, 1);
-  expectEq("two Poland flags", (team.match(/aria-label="Poland"/g) || []).length, 2);
-  expectEq("one Spain flag", (team.match(/aria-label="Spain"/g) || []).length, 1);
+  expectEq("one Moldova flag", (roster.match(/aria-label="Moldova"/g) || []).length, 1);
+  expectEq("two Poland flags", (roster.match(/aria-label="Poland"/g) || []).length, 2);
+  expectEq("one Spain flag", (roster.match(/aria-label="Spain"/g) || []).length, 1);
 
   /* the fairness rule: a member pane must never carry a score, and must never
      describe a teammate's task as a weakness */
   ["0.822", "1405.256", "0.263", "778", "1280", "weakest", "weak"].forEach(function (bad) {
     if ((team + roster).indexOf(bad) === -1) pass();
     else fail("member panes must not contain " + JSON.stringify(bad));
-  });
-
-  /* The four panes sit side by side and their logs are bottom-aligned, so
-     wildly uneven lengths read as a broken layout — one long pane beside a
-     short one leaves a visible void above it. Keep them within sight of each
-     other, in both languages. */
-  ["en", "da"].forEach(function (l) {
-    var words = ["alex", "jakub", "javier", "franek"].map(function (k) {
-      var log = (ctx.window.I18N[l].team[k] || {}).log || "";
-      return log.trim().split(/\s+/).length;
-    });
-    var lo = Math.min.apply(null, words);
-    var hi = Math.max.apply(null, words);
-    if (hi / lo <= 1.35) pass();
-    else fail("member pane logs too uneven in " + l + ": " + words.join(" / ") +
-      " words (max/min = " + (hi / lo).toFixed(2) + ")");
   });
 
   expect("board sub explains the two scales", fills["board.sub"].textContent, "own competition");
@@ -345,12 +330,15 @@ if (!failures.length) {
   if (fills["ring.shots"].innerHTML.indexOf('alt=""') === -1) pass();
   else fail("every screenshot needs alt text");
   expectEq("six build cards", (fills["ring.cards"].innerHTML.match(/feature-card__title/g) || []).length, 6);
-  var credits = fills["ring.credits.card"].innerHTML;
-  expect("credits builders", credits, "Franciszek Kossut, Javier Arévalo Hernández");
-  expect("credits status", credits, "1st place");
+  var ringPeople = fills["ring.contributors.list"].innerHTML;
+  expect("ring contributors heading", fills["ring.contributors.heading"].textContent, "Who contributed");
+  expect("ring contributor", ringPeople, "Franciszek Kossut");
+  expect("ring contributor", ringPeople, "Javier Arévalo Hernández");
+  expectEq("only the two builders are credited", (ringPeople.match(/thread__item/g) || []).length, 2);
+  expectEq("each builder links to LinkedIn", (ringPeople.match(/member__link/g) || []).length, 2);
   ["make-a-ring.deployxa.online", "github.com/FearedLynx/make-a-ring",
    "devpost.com/software/make-a-ring", "hyperbloom-october.devpost.com"]
-    .forEach(function (u) { expect("credits link " + u, credits, u); });
+    .forEach(function (u) { expect("ring link " + u, fills["ring.links"].innerHTML, u); });
   expect("back link", fills["page.back.label"].textContent, "All hackathons");
 
   /* the finals are over: nothing on the page may still point at them */

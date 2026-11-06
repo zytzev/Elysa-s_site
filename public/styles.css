@@ -14,6 +14,10 @@
      --accent     on --canvas   11.86:1
      --accent     on --surface  11.19:1
      --warn       on --canvas   10.66:1
+     --gold       on --surface-2 11.11:1
+     --silver     on --surface-2 10.77:1
+     --bronze     on --surface-2  7.00:1
+     --live       on --surface-2  7.89:1
      --canvas     on --accent   11.86:1   (pressed language button)
      --mascot     on --canvas    6.62:1   (decorative, needs 3:1)
    ============================================================================ */
@@ -31,7 +35,11 @@
 
   /* signal colours */
   --accent:     #5CE1A0;  /* phosphor green — the team's own numbers, successes */
-  --warn:       #F2B455;  /* amber — the unflattering numbers, and results not in yet */
+  --warn:       #F2B455;  /* amber — the unflattering numbers                    */
+  --gold:       #F6C945;  /* 1st place, wherever a result is shown              */
+  --silver:     #C4CCD6;  /* 2nd place                                          */
+  --bronze:     #DB9460;  /* 3rd place                                          */
+  --live:       #62B4FF;  /* in progress: no result yet                         */
   --dk:         #C8102E;  /* Danish red — used exactly once, the DK chip         */
   --marked:     #E5484D;  /* red — means "a named person pushed this point"      */
 
@@ -203,8 +211,11 @@ a:hover { text-decoration: underline; }
 }
 .rail__key { color: var(--ink-muted); }
 .rail__value { font-variant-numeric: tabular-nums; color: var(--ink); }
-.rail__item--good .rail__value { color: var(--accent); }
 .rail__item--warn .rail__value { color: var(--warn); }
+.rail__item--gold .rail__value { color: var(--gold); }
+.rail__item--silver .rail__value { color: var(--silver); }
+.rail__item--bronze .rail__value { color: var(--bronze); }
+.rail__item--live .rail__value { color: var(--live); }
 .rail__right { display: flex; align-items: center; gap: 0.9rem; margin-left: auto; flex: 0 0 auto; }
 
 .lang { display: inline-flex; gap: 0.25rem; }
@@ -344,6 +355,10 @@ a:hover { text-decoration: underline; }
   font-variant-numeric: tabular-nums;
   margin: 0.15rem 0 0.1rem;
 }
+.hero__stat-value--gold { color: var(--gold); }
+.hero__stat-value--silver { color: var(--silver); }
+.hero__stat-value--bronze { color: var(--bronze); }
+.hero__stat-value--live { color: var(--live); }
 .hero__stat-sub { font-size: 0.8rem; color: var(--ink-muted); max-width: 22ch; }
 .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .hero__reveal { opacity: 0; transform: translateY(0.6rem); transition: opacity 0.5s ease, transform 0.5s ease; }
@@ -465,6 +480,9 @@ a:hover { text-decoration: underline; }
 .board__row--us .board__points { color: var(--accent); }
 .board__row--us .board__total { color: var(--accent); }
 .board__rank { font-family: var(--font-mono); color: var(--ink-muted); width: 3.25rem; }
+.board__rank--gold { color: var(--gold); }
+.board__rank--silver { color: var(--silver); }
+.board__rank--bronze { color: var(--bronze); }
 .board__team span { display: block; }
 .board__team small { color: var(--ink-muted); font-size: 0.7rem; }
 .board__score { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
@@ -901,7 +919,10 @@ a:hover { text-decoration: underline; }
   padding: 0.25rem 0.7rem;
   white-space: nowrap;
 }
-.project__status--live { color: var(--warn); }
+.project__status--gold { color: var(--gold); }
+.project__status--silver { color: var(--silver); }
+.project__status--bronze { color: var(--bronze); }
+.project__status--live { color: var(--live); }
 .project__text { color: var(--ink-muted); max-width: 64ch; }
 .project__meta { display: grid; gap: 0.5rem; }
 @media (min-width: 40em) { .project__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; } }
@@ -934,6 +955,47 @@ a:hover { text-decoration: underline; }
 .hackathon .project__head { min-height: 4.2rem; align-content: flex-start; }
 .hackathon .project__meta { grid-template-columns: 1fr; gap: 0.6rem; }
 .hackathon .project__links { margin-top: auto; padding-top: 0.75rem; }
+
+/* ------------------------------------------------------- contributors ---
+   One line down the page with a node per person, like a commit graph. The
+   home page already shows the team as panes; this must not look like them. */
+.thread {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 52rem;
+  border-left: 1px solid var(--line);
+}
+.thread__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 0 2.5rem 1.75rem;
+}
+.thread__item:last-child { padding-bottom: 0.25rem; }
+.thread__item::before {
+  content: "";
+  position: absolute;
+  left: -0.4rem;
+  top: 0.1rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  background: var(--canvas);
+}
+.thread__role {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--accent);
+}
+.thread__name { font-size: clamp(1.35rem, 3vw, 1.9rem); letter-spacing: -0.02em; line-height: 1.15; }
+.thread__text { color: var(--ink-muted); max-width: 64ch; margin-top: 0.2rem; }
+.thread .member__link { margin-top: 0.35rem; padding-top: 0; }
+.thread__links { margin-top: 2.5rem; }
 
 /* ------------------------------------------------------- detail pages --- */
 .page__back {

@@ -22,7 +22,7 @@ window.I18N = {
       team: "The team",
       cup: "Nordic AI Cup",
       ring: "HyperBloom",
-      four: "The four",
+      contributors: "Who contributed",
       board: "The board",
       run: "The run",
       learned: "What we learned",
@@ -76,6 +76,10 @@ window.I18N = {
       }
     },
     cup: {
+      contributors: {
+        heading: "Who contributed",
+        sub: "All four of us worked on this one. None of us had competed in an ML competition before."
+      },
       pageTitle: "Nordic AI Cup 2026",
       meta: "Elysa's Secret at the Nordic AI Cup 2026: 1st in Denmark and 2nd in the Nordics, with the leaderboards, the score progressions and what we learned.",
       headline: "First place. Denmark.",
@@ -144,24 +148,28 @@ window.I18N = {
           text: "The whole flow works by keyboard and pattern changes are announced to screen readers. axe-core reports 0 WCAG 2.2 AA violations on every screen, in all four colour themes."
         }
       },
-      credits: {
-        heading: "Who built it",
-        eventLabel: "Hackathon",
-        eventKind: "UI/UX & Web Design, on Devpost",
-        buildersLabel: "Built by",
-        linkDemo: "Live demo",
-        linkRepo: "Source on GitHub",
-        linkProject: "Project on Devpost",
-        linkEvent: "The hackathon"
+      links: {
+        demo: "Live demo",
+        repo: "Source on GitHub",
+        project: "Project on Devpost",
+        event: "The hackathon"
+      },
+      contributors: {
+        heading: "Who contributed",
+        sub: "Two of the four built Make-a-Ring, entered under the team name.",
+        franek: {
+          role: "Studio and pattern tools",
+          text: "Started the ring designer, then built the pattern editor and its symmetry tools, the 50 patterns, engraving, saved designs and the blueprint size drawing."
+        },
+        javier: {
+          role: "Rendering, export and try-on",
+          text: "Moved ring building into a Web Worker, made the layout work on every device, added the real STL and OBJ downloads, built the 3D hand try-on and got axe down to 0 violations."
+        }
       }
     },
     team: {
       heading: "The team",
       sub: "Four students at the University of Southern Denmark, and what each of us has entered so far.",
-      four: {
-        heading: "The four",
-        sub: "Four students at the University of Southern Denmark. None of us had competed in an ML competition before."
-      },
       countries: {
         md: "Moldova",
         pl: "Poland",
@@ -365,7 +373,7 @@ window.I18N = {
       team: "Holdet",
       cup: "Nordic AI Cup",
       ring: "HyperBloom",
-      four: "De fire",
+      contributors: "Hvem bidrog",
       board: "Ranglisten",
       run: "Forløbet",
       learned: "Hvad vi lærte",
@@ -419,6 +427,10 @@ window.I18N = {
       }
     },
     cup: {
+      contributors: {
+        heading: "Hvem bidrog",
+        sub: "Vi arbejdede alle fire på den her. Ingen af os havde deltaget i en ML-konkurrence før."
+      },
       pageTitle: "Nordic AI Cup 2026",
       meta: "Elysa's Secret ved Nordic AI Cup 2026: 1. plads i Danmark og 2. plads i Norden, med ranglisterne, scoreforløbene og hvad vi lærte.",
       headline: "Førstepladsen. Danmark.",
@@ -487,24 +499,28 @@ window.I18N = {
           text: "Hele forløbet virker med tastatur, og mønsterskift annonceres til skærmlæsere. axe-core rapporterer 0 WCAG 2.2 AA-fejl på alle skærme i alle fire farvetemaer."
         }
       },
-      credits: {
-        heading: "Hvem byggede den",
-        eventLabel: "Hackathon",
-        eventKind: "UI/UX & Web Design, på Devpost",
-        buildersLabel: "Bygget af",
-        linkDemo: "Live demo",
-        linkRepo: "Kildekode på GitHub",
-        linkProject: "Projektet på Devpost",
-        linkEvent: "Hackathonet"
+      links: {
+        demo: "Live demo",
+        repo: "Kildekode på GitHub",
+        project: "Projektet på Devpost",
+        event: "Hackathonet"
+      },
+      contributors: {
+        heading: "Hvem bidrog",
+        sub: "To af de fire byggede Make-a-Ring, tilmeldt under holdets navn.",
+        franek: {
+          role: "Studie og mønsterværktøjer",
+          text: "Startede ringdesigneren og byggede derefter mønstereditoren med dens symmetriværktøjer, de 50 mønstre, gravering, gemte designs og måltegningen."
+        },
+        javier: {
+          role: "Rendering, eksport og prøvning",
+          text: "Flyttede ringbygningen over i en Web Worker, fik layoutet til at virke på alle enheder, tilføjede rigtige STL- og OBJ-downloads, byggede 3D-prøvningen på en hånd og fik axe ned på 0 fejl."
+        }
       }
     },
     team: {
       heading: "Holdet",
       sub: "Fire studerende på Syddansk Universitet, og hvad vi hver især har deltaget i indtil nu.",
-      four: {
-        heading: "De fire",
-        sub: "Fire studerende på Syddansk Universitet. Ingen af os havde deltaget i en ML-konkurrence før."
-      },
       countries: {
         md: "Moldova",
         pl: "Polen",
