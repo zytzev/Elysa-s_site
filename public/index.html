@@ -1,13 +1,13 @@
 <!doctype html>
-<!-- Elysa's Secret — Nordic AI Cup 2026.
-     Content lives in SITE_CONFIG (data: scores, names, dates) and
-     i18n.js (all prose, EN + DA). Never hard-code copy in this file. -->
-<html lang="en">
+<!-- Elysa's Secret: the team and every hackathon we have entered.
+     Data lives in config.js, all prose (EN + DA) in i18n.js, and the top bar,
+     footer and mascot in chrome.js. Never hard-code copy in this file. -->
+<html lang="en" data-page="home">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Elysa's Secret</title>
-    <meta name="description" content="Nordic AI Cup 2026 — 1st place, Denmark. Four students from the University of Southern Denmark." />
+    <meta name="description" content="Elysa's Secret, a hackathon team from the University of Southern Denmark. 1st in Denmark at the Nordic AI Cup 2026 and 1st place at HyperBloom October 2026." />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" type="image/x-icon" href="./images/KikasLogo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -36,325 +36,8 @@
       </div>
     </div>
 
-    <script>
-      window.SITE_CONFIG = {
-        sections: ["hero", "team", "board", "run", "about", "learned", "project", "contact"],
-
-        brand: { name: "Elysa's Secret", logo: "" },
-
-        /* The team's own claims. Every value here is checked against the
-           spec's allowlist by check.js. */
-        statusRail: {
-          items: [
-            { key: "rail.dkLabel", value: "45.00", placeKey: "rail.dkPlace", tone: "good" },
-            { key: "rail.nordicLabel", value: "35.97", placeKey: "rail.nordicPlace", tone: "plain" },
-            { key: "rail.gapLabel", value: "-0.54", tone: "warn" }
-          ]
-        },
-
-        /* nav order mirrors sections[] exactly — a nav that lists "what we
-           learned" before "how we work" would jump backwards down the page */
-        nav: {
-          links: [
-            { key: "nav.team", href: "#team" },
-            { key: "nav.board", href: "#board" },
-            { key: "nav.run", href: "#run" },
-            { key: "nav.about", href: "#about" },
-            { key: "nav.learned", href: "#learned" },
-            { key: "nav.project", href: "#project" }
-          ],
-          cta: { key: "nav.contact", href: "#contact" }
-        },
-
-        hero: {
-          stats: [
-            { key: "hero.place", value: "1st", subKey: "hero.placeSub" },
-            { key: "hero.points", value: "45.00", subKey: "hero.pointsSub" },
-            { key: "hero.final", value: "35.97", subKey: "hero.finalSub" }
-          ],
-          ctas: [
-            { key: "hero.ctaPrimary", href: "#run", variant: "primary" },
-            { key: "hero.ctaSecondary", href: "#contact", variant: "secondary" }
-          ]
-        },
-
-        /* No scores on the member panes. A public site is the wrong place to
-           rank four teammates against each other — each pane says what that
-           person did, and the numbers live on the board and the run.
-           `country` picks a flag from FLAGS in script.js; the country's name
-           is translated (team.countries.*) and is the flag's accessible label. */
-        team: {
-          members: [
-            { name: "Alexandru Zaitzev", country: "md", taskKey: "team.alex.task", logKey: "team.alex.log",
-              linkedin: "https://www.linkedin.com/in/zaitzev/" },
-            { name: "Jakub Furmaniuk", country: "pl", taskKey: "team.jakub.task", logKey: "team.jakub.log",
-              linkedin: "https://www.linkedin.com/in/jakub-furmaniuk/" },
-            { name: "Javier Arévalo Hernández", country: "es", taskKey: "team.javier.task", logKey: "team.javier.log",
-              linkedin: "https://www.linkedin.com/in/javier-arevalo-hernandez" },
-            { name: "Franciszek Kossut", country: "pl", taskKey: "team.franek.task", logKey: "team.franek.log",
-              linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" }
-          ]
-        },
-
-        /* Two boards, never conflated. cells are [survival, drone, medical]. */
-        board: {
-          tabs: [
-            { id: "dk", key: "board.tabDk" },
-            { id: "nordic", key: "board.tabNordic" }
-          ],
-          columns: [
-            { key: "board.colSurvival" },
-            { key: "board.colDrone" },
-            { key: "board.colMedical" }
-          ],
-          boards: {
-            dk: {
-              captionKey: "board.captionDk",
-              rows: [
-                { place: "1", name: "Elysa's Secret", orgKey: "board.orgSdu", highlight: true,
-                  cells: [{ raw: "1405.256", points: "12.00" }, { raw: "0.263", points: "8.00" }, { raw: "0.822", points: "25.00" }], total: "45.00" },
-                { place: "2", name: "Ålle", orgKey: "board.orgDtu",
-                  cells: [{ raw: "968.559", points: "2.00" }, { raw: "0.379", points: "25.00" }, { raw: "0.790", points: "12.00" }], total: "39.00" },
-                { place: "3", name: "Powered by Smørrebrød", orgKey: "board.orgDtu",
-                  cells: [{ raw: "43061.384", points: "18.00" }, { raw: "0.314", points: "15.00" }, { raw: "0.781", points: "6.00" }], total: "39.00" },
-                { place: "4", name: "Backprop Boys", orgKey: "board.orgDtu",
-                  cells: [{ raw: "48236.876", points: "25.00" }, { raw: "0.307", points: "12.00" }, { raw: "0.749", points: "0.92" }], total: "37.92" },
-                { place: "5", name: "CarlN", orgKey: "board.orgDtu",
-                  cells: [{ raw: "1958.138", points: "15.00" }, { raw: "0.156", points: "1.00" }, { raw: "0.803", points: "18.00" }], total: "34.00" },
-                { place: "6", name: "Elemental hero", orgKey: "board.orgAalborg",
-                  cells: [{ raw: "1024.117", points: "6.00" }, { raw: "0.302", points: "10.00" }, { raw: "0.798", points: "15.00" }], total: "31.00" },
-                { place: "7", name: "Lisan al-Gaibs", orgKey: "board.orgDtu",
-                  cells: [{ raw: "821.498", points: "0.88" }, { raw: "0.360", points: "18.00" }, { raw: "0.771", points: "2.00" }], total: "20.88" }
-              ]
-            },
-            nordic: {
-              captionKey: "board.captionNordic",
-              rows: [
-                { place: "1", name: "Ifftikhar Amiri", orgKey: "board.orgNmbu",
-                  cells: [{ raw: "800.203", points: "0.51" }, { raw: "0.396", points: "18.00" }, { raw: "0.808", points: "18.00" }], total: "36.51" },
-                { place: "2", name: "Elysa's Secret", orgKey: "board.orgSdu", highlight: true,
-                  cells: [{ raw: "1405.256", points: "10.00" }, { raw: "0.263", points: "0.97" }, { raw: "0.822", points: "25.00" }], total: "35.97" },
-                { place: "3", name: "cosearch", orgKey: "board.orgNtnu",
-                  cells: [{ raw: "766.052", points: "0.44" }, { raw: "0.666", points: "25.00" }, { raw: "0.797", points: "6.00" }], total: "31.44" },
-                { place: "4", name: "CarlN", orgKey: "board.orgDtu",
-                  cells: [{ raw: "1958.138", points: "15.00" }, { raw: "0.156", points: "0.83" }, { raw: "0.803", points: "15.00" }], total: "30.83" },
-                { place: "5", name: "Backprop Boys", orgKey: "board.orgDtu",
-                  cells: [{ raw: "48236.876", points: "25.00" }, { raw: "0.307", points: "4.00" }, { raw: "0.749", points: "0.69" }], total: "29.69" },
-                { place: "6", name: "Powered by Smørrebrød", orgKey: "board.orgDtu",
-                  cells: [{ raw: "43061.384", points: "18.00" }, { raw: "0.314", points: "6.00" }, { raw: "0.781", points: "0.92" }], total: "24.92" },
-                { place: "7", name: "Ålle", orgKey: "board.orgDtu",
-                  cells: [{ raw: "968.559", points: "0.79" }, { raw: "0.379", points: "15.00" }, { raw: "0.790", points: "4.00" }], total: "19.79" }
-              ]
-            }
-          },
-          gapNote: { leader: "Ifftikhar Amiri", value: "0.54", key: "board.gap" }
-        },
-
-        /* The run is per task. Every figure here comes from the team's own
-           repository (survival-v2/RESULTS.md, drone-flyby/SERVED_CONFIG.md,
-           medical-appointment/REPRODUCE.md, SUBMISSIONS.md) — not from the
-           earlier verbal account, which disagreed on one validation number.
-
-           `kind` distinguishes a local simulator mean from an official
-           validation run from the graded evaluation. Never merge them: the
-           whole point of this section is that they are different numbers. */
-        run: {
-          /* Who pushed a given point. Only points where the team has agreed the
-             attribution carry an `author`; everything else stays unmarked rather
-             than guessed. */
-          authors: { franek: "Franciszek Kossut" },
-          tasks: [
-            {
-              id: "survival",
-              tabKey: "run.tabSurvival",
-              subKey: "run.survivalSub",
-              points: [
-                { value: 308,  kind: "local",      labelKey: "run.s1", noteKey: "run.s1n" },
-                { value: 437,  kind: "local",      labelKey: "run.s2", noteKey: "run.s2n" },
-                { value: 570,  kind: "local",      labelKey: "run.s3", noteKey: "run.s3n" },
-                { value: 709,  kind: "local",      labelKey: "run.s4", noteKey: "run.s4n" },
-                { value: 1014, kind: "local",      labelKey: "run.s5", noteKey: "run.s5n" },
-                /* the breakthrough: Franciszek's alternative controller, which
-                   took it from here to the graded result */
-                { value: 1239, kind: "local",      labelKey: "run.s6", noteKey: "run.s6n", author: "franek" },
-                { value: 1484, kind: "local",      labelKey: "run.s7", noteKey: "run.s7n", author: "franek" },
-                { value: 1815, kind: "validation", labelKey: "run.s8", noteKey: "run.s8n", author: "franek" }
-              ],
-              evaluated: { value: "1405.256", key: "run.evaluated", noteKey: "run.survivalEvalNote" }
-            },
-            {
-              id: "drone",
-              tabKey: "run.tabDrone",
-              subKey: "run.droneSub",
-              /* Eight of the recorded steps, not all of them — the shape of the
-                 climb is the point, and 0.035 -> 0.5841 says it in eight.
-                 `kind` matters: everything but the last is a validation mean. */
-              points: [
-                { value: 0.035,  kind: "validation", labelKey: "run.d1", noteKey: "run.d1n" },
-                { value: 0.132,  kind: "validation", labelKey: "run.d2", noteKey: "run.d2n" },
-                { value: 0.2365, kind: "validation", labelKey: "run.d3", noteKey: "run.d3n" },
-                { value: 0.3048, kind: "validation", labelKey: "run.d4", noteKey: "run.d4n" },
-                { value: 0.4618, kind: "validation", labelKey: "run.d5", noteKey: "run.d5n" },
-                { value: 0.5055, kind: "validation", labelKey: "run.d6", noteKey: "run.d6n", author: "franek" },
-                { value: 0.5841, kind: "validation", labelKey: "run.d7", noteKey: "run.d7n", author: "franek" },
-                { value: 0.2630, kind: "evaluated",  labelKey: "run.d8", noteKey: "run.d8n" }
-              ],
-              evaluated: null
-            },
-            {
-              id: "medical",
-              tabKey: "run.tabMedical",
-              subKey: "run.medicalSub",
-              /* Eight of the recorded steps. Evidence matching was 60% of this
-                 task's score, so most of these are about choosing the right
-                 passage rather than about answering better. */
-              points: [
-                { value: 0.732,   kind: "validation", labelKey: "run.m1", noteKey: "run.m1n" },
-                { value: 0.75457, kind: "validation", labelKey: "run.m2", noteKey: "run.m2n" },
-                { value: 0.79296, kind: "validation", labelKey: "run.m3", noteKey: "run.m3n" },
-                { value: 0.80197, kind: "validation", labelKey: "run.m4", noteKey: "run.m4n" },
-                { value: 0.80939, kind: "validation", labelKey: "run.m5", noteKey: "run.m5n" },
-                { value: 0.81677, kind: "validation", labelKey: "run.m6", noteKey: "run.m6n" },
-                { value: 0.83079, kind: "validation", labelKey: "run.m7", noteKey: "run.m7n" }
-              ],
-              evaluated: { value: "0.82225", key: "run.evaluated", noteKey: "run.medicalEvalNote" }
-            }
-          ]
-        },
-
-        /* What we did after the cup. Built by two of the four, entered under
-           the team name. No result yet: when HyperBloom announces one, change
-           statusKey (and its two strings in i18n.js), nothing else. */
-        project: {
-          command: "elysa --next",
-          name: "Make-a-Ring",
-          event: "HyperBloom October 2026",
-          builders: ["Franciszek Kossut", "Javier Arévalo Hernández"],
-          statusKey: "project.statusPending",
-          links: [
-            { key: "project.linkDemo", href: "https://make-a-ring.deployxa.online" },
-            { key: "project.linkRepo", href: "https://github.com/FearedLynx/make-a-ring" },
-            { key: "project.linkEvent", href: "https://hyperbloom-october.devpost.com" }
-          ]
-        },
-
-        /* Things we type at Claude. EXACTLY these four — nothing else gets
-           added here. Deliberately not translated: they are jokes in English
-           and survive only in their own wording. */
-        mascot: {
-          lines: [
-            "Claude LOCK IN",
-            "Claude use no tokens",
-            "Claude make no mistakes",
-            "Claude don't give up!"
-          ]
-        },
-
-        boot: {
-          commands: ["elysa --status", "elysa --whoami", "elysa --run"],
-          steps: [
-            { labelKey: "boot.l1", statusKey: "boot.s1" },
-            { labelKey: "boot.l2", statusKey: "boot.s2" },
-            { labelKey: "boot.l3", statusKey: "boot.s3" }
-          ],
-          readyKey: "boot.ready"
-        },
-
-        about: {
-          loop: [
-            { key: "about.loop.idea" }, { key: "about.loop.implement" },
-            { key: "about.loop.run" }, { key: "about.loop.wait" },
-            { key: "about.loop.score" }, { key: "about.loop.analyze" },
-            { key: "about.loop.change" }
-          ]
-        },
-
-        learned: {
-          cards: [
-            { icon: "gear", titleKey: "learned.1.title", textKey: "learned.1.text" },
-            { icon: "chart", titleKey: "learned.2.title", textKey: "learned.2.text" },
-            { icon: "check", titleKey: "learned.3.title", textKey: "learned.3.text" },
-            { icon: "shield", titleKey: "learned.4.title", textKey: "learned.4.text" },
-            { icon: "layers", titleKey: "learned.5.title", textKey: "learned.5.text" },
-            { icon: "eye", titleKey: "learned.6.title", textKey: "learned.6.text" }
-          ]
-        },
-
-        contact: {
-          email: "elysassecret@gmail.com",
-          fields: ["name", "email", "message", "consent"],
-          /* Native form POST, not fetch. Web3Forms' free plan rejects the CORS
-             preflight that a JSON fetch forces (403, no allow-origin header),
-             so an AJAX submit can never work there. A plain form POST is a
-             navigation, not a cross-origin request, so CORS does not apply.
-             The access key ships in the page by design; it only names the
-             destination inbox and cannot read anything. Restrict it to
-             elysasecret.com in the Web3Forms dashboard. */
-          endpoint: "https://api.web3forms.com/submit",
-          accessKey: "9d4a0f49-f679-4ca7-89fb-eab27e777866",
-          subject: "elysasecret.com — contact form",
-          /* Where the service sends the visitor afterwards. Leave this EMPTY
-             and the form uses its own origin — so the redirect is correct on a
-             pages.dev test URL, on elysasecret.com, and on any localhost
-             preview, with no edit in between. Set an absolute URL only to
-             override that.
-
-             This was hardcoded to https://elysasecret.com and hung the browser
-             on "Connecting to elysasecret.com" before the domain existed. */
-          thanksUrl: ""
-        },
-
-        /* LinkedIn is per-person, on the member panes — a single team-level
-           LinkedIn would be ambiguous. These two are still placeholders:
-           empty hrefs are skipped by the renderer rather than shipped dead. */
-        footer: {
-          socials: [
-            { name: "Instagram", href: "", icon: "instagram" },
-            { name: "TikTok", href: "", icon: "tiktok" }
-          ]
-        }
-      };
-    </script>
-
-    <a class="skip-link" href="#main">Skip to content</a>
-
-    <!-- ============================================================
-         SLOT: status rail — pinned, always visible, real state
-         ============================================================ -->
-    <!-- rail + header share one sticky container: the rail wraps on narrow
-         screens, so sticking them independently would let them overlap -->
-    <div class="topbar">
-    <div class="rail" data-slot="rail">
-      <div class="rail__inner container">
-        <span class="rail__items" data-fill="rail.items"></span>
-        <span class="rail__right">
-          <span class="lang" role="group" aria-label="Language">
-            <button type="button" class="lang__btn" data-lang="en" aria-pressed="true">EN</button>
-            <button type="button" class="lang__btn" data-lang="da" aria-pressed="false">DA</button>
-          </span>
-        </span>
-      </div>
-    </div>
-
-    <header class="site-header" data-slot="header">
-      <div class="container site-header__inner">
-        <a class="site-header__brand" href="#top" data-close-menu>
-          <span class="site-header__logo" data-fill="brand.logo"></span>
-          <span class="site-header__name" data-fill="brand.name"></span>
-        </a>
-        <nav class="site-header__nav" aria-label="Main navigation" data-fill="nav.links"></nav>
-        <span class="site-header__cta" data-fill="nav.cta"></span>
-        <button class="site-header__toggle" type="button" data-slot="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-          <span class="site-header__toggle-bar"></span>
-          <span class="site-header__toggle-bar"></span>
-          <span class="site-header__toggle-bar"></span>
-        </button>
-      </div>
-    </header>
-    </div>
-
     <main id="main">
-      <!-- SLOT: hero — the boot sequence -->
+      <!-- SLOT: hero: the team, not any one event -->
       <section id="hero" class="section section--hero" data-section="hero">
         <div class="container hero__inner">
           <h1 class="hero__headline" data-slot="headline" data-fill="hero.headline"></h1>
@@ -364,82 +47,25 @@
         </div>
       </section>
 
-      <!-- SLOT: team — four panes, no photographs -->
+      <!-- SLOT: hackathons: one equal card per event, newest first -->
+      <section id="hackathons" class="section section--hackathons" data-section="hackathons">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="hackathons.heading"></h2>
+            <p class="section__sub" data-fill="hackathons.sub"></p>
+          </div>
+          <div class="hackathons__grid" data-fill="hackathons.cards"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: team: who we are and what each of us entered -->
       <section id="team" class="section section--team" data-section="team">
         <div class="container">
           <div class="section__heading">
             <h2 class="section__title" data-fill="team.heading"></h2>
             <p class="section__sub" data-fill="team.sub"></p>
           </div>
-          <div class="team__grid" data-fill="team.members"></div>
-        </div>
-      </section>
-
-      <!-- SLOT: board — two leaderboards, tabbed -->
-      <section id="board" class="section section--board" data-section="board">
-        <div class="container">
-          <div class="section__heading">
-            <h2 class="section__title" data-fill="board.heading"></h2>
-            <p class="section__sub" data-fill="board.sub"></p>
-          </div>
-          <div class="board__tabs" role="tablist" aria-label="Leaderboard" data-slot="board-tabs"></div>
-          <div class="board__mount" data-slot="board-table"></div>
-          <p class="board__gap" data-slot="board-gap" hidden></p>
-        </div>
-      </section>
-
-      <!-- SLOT: run — the animated score curve -->
-      <section id="run" class="section section--run" data-section="run">
-        <div class="container">
-          <div class="section__heading">
-            <h2 class="section__title" data-fill="run.heading"></h2>
-            <p class="section__sub" data-fill="run.sub"></p>
-          </div>
-          <div class="board__tabs run__tabs" role="tablist" aria-label="Task" data-slot="run-tabs" hidden></div>
-          <figure class="run__figure">
-            <p class="run__task-sub" data-slot="run-task-sub"></p>
-            <svg class="run__svg" data-slot="run-svg" viewBox="0 0 800 360" role="img" aria-labelledby="run-svg-title run-svg-desc" preserveAspectRatio="xMidYMid meet">
-              <title id="run-svg-title"></title>
-              <desc id="run-svg-desc"></desc>
-            </svg>
-            <ol class="run__legend" data-slot="run-legend"></ol>
-            <figcaption class="run__caption" data-slot="run-caption"></figcaption>
-            <p class="run__note" data-slot="run-note" hidden></p>
-          </figure>
-          <div class="run__closing" data-slot="run-closing"></div>
-        </div>
-      </section>
-
-      <!-- SLOT: about — how we work -->
-      <section id="about" class="section section--about" data-section="about">
-        <div class="container">
-          <div class="section__heading">
-            <h2 class="section__title" data-fill="about.heading"></h2>
-          </div>
-          <ol class="loop" data-fill="about.loop"></ol>
-          <div class="about__text" data-fill="about.text"></div>
-        </div>
-      </section>
-
-      <!-- SLOT: learned — five principles -->
-      <section id="learned" class="section section--learned" data-section="learned">
-        <div class="container">
-          <div class="section__heading">
-            <h2 class="section__title" data-fill="learned.heading"></h2>
-            <p class="section__sub" data-fill="learned.sub"></p>
-          </div>
-          <div class="features__grid" data-fill="learned.cards"></div>
-        </div>
-      </section>
-
-      <!-- SLOT: project — what we built after the cup -->
-      <section id="project" class="section section--project" data-section="project">
-        <div class="container">
-          <div class="section__heading">
-            <h2 class="section__title" data-fill="project.heading"></h2>
-            <p class="section__sub" data-fill="project.sub"></p>
-          </div>
-          <div data-fill="project.card"></div>
+          <div class="team__grid" data-fill="team.roster"></div>
         </div>
       </section>
 
@@ -464,89 +90,9 @@
       </section>
     </main>
 
-    <!-- ============================================================
-         SLOT: footer
-         ============================================================ -->
-    <footer class="site-footer" data-slot="footer">
-      <div class="container">
-        <div class="footer__grid">
-          <div class="footer__brand">
-            <a class="footer__logo" href="#top">
-              <span class="site-header__logo" data-fill="brand.logo"></span>
-              <span class="site-header__name" data-fill="brand.name"></span>
-            </a>
-            <p class="footer__tagline" data-fill="footer.tagline"></p>
-          </div>
-          <div class="footer__socials" data-fill="footer.socials"></div>
-        </div>
-        <div class="footer__bottom">
-          <p data-fill="footer.legal"></p>
-        </div>
-      </div>
-    </footer>
-
-    <!-- ============================================================
-         MASCOT — arrives centre-screen after the boot sequence, then travels
-         to the bottom-right corner under its own steam. Draggable, with
-         expressions. Decorative: aria-hidden, and the drag affordance is
-         mouse/touch only, so keyboard users are never blocked by it.
-         ============================================================ -->
-    <div class="mascot" data-slot="mascot" aria-hidden="true">
-      <svg class="mascot__svg" viewBox="-8 -8 136 122" focusable="false">
-        <defs>
-          <!-- fractal noise displacement: this is what gives the body its
-               organic, breathing surface instead of a flat vector shape.
-               `scale` is driven from JS so it can be switched off for
-               reduced-motion users. -->
-          <filter id="mascot-goo" x="-40%" y="-40%" width="180%" height="180%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.015 0.022" numOctaves="2" seed="7" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" data-slot="mascot-displace"
-              scale="0" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </defs>
-        <g class="mascot__inner" filter="url(#mascot-goo)">
-          <path class="mascot__body" d="M32 10 H88 Q94 10 94 16 V32 H104 Q110 32 110 38 V52 Q110 58 104 58 H94 V72 H93 V93 Q93 96 90 96 H85 Q82 96 82 93 V72 H75 V93 Q75 96 72 96 H67 Q64 96 64 93 V72 H57 V93 Q57 96 54 96 H49 Q46 96 46 93 V72 H39 V93 Q39 96 36 96 H31 Q28 96 28 93 V72 H26 V58 H16 Q10 58 10 52 V38 Q10 32 16 32 H26 V16 Q26 10 32 10 Z" />
-
-          <!-- one arm, shown only for the wave and salute states. A single
-               element (not a group): transform-box: fill-box did not apply to
-               a <g> in Chrome, which left the arm stuck at rest. The bounding
-               box starts exactly at the shoulder, so the pivot can be 0% 50%. -->
-          <rect class="mascot__arm" x="106" y="38" width="30" height="16" rx="8" />
-
-          <!-- beret, shown only for the salute -->
-          <g class="mascot__beret">
-            <path class="mascot__beret-crown" d="M28 16 q4 -16 32 -16 q28 0 34 14 q3 8 -6 10 q-28 5 -56 1 q-9 -2 -4 -9 z" />
-            <path class="mascot__beret-band" d="M24 15 q34 9 66 0 q5 6 -3 9 q-30 7 -60 0 q-7 -3 -3 -9 z" />
-            <path class="mascot__beret-badge" d="M78 1 l2.2 4.6 5 .6 -3.7 3.4 1 5 -4.5 -2.5 -4.5 2.5 1 -5 -3.7 -3.4 5 -.6 z" />
-          </g>
-
-          <!-- paint order matters: the bloodshot eyes are drawn FIRST so the
-               chevron pupils land on top of them in the locked-in state. Put
-               them last and the red simply covers the pupils. -->
-          <g class="mascot__eyes">
-            <g class="mascot__eyes-angry">
-              <circle class="mascot__iris" cx="49" cy="42" r="10" />
-              <circle class="mascot__iris" cx="71" cy="42" r="10" />
-              <path class="mascot__brow" d="M35 26 L57 35" />
-              <path class="mascot__brow" d="M85 26 L63 35" />
-            </g>
-            <g class="mascot__eyes-default">
-              <path class="mascot__eye" d="M43 34 L56 41 L43 48 Z" />
-              <path class="mascot__eye" d="M77 34 L64 41 L77 48 Z" />
-            </g>
-            <g class="mascot__eyes-uwu">
-              <path class="mascot__uwu" d="M38 46 q8 -11 16 0" />
-              <path class="mascot__uwu" d="M66 46 q8 -11 16 0" />
-            </g>
-          </g>
-        </g>
-      </svg>
-    </div>
-    <!-- separate from the mascot so the drag's scale/rotation never distorts
-         the text; JS keeps its bottom-right corner pinned above the mascot -->
-    <p class="mascot__speech" data-slot="mascot-speech" aria-hidden="true"></p>
-
+    <script src="config.js"></script>
     <script src="i18n.js"></script>
+    <script src="chrome.js"></script>
     <!-- motion.js defines window.SiteMotion, which script.js's boot() consumes.
          It must load first, or the boot has to guard for a missing API. -->
     <script src="motion.js"></script>

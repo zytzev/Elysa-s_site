@@ -8,6 +8,9 @@
  * failure that matters most on a static site: a renderer throwing (or a
  * data-fill resolving to undefined) and leaving a section silently blank.
  *
+ * All the pages are read as one: one stub per data-fill or data-slot across
+ * index.html, the detail pages and chrome.js, so every renderer runs.
+ *
  * Run: node smoke.js
  */
 "use strict";
@@ -67,7 +70,9 @@ function makeEl(attrs) {
   return el;
 }
 
-var html = fs.readFileSync(path.join(SITE, "index.html"), "utf8");
+var html = ["index.html", "nordic-ai-cup.html", "hyperbloom.html", "chrome.js"]
+  .map(function (f) { return fs.readFileSync(path.join(SITE, f), "utf8"); })
+  .join("\n");
 
 /* one stub element per declared data-fill and data-slot, exactly as the page
    declares them — so a typo'd slot is a real miss, not a silent pass */
@@ -160,14 +165,8 @@ function run(file) {
   vm.runInContext(src, ctx, { filename: file });
 }
 
-/* only the config block — the page also carries a tiny bootstrap script that
-   touches document, which this stub deliberately does not fully provide */
-var configScript = (html.match(/<script>([\s\S]*?)<\/script>/g) || [])
-  .filter(function (b) { return b.indexOf("SITE_CONFIG") !== -1; })[0]
-  .replace(/^<script>/, "").replace(/<\/script>$/, "");
-
 try {
-  vm.runInContext(configScript, ctx, { filename: "index.html:config" });
+  run("config.js");
   run("i18n.js");
   run("motion.js");
   run("script.js"); /* its boot() runs immediately: readyState is "complete" */
@@ -189,14 +188,38 @@ function expectEq(label, actual, want) {
 }
 
 if (!failures.length) {
-  expect("rail items", fills["rail.items"].innerHTML, "45.00");
-  expect("rail gap is amber", fills["rail.items"].innerHTML, "rail__item--warn");
-  expect("rail negative gap", fills["rail.items"].innerHTML, "-0.54");
+  /* the home rail has every hackathon; the cup's numbers stay on the cup page */
+  ["NORDIC", "HYPERBLOOM", "EDTH"].forEach(function (s) {
+    expect("rail names " + s, fills["rail.items"].innerHTML, s);
+  });
+  expect("rail live event is amber", fills["rail.items"].innerHTML, "rail__item--warn");
+  var cupRail = JSON.stringify(ctx.window.SITE_CONFIG.statusRail.cupItems);
+  expect("cup rail carries the Danish total", cupRail, "45.00");
+  expect("cup rail carries the gap", cupRail, "-0.54");
 
-  expectEq("hero headline", fills["hero.headline"].textContent, "First place. Denmark.");
-  expect("hero sub is prose", fills["hero.sub"].textContent, "simulator");
-  expect("hero stats", fills["hero.stats"].innerHTML, "National result");
-  expect("hero stats carry 45.00", fills["hero.stats"].innerHTML, "45.00");
+  expectEq("hero headline", fills["hero.headline"].textContent, "Four students. Two wins.");
+  expect("hero is about the team", fills["hero.sub"].textContent, "University of Southern Denmark");
+  expect("hero stats", fills["hero.stats"].innerHTML, "Hackathons");
+  if (fills["hero.stats"].innerHTML.indexOf("45.00") === -1) pass();
+  else fail("the home hero must not lead with one event's score");
+
+  expectEq("cup headline", fills["cup.headline"].textContent, "First place. Denmark.");
+  expect("cup sub is prose", fills["cup.sub"].textContent, "simulator");
+  expect("cup stats", fills["cup.stats"].innerHTML, "National result");
+  expect("cup stats carry 45.00", fills["cup.stats"].innerHTML, "45.00");
+  expect("cup jump links", fills["cup.subnav"].innerHTML, "#board");
+
+  /* all the hackathons on the home page, each in the same shape */
+  var cards = fills["hackathons.cards"].innerHTML;
+  ["EDTH Copenhagen", "HyperBloom October", "Nordic AI Cup"].forEach(function (s) {
+    expect("hackathon card " + s, cards, s);
+  });
+  expectEq("one card per hackathon", (cards.match(/class="project hackathon"/g) || []).length, 3);
+  expectEq("every card shows a result", (cards.match(/<dt>Result<\/dt>/g) || []).length, 3);
+  expect("card links to the cup page", cards, "nordic-ai-cup.html");
+  expect("card links to the HyperBloom page", cards, "hyperbloom.html");
+  expect("live card is marked", cards, "project__status--live");
+  expect("cup card shows both results", cards, "2nd in the Nordics");
 
   /* the boot log + mascot are new surfaces; they must exist and be wired */
   expect("boot log slot exists", slots["boot-log"] ? "yes" : "", "yes");
@@ -205,7 +228,14 @@ if (!failures.length) {
   expect("mascot displacement filter wired", slots["mascot-displace"] ? "yes" : "", "yes");
   expect("mascot gets positioned inline", slots["mascot"].style.transform || "", "translate");
 
-  expect("team heading", fills["team.heading"].textContent, "The four");
+  expect("team heading", fills["team.heading"].textContent, "The team");
+  expect("cup team heading", fills["team.four.heading"].textContent, "The four");
+  var roster = fills["team.roster"].innerHTML;
+  ["Alexandru Zaitzev", "Jakub Furmaniuk", "Javier Arévalo Hernández",
+   "Franciszek Kossut", "Make-a-Ring", "Nordic AI Cup"].forEach(function (s) {
+    expect("roster includes " + s, roster, s);
+  });
+  expectEq("roster has all four LinkedIn links", (roster.match(/member__link/g) || []).length, 4);
   var team = fills["team.members"].innerHTML;
   ["Alexandru Zaitzev", "Jakub Furmaniuk", "Javier Arévalo Hernández",
    "Franciszek Kossut", "All three tasks"].forEach(function (s) {
@@ -231,7 +261,7 @@ if (!failures.length) {
   /* the fairness rule: a member pane must never carry a score, and must never
      describe a teammate's task as a weakness */
   ["0.822", "1405.256", "0.263", "778", "1280", "weakest", "weak"].forEach(function (bad) {
-    if (team.indexOf(bad) === -1) pass();
+    if ((team + roster).indexOf(bad) === -1) pass();
     else fail("member panes must not contain " + JSON.stringify(bad));
   });
 
@@ -306,15 +336,22 @@ if (!failures.length) {
   expect("run tabs list all three tasks", slots["run-tabs"].innerHTML, "Medical Appointment");
   expect("first tab selected by default", slots["run-tabs"].innerHTML, "\"true\"");
 
-  /* the project section: one card, with its result still pending */
-  var project = fills["project.card"].innerHTML;
-  expect("project heading", fills["project.heading"].textContent, "What we built next");
-  expect("project card name", project, "Make-a-Ring");
-  expect("project card event", project, "HyperBloom October 2026");
-  expect("project card builders", project, "Franciszek Kossut, Javier Arévalo Hernández");
-  expect("project card status", project, "Awaiting results");
-  ["make-a-ring.deployxa.online", "github.com/FearedLynx/make-a-ring", "hyperbloom-october.devpost.com"]
-    .forEach(function (u) { expect("project card links " + u, project, u); });
+  /* the HyperBloom page */
+  expectEq("ring headline", fills["ring.headline"].textContent, "First place. Make-a-Ring.");
+  expect("ring stats projects", fills["ring.stats"].innerHTML, "239");
+  expect("ring stats participants", fills["ring.stats"].innerHTML, "738");
+  expect("ring cta opens the demo in a new tab", fills["ring.ctas"].innerHTML, "target=\"_blank\"");
+  expectEq("three screenshots", (fills["ring.shots"].innerHTML.match(/<img /g) || []).length, 3);
+  if (fills["ring.shots"].innerHTML.indexOf('alt=""') === -1) pass();
+  else fail("every screenshot needs alt text");
+  expectEq("six build cards", (fills["ring.cards"].innerHTML.match(/feature-card__title/g) || []).length, 6);
+  var credits = fills["ring.credits.card"].innerHTML;
+  expect("credits builders", credits, "Franciszek Kossut, Javier Arévalo Hernández");
+  expect("credits status", credits, "1st place");
+  ["make-a-ring.deployxa.online", "github.com/FearedLynx/make-a-ring",
+   "devpost.com/software/make-a-ring", "hyperbloom-october.devpost.com"]
+    .forEach(function (u) { expect("credits link " + u, credits, u); });
+  expect("back link", fills["page.back.label"].textContent, "All hackathons");
 
   /* the finals are over: nothing on the page may still point at them */
   var everything = fillEls.concat(slotEls)

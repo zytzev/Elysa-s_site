@@ -1,5 +1,5 @@
 /* ============================================================================
-   elysasecret.com — Elysa's Secret, Nordic AI Cup 2026
+   elysasecret.com — Elysa's Secret
    ============================================================================
    Dark single theme. Every colour, font, spacing value and radius is a token
    on :root. Component rules reference tokens, never literals, so the whole
@@ -195,6 +195,12 @@ a:hover { text-decoration: underline; }
   overflow-x: auto;
 }
 .rail__item { display: inline-flex; gap: 0.4rem; align-items: baseline; white-space: nowrap; }
+/* on a phone all three hackathons must still fit on the one line */
+@media (max-width: 30em) {
+  .rail { font-size: 0.64rem; letter-spacing: 0; }
+  .rail__items { gap: 0.7rem; }
+  .rail__inner { gap: 0.5rem; }
+}
 .rail__key { color: var(--ink-muted); }
 .rail__value { font-variant-numeric: tabular-nums; color: var(--ink); }
 .rail__item--good .rail__value { color: var(--accent); }
@@ -390,6 +396,16 @@ a:hover { text-decoration: underline; }
    bottom-aligned: with four panes of different lengths, pushing each log to the
    bottom opened a void above the short ones and read as a broken row. */
 .member__log { font-size: 0.85rem; color: var(--ink-muted); }
+/* the home page's short version of a pane: one line per hackathon entered */
+.member__roles { list-style: none; padding: 0; display: grid; gap: 0.5rem; font-size: 0.85rem; }
+.member__roles span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-muted);
+}
 /* pinned to the bottom of the pane, so the four links form one row rather than
    sitting wherever each person's description happens to end */
 .member__link {
@@ -860,8 +876,8 @@ a:hover { text-decoration: underline; }
 
 /* ------------------------------------------------------------- project ---
    One card, built like a member pane: a prompt line, a head, prose, then the
-   links in a row at the bottom. The status chip is amber because the result
-   is not in yet — accent green is kept for results we actually have. */
+   links in a row at the bottom. The status chip is accent green for a result
+   we actually have, and amber while it is not in yet. */
 .project {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -879,12 +895,13 @@ a:hover { text-decoration: underline; }
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--warn);
+  color: var(--accent);
   border: 1px solid currentColor;
   border-radius: 999px;
   padding: 0.25rem 0.7rem;
   white-space: nowrap;
 }
+.project__status--live { color: var(--warn); }
 .project__text { color: var(--ink-muted); max-width: 64ch; }
 .project__meta { display: grid; gap: 0.5rem; }
 @media (min-width: 40em) { .project__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; } }
@@ -905,6 +922,45 @@ a:hover { text-decoration: underline; }
   line-height: 1.2;
 }
 .project__link:hover { color: var(--accent); border-bottom-color: var(--accent); text-decoration: none; }
+.project__link--page { color: var(--accent); }
+
+/* --------------------------------------------------------- hackathons ---
+   One card per event, equal in width and height: the home page must not lean
+   towards any one of them. The links sit on one row across the cards. */
+.hackathons__grid { display: grid; gap: 1rem; }
+@media (min-width: 62em) { .hackathons__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.hackathon { max-width: none; }
+.hackathon .project__name { font-size: clamp(1.25rem, 2.4vw, 1.5rem); }
+.hackathon .project__head { min-height: 4.2rem; align-content: flex-start; }
+.hackathon .project__meta { grid-template-columns: 1fr; gap: 0.6rem; }
+.hackathon .project__links { margin-top: auto; padding-top: 0.75rem; }
+
+/* ------------------------------------------------------- detail pages --- */
+.page__back {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  margin-bottom: 1.25rem;
+}
+.page__back:hover { color: var(--accent); text-decoration: none; }
+.subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+.subnav a { color: var(--ink-muted); }
+.subnav a:hover { color: var(--accent); text-decoration: none; }
+.shots { display: grid; gap: 1rem; }
+@media (min-width: 48em) { .shots { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.shot { background: var(--surface); border: 1px solid var(--line); }
+.shot img { display: block; width: 100%; height: auto; }
+.shot figcaption { padding: 0.8rem 1rem; font-size: 0.85rem; color: var(--ink-muted); }
 
 @media (max-width: 30em) { :root { --mascot-size: 106px; } }
 @media (max-height: 24em) { .mascot { display: none; } }

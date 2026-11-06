@@ -1,0 +1,72 @@
+<!doctype html>
+<!-- Elysa's Secret at HyperBloom October 2026: Make-a-Ring, the full story.
+     Data lives in config.js, all prose (EN + DA) in i18n.js, and the top bar,
+     footer and mascot in chrome.js. Never hard-code copy in this file. -->
+<html lang="en" data-page="ring">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HyperBloom October 2026 — Elysa's Secret</title>
+    <meta name="description" content="Make-a-Ring won 1st place at HyperBloom October 2026 out of 239 projects: a ring studio in the browser with print-ready STL and OBJ files." />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/x-icon" href="./images/KikasLogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body id="top">
+    <main id="main">
+      <section id="hero" class="section section--hero" data-section="hero">
+        <div class="container hero__inner">
+          <a class="page__back" href="./#hackathons"><span aria-hidden="true">← </span><span data-fill="page.back.label"></span></a>
+          <h1 class="hero__headline" data-slot="headline" data-fill="ring.headline"></h1>
+          <p class="hero__sub" data-fill="ring.sub"></p>
+          <dl class="hero__stats" data-fill="ring.stats"></dl>
+          <div class="hero__ctas" data-fill="ring.ctas"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: what it does -->
+      <section id="what" class="section" data-section="what">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="ring.what.heading"></h2>
+            <p class="section__sub" data-fill="ring.what.sub"></p>
+          </div>
+          <div class="shots" data-fill="ring.shots"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: how it was built -->
+      <section id="how" class="section" data-section="how">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="ring.how.heading"></h2>
+            <p class="section__sub" data-fill="ring.how.sub"></p>
+          </div>
+          <div class="features__grid" data-fill="ring.cards"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: who built it, and where to find it -->
+      <section id="credits" class="section" data-section="credits">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="ring.credits.heading"></h2>
+          </div>
+          <div data-fill="ring.credits.card"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="chrome.js"></script>
+    <!-- motion.js defines window.SiteMotion, which script.js's boot() consumes.
+         It must load first, or the boot has to guard for a missing API. -->
+    <script src="motion.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
