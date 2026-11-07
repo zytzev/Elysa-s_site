@@ -129,7 +129,7 @@
         return (
           '<div class="hero__stat">' +
           '<dt class="hero__stat-label">' + esc(t(stat.key)) + "</dt>" +
-          '<dd class="hero__stat-value">' + esc(stat.value) + "</dd>" +
+          '<dd class="hero__stat-value' + (stat.tone ? " hero__stat-value--" + esc(stat.tone) : "") + '">' + esc(stat.value) + "</dd>" +
           '<dd class="hero__stat-sub">' + esc(t(stat.subKey)) + "</dd>" +
           "</div>"
         );
@@ -164,6 +164,33 @@
       "</p>"
     );
   }
+  /* 1st, 2nd and 3rd read the same everywhere; see `tone` in config.js */
+  var MEDALS = { "1": "gold", "2": "silver", "3": "bronze" };
+
+  /* A thread rather than a grid of cards: the home page has the team as panes,
+     so here the names read down one line, in the order of the work. */
+  function contributorsHtml(list, c) {
+    var members = (c.team && c.team.members) || [];
+    return (
+      '<ol class="thread">' +
+      (list || [])
+        .map(function (entry) {
+          var m = members.filter(function (x) { return x.id === entry.id; })[0];
+          if (!m) return "";
+          return (
+            '<li class="thread__item">' +
+            '<p class="thread__role">' + esc(t(entry.roleKey)) + "</p>" +
+            '<h3 class="thread__name">' + esc(m.name) + "</h3>" +
+            '<p class="thread__text">' + esc(t(entry.textKey)) + "</p>" +
+            memberLink(m) +
+            "</li>"
+          );
+        })
+        .join("") +
+      "</ol>"
+    );
+  }
+
   function memberTop(m, withTask) {
     return (
       '<p class="member__prompt"><span class="member__sigil" aria-hidden="true">$</span> whoami</p>' +
@@ -260,7 +287,7 @@
             '<p class="project__cmd"><span class="hero__sigil" aria-hidden="true">$</span> ' + esc(h.command) + "</p>" +
             '<div class="project__head">' +
             '<h3 class="project__name">' + esc(h.name) + "</h3>" +
-            '<span class="project__status' + (h.live ? " project__status--live" : "") + '">' + esc(t(h.statusKey)) + "</span>" +
+            '<span class="project__status' + (h.tone ? " project__status--" + esc(h.tone) : "") + '">' + esc(t(h.statusKey)) + "</span>" +
             "</div>" +
             '<p class="project__text">' + esc(t(h.textKey)) + "</p>" +
             '<dl class="project__meta">' +
@@ -290,26 +317,8 @@
 
     "ring.cards": function (el, c) { el.innerHTML = featureCardsHtml(c.ring.cards); },
 
-    /* Name, event and builders are data (config); every sentence around them
-       is translated. */
-    "ring.credits.card": function (el, c) {
-      var p = c.ring.credits || {};
-      el.innerHTML =
-        '<article class="project">' +
-        '<p class="project__cmd"><span class="hero__sigil" aria-hidden="true">$</span> ' + esc(p.command) + "</p>" +
-        '<div class="project__head">' +
-        '<h3 class="project__name">' + esc(p.name) + "</h3>" +
-        '<span class="project__status">' + esc(t("hackathons.statusFirst")) + "</span>" +
-        "</div>" +
-        '<dl class="project__meta">' +
-        "<div><dt>" + esc(t("ring.credits.eventLabel")) + "</dt>" +
-        "<dd>" + esc(p.event) + " · " + esc(t("ring.credits.eventKind")) + "</dd></div>" +
-        "<div><dt>" + esc(t("ring.credits.buildersLabel")) + "</dt>" +
-        "<dd>" + esc((p.builders || []).join(", ")) + "</dd></div>" +
-        "</dl>" +
-        projectLinksHtml(p.links) +
-        "</article>";
-    },
+    "ring.contributors.list": function (el, c) { el.innerHTML = contributorsHtml(c.ring.contributors, c); },
+    "ring.links": function (el, c) { el.innerHTML = projectLinksHtml(c.ring.links); },
 
     /* The home page's four panes: who we are and what each of us entered. */
     "team.roster": function (el, c) {
@@ -335,20 +344,8 @@
     /* No scores here on purpose. Ranking four teammates against each other on
        a public page is not candour, it is just unkind — the numbers belong on
        the board and the run, where they are the competition's, not a
-       person's. Each pane says what that person did. */
-    "team.members": function (el, c) {
-      el.innerHTML = (c.team.members || [])
-        .map(function (m) {
-          return (
-            '<article class="member">' +
-            memberTop(m, true) +
-            '<p class="member__log">' + esc(t(m.logKey)) + "</p>" +
-            memberLink(m) +
-            "</article>"
-          );
-        })
-        .join("");
-    },
+       person's. Each entry says what that person did. */
+    "cup.contributors.list": function (el, c) { el.innerHTML = contributorsHtml(c.cup.contributors, c); },
 
     "board.tabs": function (el, c) {
       var tabs = c.board.tabs || [];
@@ -519,7 +516,7 @@
         var cls = "board__row" + (row.highlight ? " board__row--us" : "");
         return (
           '<tr class="' + cls + '">' +
-          '<td class="board__rank">' + esc(row.place) + "</td>" +
+          '<td class="board__rank' + (MEDALS[row.place] ? " board__rank--" + MEDALS[row.place] : "") + '">' + esc(row.place) + "</td>" +
           '<th scope="row" class="board__team"><span>' + esc(row.name) + "</span>" +
           "<small>" + esc(t(row.orgKey)) + "</small></th>" +
           row.cells

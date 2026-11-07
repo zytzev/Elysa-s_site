@@ -29,17 +29,6 @@
         </div>
       </section>
 
-      <!-- SLOT: the four: who did what at this event -->
-      <section id="four" class="section section--team" data-section="four">
-        <div class="container">
-          <div class="section__heading">
-            <h2 class="section__title" data-fill="team.four.heading"></h2>
-            <p class="section__sub" data-fill="team.four.sub"></p>
-          </div>
-          <div class="team__grid" data-fill="team.members"></div>
-        </div>
-      </section>
-
       <!-- SLOT: board — two leaderboards, tabbed -->
       <section id="board" class="section section--board" data-section="board">
         <div class="container">
@@ -94,6 +83,17 @@
             <p class="section__sub" data-fill="learned.sub"></p>
           </div>
           <div class="features__grid" data-fill="learned.cards"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: who contributed, on a thread -->
+      <section id="contributors" class="section section--contributors" data-section="contributors">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="cup.contributors.heading"></h2>
+            <p class="section__sub" data-fill="cup.contributors.sub"></p>
+          </div>
+          <div data-fill="cup.contributors.list"></div>
         </div>
       </section>
     </main>
