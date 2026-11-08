@@ -160,6 +160,9 @@ var ALLOWED_NUMBERS = [
   "3",
   /* HyperBloom October, from its Devpost pages */
   "239", "738",
+  /* EDTH Copenhagen, from the team repository (elysassecret/EDTH_07): boats,
+     reserve violations over 30 seeded runs, tests collected on main */
+  "5", "0", "387",
   "0.5841", "0.263", "0.2630", "0.802", "0.8308", "0.8222",
   /* Drone Flyby's recorded validation progression, from the team's notes and
      the repo record */
@@ -190,6 +193,7 @@ if (config) {
     ["hero.stats", config.hero && config.hero.stats],
     ["cup.stats", config.cup && config.cup.stats],
     ["ring.stats", config.ring && config.ring.stats],
+    ["pharos.stats", config.pharos && config.pharos.stats],
     ["team.members", config.team && config.team.members],
     ["run", config.run]
   ];
@@ -213,7 +217,7 @@ if (config) {
 /* ---- 5. all the markup, read as one -------------------------------------
    Every page, plus the chrome they share. The checks below only care that a
    data-fill or data-slot exists somewhere the site can reach it. */
-var PAGES = ["index.html", "nordic-ai-cup.html", "hyperbloom.html"];
+var PAGES = ["index.html", "nordic-ai-cup.html", "hyperbloom.html", "edth.html"];
 var pageHtml = {};
 PAGES.forEach(function (f) { pageHtml[f] = read(f) || ""; });
 var chromeSrc = read("chrome.js") || "";
@@ -252,6 +256,7 @@ var sources = {
   "index.html": pageHtml["index.html"],
   "nordic-ai-cup.html": pageHtml["nordic-ai-cup.html"],
   "hyperbloom.html": pageHtml["hyperbloom.html"],
+  "edth.html": pageHtml["edth.html"],
   "thanks.html": read("thanks.html") || "",
   "config.js": read("config.js") || "",
   "chrome.js": chromeSrc,
@@ -288,7 +293,7 @@ if (config && config.contact) {
 
 /* ---- 9. required files exist -------------------------------------------
    Site files in public/, the readme at the root. */
-["index.html", "nordic-ai-cup.html", "hyperbloom.html", "thanks.html", "config.js", "chrome.js",
+["index.html", "nordic-ai-cup.html", "hyperbloom.html", "edth.html", "thanks.html", "config.js", "chrome.js",
  "i18n.js", "styles.css", "script.js", "motion.js"].forEach(function (f) {
   if (fs.existsSync(path.join(SITE, f))) ok();
   else fail("required site file present: public/" + f);
@@ -301,7 +306,7 @@ else fail("required file present: README.md");
    a plan, a screenshot, an editor backup. This is the check that would have
    caught the design doc being served at the domain. */
 var ALLOWED_IN_PUBLIC = [
-  "index.html", "nordic-ai-cup.html", "hyperbloom.html", "thanks.html",
+  "index.html", "nordic-ai-cup.html", "hyperbloom.html", "edth.html", "thanks.html",
   "config.js", "chrome.js", "i18n.js", "styles.css", "script.js", "motion.js",
   /* the favicon, flags and screenshots */
   "images",

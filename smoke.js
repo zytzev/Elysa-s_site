@@ -70,7 +70,7 @@ function makeEl(attrs) {
   return el;
 }
 
-var html = ["index.html", "nordic-ai-cup.html", "hyperbloom.html", "chrome.js"]
+var html = ["index.html", "nordic-ai-cup.html", "hyperbloom.html", "edth.html", "chrome.js"]
   .map(function (f) { return fs.readFileSync(path.join(SITE, f), "utf8"); })
   .join("\n");
 
@@ -192,7 +192,7 @@ if (!failures.length) {
   ["NORDIC", "HYPERBLOOM", "EDTH"].forEach(function (s) {
     expect("rail names " + s, fills["rail.items"].innerHTML, s);
   });
-  expect("rail live event is blue", fills["rail.items"].innerHTML, "rail__item--live");
+  expect("rail says EDTH was pitched", fills["rail.items"].innerHTML, "pitched");
   var cupRail = JSON.stringify(ctx.window.SITE_CONFIG.statusRail.cupItems);
   expect("cup rail carries the Danish total", cupRail, "45.00");
   expect("cup rail carries the gap", cupRail, "-0.54");
@@ -218,7 +218,8 @@ if (!failures.length) {
   expectEq("every card shows a result", (cards.match(/<dt>Result<\/dt>/g) || []).length, 3);
   expect("card links to the cup page", cards, "nordic-ai-cup.html");
   expect("card links to the HyperBloom page", cards, "hyperbloom.html");
-  expect("live card is marked", cards, "project__status--live");
+  expect("card links to the EDTH page", cards, "edth.html");
+  expectEq("nothing is still in progress", cards.indexOf("project__status--live"), -1);
   expectEq("two gold cards", (cards.match(/project__status--gold/g) || []).length, 2);
   expect("cup card shows both results", cards, "2nd in the Nordics");
 
@@ -340,6 +341,22 @@ if (!failures.length) {
    "devpost.com/software/make-a-ring", "hyperbloom-october.devpost.com"]
     .forEach(function (u) { expect("ring link " + u, fills["ring.links"].innerHTML, u); });
   expect("back link", fills["page.back.label"].textContent, "All hackathons");
+
+  /* the EDTH page */
+  expectEq("pharos headline", fills["pharos.headline"].textContent, "PHAROS. Five boats, no boss.");
+  expect("pharos stats tests", fills["pharos.stats"].innerHTML, "387");
+  expectEq("three pharos screenshots", (fills["pharos.shots"].innerHTML.match(/<img /g) || []).length, 3);
+  if (fills["pharos.shots"].innerHTML.indexOf('alt=""') === -1) pass();
+  else fail("every PHAROS screenshot needs alt text");
+  expectEq("six pharos cards", (fills["pharos.cards"].innerHTML.match(/feature-card__title/g) || []).length, 6);
+  var pharosPeople = fills["pharos.contributors.list"].innerHTML;
+  expectEq("four pharos builders", (pharosPeople.match(/thread__item/g) || []).length, 4);
+  expect("the guest is credited", pharosPeople, "Simeone");
+  expect("the guest links to GitHub", pharosPeople, "github.com/SimeDev42");
+  ["suspicious", "hostile", "won "].forEach(function (bad) {
+    if (pharosPeople.indexOf(bad) === -1 && fills["pharos.cards"].innerHTML.indexOf(bad) === -1) pass();
+    else fail("the PHAROS page must not say " + JSON.stringify(bad));
+  });
 
   /* the finals are over: nothing on the page may still point at them */
   var everything = fillEls.concat(slotEls)

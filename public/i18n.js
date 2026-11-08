@@ -11,7 +11,7 @@ window.I18N = {
       nordicPlace: "2nd",
       gapLabel: "gap to NO",
       edthLabel: "EDTH",
-      edthPlace: "live",
+      edthPlace: "pitched",
       ringLabel: "HYPERBLOOM",
       ringPlace: "1st",
       cupLabel: "NORDIC",
@@ -22,6 +22,7 @@ window.I18N = {
       team: "The team",
       cup: "Nordic AI Cup",
       ring: "HyperBloom",
+      edth: "EDTH",
       contributors: "Who contributed",
       board: "The board",
       run: "The run",
@@ -42,8 +43,6 @@ window.I18N = {
       hackathonsSub: "Nordic AI Cup · HyperBloom · EDTH",
       wins: "Wins",
       winsSub: "Nordic AI Cup Denmark · HyperBloom October",
-      live: "In progress",
-      liveSub: "EDTH Copenhagen",
       ctaPrimary: "See our hackathons",
       ctaSecondary: "Get in touch"
     },
@@ -53,16 +52,16 @@ window.I18N = {
       whenLabel: "When",
       formatLabel: "Format",
       resultLabel: "Result",
-      statusLive: "In progress",
+      statusDone: "Pitched",
       statusFirst: "1st place",
       statusDenmark: "1st in Denmark",
       linkMore: "Full story",
       linkDemo: "Live demo",
       linkEvent: "Event page",
       edth: {
-        text: "We are at the European Defense Tech Hackathon in Copenhagen right now. The story goes up here once the event is over.",
+        text: "We built PHAROS: software that lets five small uncrewed boats guard undersea cables together, with no boat in charge and one operator approving what matters.",
         format: "Defense tech, on site in Copenhagen",
-        result: "Not in yet"
+        result: "Pitched to the jury. Only the top three were announced."
       },
       hyperbloom: {
         text: "We built Make-a-Ring, a ring studio where you draw one tile, watch it wrap around a 3D ring and download a print-ready file.",
@@ -164,6 +163,85 @@ window.I18N = {
         javier: {
           role: "Rendering, export and try-on",
           text: "Moved ring building into a Web Worker, made the layout work on every device, added the real STL and OBJ downloads, built the 3D hand try-on and got axe down to 0 violations."
+        }
+      }
+    },
+    pharos: {
+      pageTitle: "EDTH Copenhagen 2026",
+      meta: "PHAROS, our EDTH Copenhagen 2026 project: five uncrewed boats that guard undersea cables together, with no boat in charge and one operator approving what matters.",
+      headline: "PHAROS. Five boats, no boss.",
+      sub: "At the European Defense Tech Hackathon in Copenhagen we took on challenge 07: coordinate a swarm of small uncrewed boats guarding undersea cables. In one weekend we built the swarm, a simulator of the real Great Belt and the console for the one person on shore.",
+      boats: "Boats",
+      boatsSub: "Each its own process, none in charge",
+      reserve: "Reserve violations",
+      reserveSub: "Over 30 seeded runs, measured against the truth",
+      tests: "Tests",
+      testsSub: "91 merged pull requests in one weekend",
+      ctaPrimary: "See how it works",
+      ctaSecondary: "Get in touch",
+      what: {
+        heading: "The problem",
+        sub: "On Christmas Day 2024 a ship dragged its anchor across the Gulf of Finland and cut undersea cables, EstLink 2 among them. Nobody was watching the seabed. Small uncrewed boats could watch, but they run flat in hours, and one operator cannot steer five of them."
+      },
+      shots: {
+        consoleAlt: "The PHAROS console: five boats over the Great Belt cables, the fleet on the left, alerts on the right and an event timeline below.",
+        consoleCaption: "The operator's console. Every boat says what it is doing and why.",
+        driftAlt: "The console zoomed in on a drifting boat, with the banner Motors off, sensors on.",
+        driftCaption: "Motors off, sensors on: pickets drift with the tide and correct only when pushed off station.",
+        relayAlt: "The relay boat has been switched off and the banner says another boat was elected as the new relay.",
+        relayCaption: "The relay boat goes silent. Another boat takes over the relay and the cable sweep goes on."
+      },
+      how: {
+        heading: "How it works",
+        sub: "The jury scored a three-minute pitch, not the code, so this is what was under the hood. No boat is in charge, and nothing beyond watching happens without a person."
+      },
+      cards: {
+        "1": {
+          title: "Motors off, sensors on",
+          text: "Lane pickets and the relay drift with the tide and only drive back when pushed 300 m off station: about a tenth of cruise power in our energy model."
+        },
+        "2": {
+          title: "No boss boat",
+          text: "Every task goes to a peer-to-peer auction. The cheapest bid in travel time and battery wins, and every decision carries its reason in plain language."
+        },
+        "3": {
+          title: "It heals itself",
+          text: "Battery low: the boat goes home and another takes its cables. Relay lost: another boat becomes the relay. Shore link cut: the boats keep working and sync when it is back."
+        },
+        "4": {
+          title: "A human on the loop",
+          text: "Keeping a ship in view from a nautical mile away is pre-approved. Closing to 500 m for a look waits for the operator to approve."
+        },
+        "5": {
+          title: "Measured, not assumed",
+          text: "An evaluator that sees the ground truth scores every run. Over 30 seeded runs no boat went under its battery reserve, and handing work over left less cable overdue in all 30."
+        },
+        "6": {
+          title: "Built like the real thing",
+          text: "Each boat runs as its own process and talks over a modelled radio, the way it would on a small computer beside an ArduPilot autopilot. The sea is the real Great Belt: cables, shipping lane, depth, tide and a day of real ship traffic."
+        }
+      },
+      links: {
+        event: "The hackathon"
+      },
+      contributors: {
+        heading: "Who contributed",
+        sub: "Three of us went to Copenhagen with Simeone, who joined the team for this one. Each of us owned one part of the system.",
+        javier: {
+          role: "The swarm brain",
+          text: "Wrote the agent that runs on every boat: the task auction, patrol tours, taking over a silent boat's work and the reason behind each decision."
+        },
+        simeone: {
+          role: "Simulator and pitch video",
+          text: "Built the world the boats live in: the Great Belt, the radio, the tide and ship traffic replay, the 3D view and the automated recording of the pitch video."
+        },
+        alex: {
+          role: "Operator console",
+          text: "Built the shore service and the console: the fleet list, alerts, approvals, the event timeline and the replay."
+        },
+        franek: {
+          role: "Evaluation and pitch",
+          text: "Built the evaluator that measures every run against the truth, the energy and recovery metrics, the depth map, and the pitch script and slides."
         }
       }
     },
@@ -320,14 +398,14 @@ window.I18N = {
       }
     },
     /* the boot sequence: commands are literal (config), these status lines are
-       not. l3 is true while EDTH runs; change it when the result is in. */
+       not. */
     boot: {
       l1: "four students",
       s1: "loaded",
       l2: "two wins",
       s2: "loaded",
-      l3: "one hackathon",
-      s3: "pending",
+      l3: "three hackathons",
+      s3: "shipped",
       ready: "ready"
     },
     contact: {
@@ -362,7 +440,7 @@ window.I18N = {
       nordicPlace: "2.",
       gapLabel: "afstand til NO",
       edthLabel: "EDTH",
-      edthPlace: "live",
+      edthPlace: "pitchet",
       ringLabel: "HYPERBLOOM",
       ringPlace: "1.",
       cupLabel: "NORDIC",
@@ -373,6 +451,7 @@ window.I18N = {
       team: "Holdet",
       cup: "Nordic AI Cup",
       ring: "HyperBloom",
+      edth: "EDTH",
       contributors: "Hvem bidrog",
       board: "Ranglisten",
       run: "Forløbet",
@@ -393,8 +472,6 @@ window.I18N = {
       hackathonsSub: "Nordic AI Cup · HyperBloom · EDTH",
       wins: "Sejre",
       winsSub: "Nordic AI Cup Danmark · HyperBloom October",
-      live: "I gang",
-      liveSub: "EDTH Copenhagen",
       ctaPrimary: "Se vores hackathons",
       ctaSecondary: "Kontakt os"
     },
@@ -404,16 +481,16 @@ window.I18N = {
       whenLabel: "Hvornår",
       formatLabel: "Format",
       resultLabel: "Resultat",
-      statusLive: "I gang",
+      statusDone: "Pitchet",
       statusFirst: "1. plads",
       statusDenmark: "1. plads i Danmark",
       linkMore: "Hele historien",
       linkDemo: "Live demo",
       linkEvent: "Eventets side",
       edth: {
-        text: "Vi er til European Defense Tech Hackathon i København lige nu. Historien kommer her, når eventet er slut.",
+        text: "Vi byggede PHAROS: software, der lader fem små ubemandede både vogte søkabler sammen, uden en båd i spidsen og med én operatør, der godkender det vigtige.",
         format: "Forsvarsteknologi, fysisk i København",
-        result: "Ikke klart endnu"
+        result: "Pitchet for juryen. Kun top tre blev offentliggjort."
       },
       hyperbloom: {
         text: "Vi byggede Make-a-Ring, et ringstudie, hvor du tegner én flise, ser den gå rundt om en 3D-ring og downloader en printklar fil.",
@@ -515,6 +592,85 @@ window.I18N = {
         javier: {
           role: "Rendering, eksport og prøvning",
           text: "Flyttede ringbygningen over i en Web Worker, fik layoutet til at virke på alle enheder, tilføjede rigtige STL- og OBJ-downloads, byggede 3D-prøvningen på en hånd og fik axe ned på 0 fejl."
+        }
+      }
+    },
+    pharos: {
+      pageTitle: "EDTH Copenhagen 2026",
+      meta: "PHAROS, vores projekt fra EDTH Copenhagen 2026: fem ubemandede både, der sammen vogter søkabler, uden en båd i spidsen og med én operatør, der godkender det vigtige.",
+      headline: "PHAROS. Fem både, ingen chef.",
+      sub: "Til European Defense Tech Hackathon i København tog vi opgave 07: at koordinere en sværm af små ubemandede både, der vogter søkabler. På én weekend byggede vi sværmen, en simulator af det rigtige Storebælt og konsollen til den ene person på land.",
+      boats: "Både",
+      boatsSub: "Hver sin proces, ingen i spidsen",
+      reserve: "Brud på reserven",
+      reserveSub: "Over 30 seedede kørsler, målt mod sandheden",
+      tests: "Tests",
+      testsSub: "91 mergede pull requests på én weekend",
+      ctaPrimary: "Se hvordan det virker",
+      ctaSecondary: "Kontakt os",
+      what: {
+        heading: "Problemet",
+        sub: "Juledag 2024 slæbte et skib sit anker hen over Den Finske Bugt og skar søkabler over, blandt dem EstLink 2. Ingen holdt øje med havbunden. Små ubemandede både kunne holde øje, men de løber tør for strøm på timer, og én operatør kan ikke styre fem af dem."
+      },
+      shots: {
+        consoleAlt: "PHAROS-konsollen: fem både over kablerne i Storebælt, flåden til venstre, alarmer til højre og en tidslinje forneden.",
+        consoleCaption: "Operatørens konsol. Hver båd siger, hvad den gør og hvorfor.",
+        driftAlt: "Konsollen zoomet ind på en drivende båd med banneret Motors off, sensors on.",
+        driftCaption: "Motorer slukket, sensorer tændt: posterne driver med tidevandet og retter kun op, når de skubbes ud af position.",
+        relayAlt: "Relæbåden er slukket, og banneret siger, at en anden båd er valgt som nyt relæ.",
+        relayCaption: "Relæbåden bliver tavs. En anden båd overtager relæet, og kabelpatruljen fortsætter."
+      },
+      how: {
+        heading: "Sådan virker det",
+        sub: "Juryen bedømte en pitch på tre minutter, ikke koden, så her er, hvad der lå under motorhjelmen. Ingen båd bestemmer, og intet ud over at holde øje sker uden et menneske."
+      },
+      cards: {
+        "1": {
+          title: "Motorer slukket, sensorer tændt",
+          text: "Posterne ved sejlrenden og relæet driver med tidevandet og sejler kun tilbage, når de er skubbet 300 m ud af position: omkring en tiendedel af marchkraften i vores energimodel."
+        },
+        "2": {
+          title: "Ingen chefbåd",
+          text: "Hver opgave går til en auktion mellem bådene. Det billigste bud i sejltid og batteri vinder, og hver beslutning har sin begrundelse i almindeligt sprog."
+        },
+        "3": {
+          title: "Den heler sig selv",
+          text: "Lavt batteri: båden sejler hjem, og en anden overtager dens kabler. Relæet tabt: en anden båd bliver relæ. Forbindelsen til land afbrudt: bådene arbejder videre og synkroniserer, når den er tilbage."
+        },
+        "4": {
+          title: "Et menneske på sløjfen",
+          text: "At holde et skib i syne fra en sømils afstand er godkendt på forhånd. At gå tæt på, til 500 m, venter på operatørens godkendelse."
+        },
+        "5": {
+          title: "Målt, ikke antaget",
+          text: "En evaluator, der ser sandheden, bedømmer hver kørsel. Over 30 seedede kørsler kom ingen båd under sin batterireserve, og overdragelse af arbejde gav mindre forsinket kabel i alle 30."
+        },
+        "6": {
+          title: "Bygget som den rigtige",
+          text: "Hver båd kører som sin egen proces og taler over en modelleret radio, ligesom den ville på en lille computer ved siden af en ArduPilot-autopilot. Havet er det rigtige Storebælt: kabler, sejlrende, dybde, tidevand og en dags rigtig skibstrafik."
+        }
+      },
+      links: {
+        event: "Hackathonen"
+      },
+      contributors: {
+        heading: "Hvem bidrog",
+        sub: "Tre af os tog til København sammen med Simeone, som var med på holdet denne gang. Hver af os ejede én del af systemet.",
+        javier: {
+          role: "Sværmens hjerne",
+          text: "Skrev agenten, der kører på hver båd: opgaveauktionen, patruljeruterne, overtagelse af en tavs båds arbejde og begrundelsen bag hver beslutning."
+        },
+        simeone: {
+          role: "Simulator og pitchvideo",
+          text: "Byggede verdenen, bådene lever i: Storebælt, radioen, tidevandet og genafspilning af skibstrafik, 3D-visningen og den automatiske optagelse af pitchvideoen."
+        },
+        alex: {
+          role: "Operatørkonsol",
+          text: "Byggede landtjenesten og konsollen: flådelisten, alarmer, godkendelser, tidslinjen og genafspilningen."
+        },
+        franek: {
+          role: "Evaluering og pitch",
+          text: "Byggede evaluatoren, der måler hver kørsel mod sandheden, energi- og genopretningsmålene, dybdekortet samt pitchmanuskriptet og slides."
         }
       }
     },
@@ -675,8 +831,8 @@ window.I18N = {
       s1: "indlæst",
       l2: "to sejre",
       s2: "indlæst",
-      l3: "ét hackathon",
-      s3: "afventer",
+      l3: "tre hackathons",
+      s3: "leveret",
       ready: "klar"
     },
     contact: {

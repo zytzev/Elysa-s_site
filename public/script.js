@@ -175,7 +175,9 @@
       '<ol class="thread">' +
       (list || [])
         .map(function (entry) {
-          var m = members.filter(function (x) { return x.id === entry.id; })[0];
+          /* a guest joined for one hackathon only: credited here with their
+             own link, but not one of the four panes on the home page */
+          var m = entry.guest || members.filter(function (x) { return x.id === entry.id; })[0];
           if (!m) return "";
           return (
             '<li class="thread__item">' +
@@ -209,9 +211,25 @@
   function memberLink(m) {
     /* LinkedIn is per person, not one team link: each of the four points at
        their own profile */
-    return m.linkedin
-      ? '<a class="member__link" href="' + esc(m.linkedin) + '" target="_blank" rel="noopener">LinkedIn<span aria-hidden="true"> ↗</span></a>'
+    if (m.linkedin) {
+      return '<a class="member__link" href="' + esc(m.linkedin) + '" target="_blank" rel="noopener">LinkedIn<span aria-hidden="true"> ↗</span></a>';
+    }
+    return m.github
+      ? '<a class="member__link" href="' + esc(m.github) + '" target="_blank" rel="noopener">GitHub<span aria-hidden="true"> ↗</span></a>'
       : "";
+  }
+
+  function shotsHtml(shots) {
+    return (shots || [])
+      .map(function (shot) {
+        return (
+          '<figure class="shot">' +
+          '<img src="' + esc(shot.src) + '" alt="' + esc(t(shot.altKey)) + '" loading="lazy" />' +
+          "<figcaption>" + esc(t(shot.captionKey)) + "</figcaption>" +
+          "</figure>"
+        );
+      })
+      .join("");
   }
 
   function logoHtml(brand) {
@@ -302,23 +320,18 @@
         .join("");
     },
 
-    "ring.shots": function (el, c) {
-      el.innerHTML = (c.ring.shots || [])
-        .map(function (shot) {
-          return (
-            '<figure class="shot">' +
-            '<img src="' + esc(shot.src) + '" alt="' + esc(t(shot.altKey)) + '" loading="lazy" />' +
-            "<figcaption>" + esc(t(shot.captionKey)) + "</figcaption>" +
-            "</figure>"
-          );
-        })
-        .join("");
-    },
-
+    "ring.shots": function (el, c) { el.innerHTML = shotsHtml(c.ring.shots); },
     "ring.cards": function (el, c) { el.innerHTML = featureCardsHtml(c.ring.cards); },
-
     "ring.contributors.list": function (el, c) { el.innerHTML = contributorsHtml(c.ring.contributors, c); },
     "ring.links": function (el, c) { el.innerHTML = projectLinksHtml(c.ring.links); },
+
+    /* the EDTH page has the same shape as the HyperBloom one */
+    "pharos.stats": function (el, c) { el.innerHTML = statsHtml(c.pharos.stats); },
+    "pharos.ctas": function (el, c) { el.innerHTML = (c.pharos.ctas || []).map(ctaHtml).join(""); },
+    "pharos.shots": function (el, c) { el.innerHTML = shotsHtml(c.pharos.shots); },
+    "pharos.cards": function (el, c) { el.innerHTML = featureCardsHtml(c.pharos.cards); },
+    "pharos.contributors.list": function (el, c) { el.innerHTML = contributorsHtml(c.pharos.contributors, c); },
+    "pharos.links": function (el, c) { el.innerHTML = projectLinksHtml(c.pharos.links); },
 
     /* The home page's four panes: who we are and what each of us entered. */
     "team.roster": function (el, c) {

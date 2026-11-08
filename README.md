@@ -15,6 +15,7 @@ public/            ← this folder is the website
 ├── index.html          home: the team, every hackathon with its result, contact
 ├── nordic-ai-cup.html  Nordic AI Cup: boards, the run, what we learned, who contributed
 ├── hyperbloom.html     HyperBloom October: Make-a-Ring
+├── edth.html          EDTH Copenhagen: PHAROS, the USV swarm
 ├── config.js      all data: scores, names, dates, links
 ├── i18n.js        all prose, English and Danish
 ├── chrome.js      markup every page shares: top bar, footer, mascot

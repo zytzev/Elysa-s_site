@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- Elysa's Secret at EDTH Copenhagen 2026: PHAROS, the full story.
+     Data lives in config.js, all prose (EN + DA) in i18n.js, and the top bar,
+     footer and mascot in chrome.js. Never hard-code copy in this file. -->
+<html lang="en" data-page="pharos">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EDTH Copenhagen 2026 — Elysa's Secret</title>
+    <meta name="description" content="PHAROS, our EDTH Copenhagen 2026 project: five uncrewed boats that guard undersea cables together, with no boat in charge and one operator approving what matters." />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/x-icon" href="./images/KikasLogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body id="top">
+    <main id="main">
+      <section id="hero" class="section section--hero" data-section="hero">
+        <div class="container hero__inner">
+          <a class="page__back" href="./#hackathons"><span aria-hidden="true">← </span><span data-fill="page.back.label"></span></a>
+          <h1 class="hero__headline" data-slot="headline" data-fill="pharos.headline"></h1>
+          <p class="hero__sub" data-fill="pharos.sub"></p>
+          <dl class="hero__stats" data-fill="pharos.stats"></dl>
+          <div class="hero__ctas" data-fill="pharos.ctas"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: the problem -->
+      <section id="what" class="section" data-section="what">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="pharos.what.heading"></h2>
+            <p class="section__sub" data-fill="pharos.what.sub"></p>
+          </div>
+          <div class="shots" data-fill="pharos.shots"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: how it works -->
+      <section id="how" class="section" data-section="how">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="pharos.how.heading"></h2>
+            <p class="section__sub" data-fill="pharos.how.sub"></p>
+          </div>
+          <div class="features__grid" data-fill="pharos.cards"></div>
+        </div>
+      </section>
+
+      <!-- SLOT: who contributed, on a thread -->
+      <section id="contributors" class="section section--contributors" data-section="contributors">
+        <div class="container">
+          <div class="section__heading">
+            <h2 class="section__title" data-fill="pharos.contributors.heading"></h2>
+            <p class="section__sub" data-fill="pharos.contributors.sub"></p>
+          </div>
+          <div data-fill="pharos.contributors.list"></div>
+          <div class="thread__links" data-fill="pharos.links"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="chrome.js"></script>
+    <!-- motion.js defines window.SiteMotion, which script.js's boot() consumes.
+         It must load first, or the boot has to guard for a missing API. -->
+    <script src="motion.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
