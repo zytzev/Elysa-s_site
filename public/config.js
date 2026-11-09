@@ -49,13 +49,15 @@ window.SITE_CONFIG = {
   /* Every hackathon we have entered, newest first, on the home page. Each card
      has the same shape, so none of them outweighs the others. To add one, add
      a card here and its strings under hackathons.* in i18n.js. A card with
-     no `tone` is a hackathon that is over without a podium place. */
+     no `tone` is a hackathon that is over without a podium place. `url` is the
+     event's own site; the card's name links to it. */
   hackathons: {
     cards: [
       {
         id: "edth",
         command: "elysa --edth",
         name: "EDTH Copenhagen",
+        url: "https://events.eurodefense.tech/copenhagen-2026",
         when: "6–8 Nov 2026",
         statusKey: "hackathons.statusDone",
         textKey: "hackathons.edth.text",
@@ -70,6 +72,7 @@ window.SITE_CONFIG = {
         id: "hyperbloom",
         command: "elysa --hyperbloom",
         name: "HyperBloom October",
+        url: "https://hyperbloom-october.devpost.com",
         when: "1–19 Oct 2026",
         tone: "gold",
         statusKey: "hackathons.statusFirst",
@@ -85,6 +88,7 @@ window.SITE_CONFIG = {
         id: "cup",
         command: "elysa --cup",
         name: "Nordic AI Cup",
+        url: "https://nordicaicup.com/",
         when: "Sep 2026",
         tone: "gold",
         statusKey: "hackathons.statusDenmark",

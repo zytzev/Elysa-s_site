@@ -304,7 +304,11 @@
             '<article class="project hackathon">' +
             '<p class="project__cmd"><span class="hero__sigil" aria-hidden="true">$</span> ' + esc(h.command) + "</p>" +
             '<div class="project__head">' +
-            '<h3 class="project__name">' + esc(h.name) + "</h3>" +
+            '<h3 class="project__name">' +
+            (h.url
+              ? '<a class="project__name-link" href="' + esc(h.url) + '" target="_blank" rel="noopener">' + esc(h.name) + '<span aria-hidden="true"> ↗</span></a>'
+              : esc(h.name)) +
+            "</h3>" +
             '<span class="project__status' + (h.tone ? " project__status--" + esc(h.tone) : "") + '">' + esc(t(h.statusKey)) + "</span>" +
             "</div>" +
             '<p class="project__text">' + esc(t(h.textKey)) + "</p>" +

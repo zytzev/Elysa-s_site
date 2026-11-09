@@ -952,6 +952,16 @@ a:hover { text-decoration: underline; }
 @media (min-width: 62em) { .hackathons__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .hackathon { max-width: none; }
 .hackathon .project__name { font-size: clamp(1.25rem, 2.4vw, 1.5rem); }
+.project__name-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+.project__name-link span { color: var(--accent); }
+.project__name-link:hover,
+.project__name-link:focus-visible { color: var(--accent); }
 .hackathon .project__head { min-height: 4.2rem; align-content: flex-start; }
 .hackathon .project__meta { grid-template-columns: 1fr; gap: 0.6rem; }
 .hackathon .project__links { margin-top: auto; padding-top: 0.75rem; }
