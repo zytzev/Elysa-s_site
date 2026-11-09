@@ -169,7 +169,7 @@ window.I18N = {
     pharos: {
       pageTitle: "EDTH Copenhagen 2026",
       meta: "PHAROS, our EDTH Copenhagen 2026 project: five uncrewed boats that guard undersea cables together, with no boat in charge and one operator approving what matters.",
-      headline: "PHAROS. Five boats, no boss.",
+      headline: "PHAROS. Autonomous USV's coordination.",
       sub: "At the European Defense Tech Hackathon in Copenhagen we took on challenge 07: coordinate a swarm of small uncrewed boats guarding undersea cables. In one weekend we built the swarm, a simulator of the real Great Belt and the console for the one person on shore.",
       boats: "Boats",
       boatsSub: "Each its own process, none in charge",
@@ -598,7 +598,7 @@ window.I18N = {
     pharos: {
       pageTitle: "EDTH Copenhagen 2026",
       meta: "PHAROS, vores projekt fra EDTH Copenhagen 2026: fem ubemandede både, der sammen vogter søkabler, uden en båd i spidsen og med én operatør, der godkender det vigtige.",
-      headline: "PHAROS. Fem både, ingen chef.",
+      headline: "PHAROS. Koordinering af autonome USV'er.",
       sub: "Til European Defense Tech Hackathon i København tog vi opgave 07: at koordinere en sværm af små ubemandede både, der vogter søkabler. På én weekend byggede vi sværmen, en simulator af det rigtige Storebælt og konsollen til den ene person på land.",
       boats: "Både",
       boatsSub: "Hver sin proces, ingen i spidsen",

@@ -343,7 +343,7 @@ if (!failures.length) {
   expect("back link", fills["page.back.label"].textContent, "All hackathons");
 
   /* the EDTH page */
-  expectEq("pharos headline", fills["pharos.headline"].textContent, "PHAROS. Five boats, no boss.");
+  expectEq("pharos headline", fills["pharos.headline"].textContent, "PHAROS. Autonomous USV's coordination.");
   expect("pharos stats tests", fills["pharos.stats"].innerHTML, "387");
   expectEq("three pharos screenshots", (fills["pharos.shots"].innerHTML.match(/<img /g) || []).length, 3);
   if (fills["pharos.shots"].innerHTML.indexOf('alt=""') === -1) pass();
