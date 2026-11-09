@@ -214,7 +214,7 @@ if (!failures.length) {
   ["EDTH Copenhagen", "HyperBloom October", "Nordic AI Cup"].forEach(function (s) {
     expect("hackathon card " + s, cards, s);
   });
-  expectEq("one card per hackathon", (cards.match(/class="project hackathon"/g) || []).length, 3);
+  expectEq("one card per hackathon", (cards.match(/class="project hackathon[ "]/g) || []).length, 3);
   expectEq("every card shows a result", (cards.match(/<dt>Result<\/dt>/g) || []).length, 3);
   expect("card links to the cup page", cards, "nordic-ai-cup.html");
   expect("card links to the HyperBloom page", cards, "hyperbloom.html");

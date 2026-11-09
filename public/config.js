@@ -50,7 +50,8 @@ window.SITE_CONFIG = {
      has the same shape, so none of them outweighs the others. To add one, add
      a card here and its strings under hackathons.* in i18n.js. A card with
      no `tone` is a hackathon that is over without a podium place. `url` is the
-     event's own site; the card's name links to it. */
+     event's own site; the card's name links to it. `bg` is a faint picture
+     behind the card: kind "art" is a line drawing, "photo" a screenshot. */
   hackathons: {
     cards: [
       {
@@ -58,6 +59,7 @@ window.SITE_CONFIG = {
         command: "elysa --edth",
         name: "EDTH Copenhagen",
         url: "https://events.eurodefense.tech/copenhagen-2026",
+        bg: { src: "images/card-boat.svg", kind: "art" },
         when: "6–8 Nov 2026",
         statusKey: "hackathons.statusDone",
         textKey: "hackathons.edth.text",
@@ -73,6 +75,7 @@ window.SITE_CONFIG = {
         command: "elysa --hyperbloom",
         name: "HyperBloom October",
         url: "https://hyperbloom-october.devpost.com",
+        bg: { src: "images/card-ring.webp", kind: "photo" },
         when: "1–19 Oct 2026",
         tone: "gold",
         statusKey: "hackathons.statusFirst",
@@ -89,6 +92,7 @@ window.SITE_CONFIG = {
         command: "elysa --cup",
         name: "Nordic AI Cup",
         url: "https://nordicaicup.com/",
+        bg: { src: "images/card-drone.svg", kind: "art" },
         when: "Sep 2026",
         tone: "gold",
         statusKey: "hackathons.statusDenmark",

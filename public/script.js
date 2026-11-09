@@ -301,7 +301,9 @@
       el.innerHTML = (c.hackathons.cards || [])
         .map(function (h) {
           return (
-            '<article class="project hackathon">' +
+            '<article class="project hackathon' +
+            (h.bg ? " hackathon--bg hackathon--bg-" + esc(h.bg.kind) + '" style="--card-bg: url(' + esc(h.bg.src) + ')' : "") +
+            '">' +
             '<p class="project__cmd"><span class="hero__sigil" aria-hidden="true">$</span> ' + esc(h.command) + "</p>" +
             '<div class="project__head">' +
             '<h3 class="project__name">' +

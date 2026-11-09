@@ -972,6 +972,29 @@ a:hover { text-decoration: underline; }
 .hackathons__grid { display: grid; gap: 1rem; }
 @media (min-width: 62em) { .hackathons__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .hackathon { max-width: none; }
+/* A faint picture behind a hackathon card: a line drawing in the lower
+   right, or a screenshot fading out towards the text. */
+.hackathon--bg { position: relative; isolation: isolate; overflow: hidden; }
+.hackathon--bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--card-bg) no-repeat;
+}
+.hackathon--bg-art::before {
+  background-position: right -12% bottom 4%;
+  background-size: 78% auto;
+  opacity: 0.08;
+}
+.hackathon--bg-photo::before {
+  background-position: center top;
+  background-size: cover;
+  opacity: 0.14;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}
 .hackathon .project__name { font-size: clamp(1.25rem, 2.4vw, 1.5rem); }
 .project__name-link {
   color: inherit;
