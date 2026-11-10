@@ -230,10 +230,10 @@ window.SITE_CONFIG = {
         linkedin: "https://www.linkedin.com/in/jakub-furmaniuk/" },
       { id: "javier", name: "Javier Arévalo Hernández", country: "es", taskKey: "team.javier.task", logKey: "team.javier.log",
         roles: [{ event: "EDTH", text: "PHAROS" }, { event: "HyperBloom", text: "Make-a-Ring" }, { event: "Nordic AI Cup", key: "team.javier.task" }],
-        linkedin: "https://www.linkedin.com/in/javier-arevalo-hernandez" },
+        website: "https://cv.javierarevalo.dev", linkedin: "https://www.linkedin.com/in/javier-arevalo-hernandez" },
       { id: "franek", name: "Franciszek Kossut", country: "pl", taskKey: "team.franek.task", logKey: "team.franek.log",
         roles: [{ event: "EDTH", text: "PHAROS" }, { event: "HyperBloom", text: "Make-a-Ring" }, { event: "Nordic AI Cup", key: "team.franek.task" }],
-        linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" },
+        website: "https://kossut.dev", linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" },
       { id: "simeone", name: "Simeone Gentile", country: "it",
         roles: [{ event: "EDTH", text: "PHAROS" }],
         linkedin: "https://www.linkedin.com/in/simeone-gentile" }

@@ -239,6 +239,8 @@ if (!failures.length) {
   });
   expectEq("roster has all five LinkedIn links", (roster.match(/linkedin\.com\/in\//g) || []).length, 5);
   expect("roster links Alexandru's website", roster, 'href="https://zaitzev.com"');
+  expect("roster links Javier's website", roster, 'href="https://cv.javierarevalo.dev"');
+  expect("roster links Franciszek's website", roster, 'href="https://kossut.dev"');
   var team = fills["cup.contributors.list"].innerHTML;
   ["Alexandru Zaitzev", "Jakub Furmaniuk", "Javier Arévalo Hernández",
    "Franciszek Kossut", "All three tasks"].forEach(function (s) {
