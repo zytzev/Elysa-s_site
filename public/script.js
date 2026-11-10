@@ -209,14 +209,16 @@
     );
   }
   function memberLink(m) {
-    /* LinkedIn is per person, not one team link: each of the four points at
-       their own profile */
-    if (m.linkedin) {
-      return '<a class="member__link" href="' + esc(m.linkedin) + '" target="_blank" rel="noopener">LinkedIn<span aria-hidden="true"> ↗</span></a>';
-    }
-    return m.github
-      ? '<a class="member__link" href="' + esc(m.github) + '" target="_blank" rel="noopener">GitHub<span aria-hidden="true"> ↗</span></a>'
-      : "";
+    /* links are per person, not one team link: each points at that person's
+       own website and/or profile. Several links share one row. */
+    var out = function (href, label) {
+      return '<a class="member__link" href="' + esc(href) + '" target="_blank" rel="noopener">' + label + '<span aria-hidden="true"> ↗</span></a>';
+    };
+    var links = [];
+    if (m.website) links.push(out(m.website, esc(m.website.replace(/^https?:\/\//, "").replace(/\/$/, ""))));
+    if (m.linkedin) links.push(out(m.linkedin, "LinkedIn"));
+    else if (m.github) links.push(out(m.github, "GitHub"));
+    return links.length ? '<p class="member__links">' + links.join("") + "</p>" : "";
   }
 
   function shotsHtml(shots) {

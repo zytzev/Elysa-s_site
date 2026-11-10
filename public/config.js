@@ -225,7 +225,7 @@ window.SITE_CONFIG = {
     members: [
       { id: "alex", name: "Alexandru Zaitzev", country: "md", taskKey: "team.alex.task", logKey: "team.alex.log",
         roles: [{ event: "EDTH", text: "PHAROS" }, { event: "Nordic AI Cup", key: "team.alex.task" }],
-        linkedin: "https://www.linkedin.com/in/zaitzev/" },
+        website: "https://zaitzev.com", linkedin: "https://www.linkedin.com/in/zaitzev/" },
       { id: "jakub", name: "Jakub Furmaniuk", country: "pl", taskKey: "team.jakub.task", logKey: "team.jakub.log",
         roles: [{ event: "Nordic AI Cup", key: "team.jakub.task" }],
         linkedin: "https://www.linkedin.com/in/jakub-furmaniuk/" },

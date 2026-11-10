@@ -237,7 +237,8 @@ if (!failures.length) {
    "Franciszek Kossut", "Make-a-Ring", "Nordic AI Cup"].forEach(function (s) {
     expect("roster includes " + s, roster, s);
   });
-  expectEq("roster has all four LinkedIn links", (roster.match(/member__link/g) || []).length, 4);
+  expectEq("roster has all four LinkedIn links", (roster.match(/linkedin\.com\/in\//g) || []).length, 4);
+  expect("roster links Alexandru's website", roster, 'href="https://zaitzev.com"');
   var team = fills["cup.contributors.list"].innerHTML;
   ["Alexandru Zaitzev", "Jakub Furmaniuk", "Javier Arévalo Hernández",
    "Franciszek Kossut", "All three tasks"].forEach(function (s) {
@@ -245,7 +246,7 @@ if (!failures.length) {
   });
   /* each member links to their OWN LinkedIn — one team-level link would be
      ambiguous, and a missing one would leave a person unlinked */
-  var linkCount = (team.match(/member__link/g) || []).length;
+  var linkCount = (team.match(/linkedin\.com\/in\//g) || []).length;
   if (linkCount === 4) pass();
   else fail("expected a LinkedIn link on each of the 4 member panes, got " + linkCount);
   ["linkedin.com/in/zaitzev", "linkedin.com/in/jakub-furmaniuk",
@@ -336,7 +337,7 @@ if (!failures.length) {
   expect("ring contributor", ringPeople, "Franciszek Kossut");
   expect("ring contributor", ringPeople, "Javier Arévalo Hernández");
   expectEq("only the two builders are credited", (ringPeople.match(/thread__item/g) || []).length, 2);
-  expectEq("each builder links to LinkedIn", (ringPeople.match(/member__link/g) || []).length, 2);
+  expectEq("each builder links to LinkedIn", (ringPeople.match(/linkedin\.com\/in\//g) || []).length, 2);
   ["make-a-ring.deployxa.online", "github.com/FearedLynx/make-a-ring",
    "devpost.com/software/make-a-ring", "hyperbloom-october.devpost.com"]
     .forEach(function (u) { expect("ring link " + u, fills["ring.links"].innerHTML, u); });

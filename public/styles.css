@@ -409,18 +409,14 @@ a:hover { text-decoration: underline; }
 /* fixed-height head slot: a two-line name (Javier's) must not push its log out
    of line with the other three */
 .member__head { display: flex; gap: 0.8rem; align-items: center; min-height: 3.6rem; }
-/* the same box the initials used to sit in, now holding the flag. Flags keep
-   their own ratios (Moldova 1:2, Poland 5:8, Spain 2:3), so the box is sized
-   for the widest and centres the rest — the four names still start in line. */
+/* the flag sits bare on the pane, no box behind it. Flags keep their own
+   ratios (Moldova 1:2, Poland 5:8, Spain 2:3), so the slot is sized for the
+   widest and centres the rest — the four names still start in line. */
 .member__flag {
   display: flex;
   align-items: center;
   justify-content: center;
   width: calc(3.2rem + 0.8rem + 2px);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 0.4rem;
-  background: var(--canvas);
   flex: 0 0 auto;
   line-height: 0;
 }
@@ -444,13 +440,18 @@ a:hover { text-decoration: underline; }
 }
 /* pinned to the bottom of the pane, so the four links form one row rather than
    sitting wherever each person's description happens to end */
+.member__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: 1rem;
+}
 .member__link {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--ink-muted);
-  align-self: flex-start;
-  margin-top: auto;
-  padding-top: 1rem;
   border-bottom: 1px solid var(--line);
   line-height: 1.2;
 }
@@ -1048,7 +1049,7 @@ a:hover { text-decoration: underline; }
 }
 .thread__name { font-size: clamp(1.35rem, 3vw, 1.9rem); letter-spacing: -0.02em; line-height: 1.15; }
 .thread__text { color: var(--ink-muted); max-width: 64ch; margin-top: 0.2rem; }
-.thread .member__link { margin-top: 0.35rem; padding-top: 0; }
+.thread .member__links { margin-top: 0.35rem; padding-top: 0; }
 .thread__links { margin-top: 2.5rem; }
 
 /* ------------------------------------------------------- detail pages --- */
