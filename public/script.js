@@ -68,13 +68,15 @@
      Spain and Moldova are the real flags (Wikimedia Commons, public domain),
      downscaled to 3x their displayed size in images/ — their coats of arms
      cannot be redrawn by hand without looking wrong up close. Poland is two
-     stripes, so it is drawn inline. No emoji: Windows has no flag emoji and
+     stripes and Italy three bars, so both are drawn inline. No emoji: Windows has no flag emoji and
      prints the bare letters instead. Each keeps its own official ratio. */
   var FLAGS = {
     es: '<img src="images/flag-es.png" width="117" height="78" alt="" />',
     md: '<img src="images/flag-md.png" width="156" height="78" alt="" />',
     pl: '<svg viewBox="0 0 16 10" aria-hidden="true" focusable="false">' +
-      '<rect width="16" height="5" fill="#FFFFFF"/><rect y="5" width="16" height="5" fill="#DC143C"/></svg>'
+      '<rect width="16" height="5" fill="#FFFFFF"/><rect y="5" width="16" height="5" fill="#DC143C"/></svg>',
+    it: '<svg class="flag-it" viewBox="0 0 3 2" aria-hidden="true" focusable="false">' +
+      '<rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#FFFFFF"/><rect x="2" width="1" height="2" fill="#CE2B37"/></svg>'
   };
 
   /* ---------------------------------------------------------------- icons --- */

@@ -37,7 +37,7 @@ window.I18N = {
       meta: "Elysa's Secret, a hackathon team from the University of Southern Denmark. 1st in Denmark at the Nordic AI Cup 2026 and 1st place at HyperBloom October 2026."
     },
     hero: {
-      headline: "Four students. Two wins.",
+      headline: "Five students. Two wins.",
       sub: "We are Elysa's Secret, a hackathon team from the University of Southern Denmark. We build fast, measure everything and show our work.",
       hackathons: "Hackathons",
       hackathonsSub: "Nordic AI Cup · HyperBloom · EDTH",
@@ -155,7 +155,7 @@ window.I18N = {
       },
       contributors: {
         heading: "Who contributed",
-        sub: "Two of the four built Make-a-Ring, entered under the team name.",
+        sub: "Two of us built Make-a-Ring, entered under the team name.",
         franek: {
           role: "Studio and pattern tools",
           text: "Started the ring designer, then built the pattern editor and its symmetry tools, the 50 patterns, engraving, saved designs and the blueprint size drawing."
@@ -226,14 +226,14 @@ window.I18N = {
       },
       contributors: {
         heading: "Who contributed",
-        sub: "Three of us went to Copenhagen with Simeone, who joined the team for this one. Each of us owned one part of the system.",
+        sub: "Four of us went to Copenhagen. Each of us owned one part of the system.",
         javier: {
           role: "The swarm brain",
           text: "Wrote the agent that runs on every boat: the task auction, patrol tours, taking over a silent boat's work and the reason behind each decision."
         },
         simeone: {
-          role: "Simulator and pitch video",
-          text: "Built the world the boats live in: the Great Belt, the radio, the tide and ship traffic replay, the 3D view and the automated recording of the pitch video."
+          role: "Simulator and 3D models",
+          text: "Built the world the boats live in: the Great Belt, the radio, the tide and ship traffic replay, and the 3D models behind the final product."
         },
         alex: {
           role: "Operator console",
@@ -247,11 +247,12 @@ window.I18N = {
     },
     team: {
       heading: "The team",
-      sub: "Four students at the University of Southern Denmark, and what each of us has entered so far.",
+      sub: "Five students at the University of Southern Denmark, and what each of us has entered so far.",
       countries: {
         md: "Moldova",
         pl: "Poland",
-        es: "Spain"
+        es: "Spain",
+        it: "Italy"
       },
       alex: {
         task: "Survival Simulator",
@@ -400,7 +401,7 @@ window.I18N = {
     /* the boot sequence: commands are literal (config), these status lines are
        not. */
     boot: {
-      l1: "four students",
+      l1: "five students",
       s1: "loaded",
       l2: "two wins",
       s2: "loaded",
@@ -410,7 +411,7 @@ window.I18N = {
     },
     contact: {
       heading: "Get in touch",
-      sub: "We are four students at the University of Southern Denmark. If you would like to ask what we built, work with us, or just say hello — write to us.",
+      sub: "We are five students at the University of Southern Denmark. If you would like to ask what we built, work with us, or just say hello — write to us.",
       email: "Email",
       phone: "Phone",
       name: "Your name",
@@ -466,7 +467,7 @@ window.I18N = {
       meta: "Elysa's Secret, et hackathon-hold fra Syddansk Universitet. 1. plads i Danmark ved Nordic AI Cup 2026 og 1. plads ved HyperBloom October 2026."
     },
     hero: {
-      headline: "Fire studerende. To sejre.",
+      headline: "Fem studerende. To sejre.",
       sub: "Vi er Elysa's Secret, et hackathon-hold fra Syddansk Universitet. Vi bygger hurtigt, måler alt og viser vores arbejde.",
       hackathons: "Hackathons",
       hackathonsSub: "Nordic AI Cup · HyperBloom · EDTH",
@@ -584,7 +585,7 @@ window.I18N = {
       },
       contributors: {
         heading: "Hvem bidrog",
-        sub: "To af de fire byggede Make-a-Ring, tilmeldt under holdets navn.",
+        sub: "To af os byggede Make-a-Ring, tilmeldt under holdets navn.",
         franek: {
           role: "Studie og mønsterværktøjer",
           text: "Startede ringdesigneren og byggede derefter mønstereditoren med dens symmetriværktøjer, de 50 mønstre, gravering, gemte designs og måltegningen."
@@ -655,14 +656,14 @@ window.I18N = {
       },
       contributors: {
         heading: "Hvem bidrog",
-        sub: "Tre af os tog til København sammen med Simeone, som var med på holdet denne gang. Hver af os ejede én del af systemet.",
+        sub: "Fire af os tog til København. Hver af os ejede én del af systemet.",
         javier: {
           role: "Sværmens hjerne",
           text: "Skrev agenten, der kører på hver båd: opgaveauktionen, patruljeruterne, overtagelse af en tavs båds arbejde og begrundelsen bag hver beslutning."
         },
         simeone: {
-          role: "Simulator og pitchvideo",
-          text: "Byggede verdenen, bådene lever i: Storebælt, radioen, tidevandet og genafspilning af skibstrafik, 3D-visningen og den automatiske optagelse af pitchvideoen."
+          role: "Simulator og 3D-modeller",
+          text: "Byggede verdenen, bådene lever i: Storebælt, radioen, tidevandet og genafspilning af skibstrafik, og 3D-modellerne bag det endelige produkt."
         },
         alex: {
           role: "Operatørkonsol",
@@ -676,11 +677,12 @@ window.I18N = {
     },
     team: {
       heading: "Holdet",
-      sub: "Fire studerende på Syddansk Universitet, og hvad vi hver især har deltaget i indtil nu.",
+      sub: "Fem studerende på Syddansk Universitet, og hvad vi hver især har deltaget i indtil nu.",
       countries: {
         md: "Moldova",
         pl: "Polen",
-        es: "Spanien"
+        es: "Spanien",
+        it: "Italien"
       },
       alex: {
         task: "Survival Simulator",
@@ -827,7 +829,7 @@ window.I18N = {
       }
     },
     boot: {
-      l1: "fire studerende",
+      l1: "fem studerende",
       s1: "indlæst",
       l2: "to sejre",
       s2: "indlæst",
@@ -837,7 +839,7 @@ window.I18N = {
     },
     contact: {
       heading: "Kontakt os",
-      sub: "Vi er fire studerende på Syddansk Universitet. Vil du spørge om, hvad vi byggede, arbejde sammen med os, eller bare sige hej — så skriv til os.",
+      sub: "Vi er fem studerende på Syddansk Universitet. Vil du spørge om, hvad vi byggede, arbejde sammen med os, eller bare sige hej — så skriv til os.",
       email: "E-mail",
       phone: "Telefon",
       name: "Dit navn",
