@@ -197,7 +197,7 @@ if (!failures.length) {
   expect("cup rail carries the Danish total", cupRail, "45.00");
   expect("cup rail carries the gap", cupRail, "-0.54");
 
-  expectEq("hero headline", fills["hero.headline"].textContent, "Four students. Two wins.");
+  expectEq("hero headline", fills["hero.headline"].textContent, "Five students. Two wins.");
   expect("hero is about the team", fills["hero.sub"].textContent, "University of Southern Denmark");
   expect("hero stats", fills["hero.stats"].innerHTML, "Hackathons");
   if (fills["hero.stats"].innerHTML.indexOf("45.00") === -1) pass();
@@ -237,7 +237,8 @@ if (!failures.length) {
    "Franciszek Kossut", "Make-a-Ring", "Nordic AI Cup"].forEach(function (s) {
     expect("roster includes " + s, roster, s);
   });
-  expectEq("roster has all four LinkedIn links", (roster.match(/member__link/g) || []).length, 4);
+  expectEq("roster has all five LinkedIn links", (roster.match(/linkedin\.com\/in\//g) || []).length, 5);
+  expect("roster links Alexandru's website", roster, 'href="https://zaitzev.com"');
   var team = fills["cup.contributors.list"].innerHTML;
   ["Alexandru Zaitzev", "Jakub Furmaniuk", "Javier Arévalo Hernández",
    "Franciszek Kossut", "All three tasks"].forEach(function (s) {
@@ -245,20 +246,23 @@ if (!failures.length) {
   });
   /* each member links to their OWN LinkedIn — one team-level link would be
      ambiguous, and a missing one would leave a person unlinked */
-  var linkCount = (team.match(/member__link/g) || []).length;
+  var linkCount = (team.match(/linkedin\.com\/in\//g) || []).length;
   if (linkCount === 4) pass();
   else fail("expected a LinkedIn link on each of the 4 member panes, got " + linkCount);
   ["linkedin.com/in/zaitzev", "linkedin.com/in/jakub-furmaniuk",
    "linkedin.com/in/javier-arevalo-hernandez"].forEach(function (u) {
     expect("member linkedin " + u, team, u);
   });
-  /* a flag per pane, each labelled with its country: one Moldovan, two Polish, one Spanish */
+  /* a flag per pane, each labelled with its country: one Moldovan, two Polish, one Spanish, one Italian */
   var flagCount = (roster.match(/class="member__flag"/g) || []).length;
-  if (flagCount === 4) pass();
-  else fail("expected a flag on each of the 4 member panes, got " + flagCount);
+  if (flagCount === 5) pass();
+  else fail("expected a flag on each of the 5 member panes, got " + flagCount);
   expectEq("one Moldova flag", (roster.match(/aria-label="Moldova"/g) || []).length, 1);
   expectEq("two Poland flags", (roster.match(/aria-label="Poland"/g) || []).length, 2);
   expectEq("one Spain flag", (roster.match(/aria-label="Spain"/g) || []).length, 1);
+  expectEq("one Italy flag", (roster.match(/aria-label="Italy"/g) || []).length, 1);
+  expect("roster includes Simeone Gentile", roster, "Simeone Gentile");
+  expect("roster links Simeone's LinkedIn", roster, "linkedin.com/in/simeone-gentile");
 
   /* the fairness rule: a member pane must never carry a score, and must never
      describe a teammate's task as a weakness */
@@ -336,7 +340,7 @@ if (!failures.length) {
   expect("ring contributor", ringPeople, "Franciszek Kossut");
   expect("ring contributor", ringPeople, "Javier Arévalo Hernández");
   expectEq("only the two builders are credited", (ringPeople.match(/thread__item/g) || []).length, 2);
-  expectEq("each builder links to LinkedIn", (ringPeople.match(/member__link/g) || []).length, 2);
+  expectEq("each builder links to LinkedIn", (ringPeople.match(/linkedin\.com\/in\//g) || []).length, 2);
   ["make-a-ring.deployxa.online", "github.com/FearedLynx/make-a-ring",
    "devpost.com/software/make-a-ring", "hyperbloom-october.devpost.com"]
     .forEach(function (u) { expect("ring link " + u, fills["ring.links"].innerHTML, u); });
@@ -351,8 +355,8 @@ if (!failures.length) {
   expectEq("six pharos cards", (fills["pharos.cards"].innerHTML.match(/feature-card__title/g) || []).length, 6);
   var pharosPeople = fills["pharos.contributors.list"].innerHTML;
   expectEq("four pharos builders", (pharosPeople.match(/thread__item/g) || []).length, 4);
-  expect("the guest is credited", pharosPeople, "Simeone");
-  expect("the guest links to GitHub", pharosPeople, "github.com/SimeDev42");
+  expect("Simeone is credited", pharosPeople, "Simeone Gentile");
+  expect("Simeone links to LinkedIn", pharosPeople, "linkedin.com/in/simeone-gentile");
   ["suspicious", "hostile", "won "].forEach(function (bad) {
     if (pharosPeople.indexOf(bad) === -1 && fills["pharos.cards"].innerHTML.indexOf(bad) === -1) pass();
     else fail("the PHAROS page must not say " + JSON.stringify(bad));

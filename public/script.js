@@ -68,13 +68,15 @@
      Spain and Moldova are the real flags (Wikimedia Commons, public domain),
      downscaled to 3x their displayed size in images/ — their coats of arms
      cannot be redrawn by hand without looking wrong up close. Poland is two
-     stripes, so it is drawn inline. No emoji: Windows has no flag emoji and
+     stripes and Italy three bars, so both are drawn inline. No emoji: Windows has no flag emoji and
      prints the bare letters instead. Each keeps its own official ratio. */
   var FLAGS = {
     es: '<img src="images/flag-es.png" width="117" height="78" alt="" />',
     md: '<img src="images/flag-md.png" width="156" height="78" alt="" />',
     pl: '<svg viewBox="0 0 16 10" aria-hidden="true" focusable="false">' +
-      '<rect width="16" height="5" fill="#FFFFFF"/><rect y="5" width="16" height="5" fill="#DC143C"/></svg>'
+      '<rect width="16" height="5" fill="#FFFFFF"/><rect y="5" width="16" height="5" fill="#DC143C"/></svg>',
+    it: '<svg class="flag-it" viewBox="0 0 3 2" aria-hidden="true" focusable="false">' +
+      '<rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#FFFFFF"/><rect x="2" width="1" height="2" fill="#CE2B37"/></svg>'
   };
 
   /* ---------------------------------------------------------------- icons --- */
@@ -209,14 +211,16 @@
     );
   }
   function memberLink(m) {
-    /* LinkedIn is per person, not one team link: each of the four points at
-       their own profile */
-    if (m.linkedin) {
-      return '<a class="member__link" href="' + esc(m.linkedin) + '" target="_blank" rel="noopener">LinkedIn<span aria-hidden="true"> ↗</span></a>';
-    }
-    return m.github
-      ? '<a class="member__link" href="' + esc(m.github) + '" target="_blank" rel="noopener">GitHub<span aria-hidden="true"> ↗</span></a>'
-      : "";
+    /* links are per person, not one team link: each points at that person's
+       own website and/or profile. Several links share one row. */
+    var out = function (href, label) {
+      return '<a class="member__link" href="' + esc(href) + '" target="_blank" rel="noopener">' + label + '<span aria-hidden="true"> ↗</span></a>';
+    };
+    var links = [];
+    if (m.website) links.push(out(m.website, esc(m.website.replace(/^https?:\/\//, "").replace(/\/$/, ""))));
+    if (m.linkedin) links.push(out(m.linkedin, "LinkedIn"));
+    else if (m.github) links.push(out(m.github, "GitHub"));
+    return links.length ? '<p class="member__links">' + links.join("") + "</p>" : "";
   }
 
   function shotsHtml(shots) {

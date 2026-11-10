@@ -177,7 +177,7 @@ window.SITE_CONFIG = {
      repository (github.com/elysassecret/EDTH_07): 5 boat agents, 0 reserve
      violations over 30 seeded evaluator runs (eval/), 387 tests collected on
      main at 0a9780e, 91 merged pull requests. Only the top three were
-     announced, so no place is claimed. Simeone joined for this one only. */
+     announced, so no place is claimed. EDTH was Simeone's first event with the team. */
   pharos: {
     stats: [
       { key: "pharos.boats", value: "5", subKey: "pharos.boatsSub" },
@@ -204,8 +204,7 @@ window.SITE_CONFIG = {
     /* by folder ownership and the commit history of the team repository */
     contributors: [
       { id: "javier", roleKey: "pharos.contributors.javier.role", textKey: "pharos.contributors.javier.text" },
-      { id: "simeone", guest: { name: "Simeone", github: "https://github.com/SimeDev42" },
-        roleKey: "pharos.contributors.simeone.role", textKey: "pharos.contributors.simeone.text" },
+      { id: "simeone", roleKey: "pharos.contributors.simeone.role", textKey: "pharos.contributors.simeone.text" },
       { id: "alex", roleKey: "pharos.contributors.alex.role", textKey: "pharos.contributors.alex.text" },
       { id: "franek", roleKey: "pharos.contributors.franek.role", textKey: "pharos.contributors.franek.text" }
     ],
@@ -225,7 +224,7 @@ window.SITE_CONFIG = {
     members: [
       { id: "alex", name: "Alexandru Zaitzev", country: "md", taskKey: "team.alex.task", logKey: "team.alex.log",
         roles: [{ event: "EDTH", text: "PHAROS" }, { event: "Nordic AI Cup", key: "team.alex.task" }],
-        linkedin: "https://www.linkedin.com/in/zaitzev/" },
+        website: "https://zaitzev.com", linkedin: "https://www.linkedin.com/in/zaitzev/" },
       { id: "jakub", name: "Jakub Furmaniuk", country: "pl", taskKey: "team.jakub.task", logKey: "team.jakub.log",
         roles: [{ event: "Nordic AI Cup", key: "team.jakub.task" }],
         linkedin: "https://www.linkedin.com/in/jakub-furmaniuk/" },
@@ -234,7 +233,10 @@ window.SITE_CONFIG = {
         linkedin: "https://www.linkedin.com/in/javier-arevalo-hernandez" },
       { id: "franek", name: "Franciszek Kossut", country: "pl", taskKey: "team.franek.task", logKey: "team.franek.log",
         roles: [{ event: "EDTH", text: "PHAROS" }, { event: "HyperBloom", text: "Make-a-Ring" }, { event: "Nordic AI Cup", key: "team.franek.task" }],
-        linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" }
+        linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" },
+      { id: "simeone", name: "Simeone Gentile", country: "it",
+        roles: [{ event: "EDTH", text: "PHAROS" }],
+        linkedin: "https://www.linkedin.com/in/simeone-gentile" }
     ]
   },
 

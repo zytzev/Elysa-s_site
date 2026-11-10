@@ -1,7 +1,7 @@
 # elysasecret.com
 
 Team site for **Elysa's Secret**, a hackathon team.
-Four students at the University of Southern Denmark.
+Five students at the University of Southern Denmark.
 
 Static site. No build step, no framework, no dependencies.
 
