@@ -11,7 +11,7 @@ window.SITE_CONFIG = {
      the site: the rail, the cards, the stats and the board's ranks. */
   statusRail: {
     items: [
-      { key: "rail.edthLabel", placeKey: "rail.edthPlace", tone: "live" },
+      { key: "rail.edthLabel", placeKey: "rail.edthPlace" },
       { key: "rail.ringLabel", placeKey: "rail.ringPlace", tone: "gold" },
       { key: "rail.cupLabel", placeKey: "rail.cupPlace", tone: "gold" }
     ],
@@ -29,7 +29,8 @@ window.SITE_CONFIG = {
       { key: "nav.hackathons", href: "./#hackathons" },
       { key: "nav.team", href: "./#team" },
       { key: "nav.cup", href: "nordic-ai-cup.html" },
-      { key: "nav.ring", href: "hyperbloom.html" }
+      { key: "nav.ring", href: "hyperbloom.html" },
+      { key: "nav.edth", href: "edth.html" }
     ],
     cta: { key: "nav.contact", href: "./#contact" }
   },
@@ -37,8 +38,7 @@ window.SITE_CONFIG = {
   hero: {
     stats: [
       { key: "hero.hackathons", value: "3", subKey: "hero.hackathonsSub" },
-      { key: "hero.wins", value: "2", subKey: "hero.winsSub", tone: "gold" },
-      { key: "hero.live", value: "1", subKey: "hero.liveSub", tone: "live" }
+      { key: "hero.wins", value: "2", subKey: "hero.winsSub", tone: "gold" }
     ],
     ctas: [
       { key: "hero.ctaPrimary", href: "#hackathons", variant: "primary" },
@@ -48,21 +48,25 @@ window.SITE_CONFIG = {
 
   /* Every hackathon we have entered, newest first, on the home page. Each card
      has the same shape, so none of them outweighs the others. To add one, add
-     a card here and its strings under hackathons.* in i18n.js. A page of its
-     own is optional: EDTH has none until the event is over. */
+     a card here and its strings under hackathons.* in i18n.js. A card with
+     no `tone` is a hackathon that is over without a podium place. `url` is the
+     event's own site; the card's name links to it. `bg` is a faint picture
+     behind the card: kind "art" is a line drawing, "photo" a screenshot. */
   hackathons: {
     cards: [
       {
         id: "edth",
-        command: "elysa --now",
+        command: "elysa --edth",
         name: "EDTH Copenhagen",
+        url: "https://events.eurodefense.tech/copenhagen-2026",
+        bg: { src: "images/card-boat.svg", kind: "art" },
         when: "6–8 Nov 2026",
-        tone: "live",
-        statusKey: "hackathons.statusLive",
+        statusKey: "hackathons.statusDone",
         textKey: "hackathons.edth.text",
         formatKey: "hackathons.edth.format",
         resultKey: "hackathons.edth.result",
         links: [
+          { key: "hackathons.linkMore", href: "edth.html" },
           { key: "hackathons.linkEvent", href: "https://events.eurodefense.tech/copenhagen-2026" }
         ]
       },
@@ -70,6 +74,8 @@ window.SITE_CONFIG = {
         id: "hyperbloom",
         command: "elysa --hyperbloom",
         name: "HyperBloom October",
+        url: "https://hyperbloom-october.devpost.com",
+        bg: { src: "images/card-ring.webp", kind: "photo" },
         when: "1–19 Oct 2026",
         tone: "gold",
         statusKey: "hackathons.statusFirst",
@@ -85,6 +91,8 @@ window.SITE_CONFIG = {
         id: "cup",
         command: "elysa --cup",
         name: "Nordic AI Cup",
+        url: "https://nordicaicup.com/",
+        bg: { src: "images/card-drone.svg", kind: "art" },
         when: "Sep 2026",
         tone: "gold",
         statusKey: "hackathons.statusDenmark",
@@ -165,6 +173,47 @@ window.SITE_CONFIG = {
     ]
   },
 
+  /* The EDTH Copenhagen page: PHAROS, challenge 07. Figures from the team's
+     repository (github.com/elysassecret/EDTH_07): 5 boat agents, 0 reserve
+     violations over 30 seeded evaluator runs (eval/), 387 tests collected on
+     main at 0a9780e, 91 merged pull requests. Only the top three were
+     announced, so no place is claimed. Simeone joined for this one only. */
+  pharos: {
+    stats: [
+      { key: "pharos.boats", value: "5", subKey: "pharos.boatsSub" },
+      { key: "pharos.reserve", value: "0", subKey: "pharos.reserveSub" },
+      { key: "pharos.tests", value: "387", subKey: "pharos.testsSub" }
+    ],
+    ctas: [
+      { key: "pharos.ctaPrimary", href: "#how", variant: "primary" },
+      { key: "pharos.ctaSecondary", href: "./#contact", variant: "secondary" }
+    ],
+    shots: [
+      { src: "images/pharos-console.png", altKey: "pharos.shots.consoleAlt", captionKey: "pharos.shots.consoleCaption" },
+      { src: "images/pharos-drift.png", altKey: "pharos.shots.driftAlt", captionKey: "pharos.shots.driftCaption" },
+      { src: "images/pharos-relay.png", altKey: "pharos.shots.relayAlt", captionKey: "pharos.shots.relayCaption" }
+    ],
+    cards: [
+      { icon: "zap", titleKey: "pharos.cards.1.title", textKey: "pharos.cards.1.text" },
+      { icon: "layers", titleKey: "pharos.cards.2.title", textKey: "pharos.cards.2.text" },
+      { icon: "shield", titleKey: "pharos.cards.3.title", textKey: "pharos.cards.3.text" },
+      { icon: "eye", titleKey: "pharos.cards.4.title", textKey: "pharos.cards.4.text" },
+      { icon: "chart", titleKey: "pharos.cards.5.title", textKey: "pharos.cards.5.text" },
+      { icon: "gear", titleKey: "pharos.cards.6.title", textKey: "pharos.cards.6.text" }
+    ],
+    /* by folder ownership and the commit history of the team repository */
+    contributors: [
+      { id: "javier", roleKey: "pharos.contributors.javier.role", textKey: "pharos.contributors.javier.text" },
+      { id: "simeone", guest: { name: "Simeone", github: "https://github.com/SimeDev42" },
+        roleKey: "pharos.contributors.simeone.role", textKey: "pharos.contributors.simeone.text" },
+      { id: "alex", roleKey: "pharos.contributors.alex.role", textKey: "pharos.contributors.alex.text" },
+      { id: "franek", roleKey: "pharos.contributors.franek.role", textKey: "pharos.contributors.franek.text" }
+    ],
+    links: [
+      { key: "pharos.links.event", href: "https://events.eurodefense.tech/copenhagen-2026" }
+    ]
+  },
+
   /* No scores on the member panes, on either page. `roles` is the short list
      on the home page; the task and log are that person's entry under "Who
      contributed" on the Nordic AI Cup page. A public site is the wrong place to
@@ -175,16 +224,16 @@ window.SITE_CONFIG = {
   team: {
     members: [
       { id: "alex", name: "Alexandru Zaitzev", country: "md", taskKey: "team.alex.task", logKey: "team.alex.log",
-        roles: [{ event: "Nordic AI Cup", key: "team.alex.task" }],
+        roles: [{ event: "EDTH", text: "PHAROS" }, { event: "Nordic AI Cup", key: "team.alex.task" }],
         linkedin: "https://www.linkedin.com/in/zaitzev/" },
       { id: "jakub", name: "Jakub Furmaniuk", country: "pl", taskKey: "team.jakub.task", logKey: "team.jakub.log",
         roles: [{ event: "Nordic AI Cup", key: "team.jakub.task" }],
         linkedin: "https://www.linkedin.com/in/jakub-furmaniuk/" },
       { id: "javier", name: "Javier Arévalo Hernández", country: "es", taskKey: "team.javier.task", logKey: "team.javier.log",
-        roles: [{ event: "HyperBloom", text: "Make-a-Ring" }, { event: "Nordic AI Cup", key: "team.javier.task" }],
+        roles: [{ event: "EDTH", text: "PHAROS" }, { event: "HyperBloom", text: "Make-a-Ring" }, { event: "Nordic AI Cup", key: "team.javier.task" }],
         linkedin: "https://www.linkedin.com/in/javier-arevalo-hernandez" },
       { id: "franek", name: "Franciszek Kossut", country: "pl", taskKey: "team.franek.task", logKey: "team.franek.log",
-        roles: [{ event: "HyperBloom", text: "Make-a-Ring" }, { event: "Nordic AI Cup", key: "team.franek.task" }],
+        roles: [{ event: "EDTH", text: "PHAROS" }, { event: "HyperBloom", text: "Make-a-Ring" }, { event: "Nordic AI Cup", key: "team.franek.task" }],
         linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" }
     ]
   },

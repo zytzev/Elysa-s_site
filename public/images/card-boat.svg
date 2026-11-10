@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" fill="none" stroke="#E8EAED" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- small uncrewed surface vessel -->
+  <path d="M60 170 L340 170 L310 205 L95 205 Z"/>
+  <path d="M130 170 L150 128 L265 128 L285 170"/>
+  <path d="M170 128 L170 145 L245 145 L245 128"/>
+  <path d="M207 128 L207 70"/>
+  <path d="M190 84 L224 84"/>
+  <circle cx="207" cy="62" r="7"/>
+  <path d="M180 52 Q207 30 234 52"/>
+  <path d="M166 40 Q207 8 248 40"/>
+  <path d="M20 225 Q45 212 70 225 T120 225 T170 225 T220 225 T270 225 T320 225 T370 225"/>
+  <path d="M60 248 Q85 236 110 248 T160 248 T210 248 T260 248 T310 248"/>
+</svg>

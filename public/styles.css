@@ -328,6 +328,27 @@ a:hover { text-decoration: underline; }
   letter-spacing: -0.035em;
   margin-bottom: 1.25rem;
 }
+/* Event gallery placeholder: a dashed frame across the full width of the
+   page, with [GALLERY] running right to left until real photos replace it. */
+.gallery {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  height: clamp(11rem, 28vw, 20rem);
+  margin-bottom: 2.5rem;
+  border: 2px dashed var(--line);
+  border-color: color-mix(in srgb, var(--ink-muted) 45%, transparent);
+}
+.gallery__track {
+  display: flex;
+  flex: none;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 2.4vw, 1.5rem);
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+}
+.gallery__run { flex: none; white-space: pre; }
 .hero__sub {
   color: var(--ink-muted);
   font-size: clamp(0.98rem, 2vw, 1.15rem);
@@ -951,7 +972,40 @@ a:hover { text-decoration: underline; }
 .hackathons__grid { display: grid; gap: 1rem; }
 @media (min-width: 62em) { .hackathons__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .hackathon { max-width: none; }
+/* A faint picture behind a hackathon card: a line drawing in the lower
+   right, or a screenshot fading out towards the text. */
+.hackathon--bg { position: relative; isolation: isolate; overflow: hidden; }
+.hackathon--bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--card-bg) no-repeat;
+}
+.hackathon--bg-art::before {
+  background-position: right -12% bottom 4%;
+  background-size: 78% auto;
+  opacity: 0.08;
+}
+.hackathon--bg-photo::before {
+  background-position: center top;
+  background-size: cover;
+  opacity: 0.14;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}
 .hackathon .project__name { font-size: clamp(1.25rem, 2.4vw, 1.5rem); }
+.project__name-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+.project__name-link span { color: var(--accent); }
+.project__name-link:hover,
+.project__name-link:focus-visible { color: var(--accent); }
 .hackathon .project__head { min-height: 4.2rem; align-content: flex-start; }
 .hackathon .project__meta { grid-template-columns: 1fr; gap: 0.6rem; }
 .hackathon .project__links { margin-top: auto; padding-top: 0.75rem; }
@@ -1095,6 +1149,8 @@ html.is-booting { overflow: hidden; }
    Every animated behaviour sits behind this query. With reduced motion the
    page is complete and static — nothing below runs at all. */
 @media (prefers-reduced-motion: no-preference) {
+  .gallery__track { animation: gallery-run 40s linear infinite; }
+
   .caret { animation: caret-blink 1.05s steps(1) infinite; }
 
   /* idle: breathe and blink — only when no event or drag owns the mascot */
@@ -1136,6 +1192,10 @@ html.is-booting { overflow: hidden; }
   .run__svg.is-animated.is-complete .run__marks { opacity: 1; }
 }
 
+@keyframes gallery-run {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
 @keyframes caret-blink {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }

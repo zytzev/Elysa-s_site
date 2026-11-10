@@ -33,7 +33,6 @@
 <header class="site-header" data-slot="header">
   <div class="container site-header__inner">
     <a class="site-header__brand" href="${brandHref}" data-close-menu>
-      <span class="site-header__logo" data-fill="brand.logo"></span>
       <span class="site-header__name" data-fill="brand.name"></span>
     </a>
     <nav class="site-header__nav" aria-label="Main navigation" data-fill="nav.links"></nav>
