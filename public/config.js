@@ -236,7 +236,7 @@ window.SITE_CONFIG = {
         website: "https://kossut.dev", linkedin: "https://www.linkedin.com/in/franciszek-kossut-1967633a8/" },
       { id: "simeone", name: "Simeone Gentile", country: "it",
         roles: [{ event: "EDTH", text: "PHAROS" }],
-        linkedin: "https://www.linkedin.com/in/simeone-gentile" }
+        website: "https://simeone.cc", linkedin: "https://www.linkedin.com/in/simeone-gentile" }
     ]
   },
 
